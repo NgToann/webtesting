@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 
 using WebsiteTesting.Models.SewingMachine;
 using WebsiteTesting.Entities;
+using System.Data;
 
 namespace WebsiteTesting.Controllers.SewingMachineController
 {
@@ -191,7 +192,7 @@ namespace WebsiteTesting.Controllers.SewingMachineController
             var @OutsolePaperImageId = new SqlParameter("@OutsolePaperImageId", osmachineId);
             using (var db = new SewingMachineEntities())
             {
-                return db.Database.SqlQuery<OutsolePaperMachineModel>("EXEC spm_os_SelectOutsolePaperMachineFromTo @OutsolePaperImageId", @OutsolePaperImageId).FirstOrDefault();
+                return db.Database.SqlQuery<OutsolePaperMachineModel>("EXEC spm_os_SelectOutsolePaperMachineById @OutsolePaperImageId", @OutsolePaperImageId).FirstOrDefault();
             }
         }
 
@@ -217,16 +218,16 @@ namespace WebsiteTesting.Controllers.SewingMachineController
 
             var createdBy = model.CreatedBy != null ? string.Format("{0}-{1}", model.CreatedBy, deviceName) : deviceName;
 
-            var @SectionName    = new SqlParameter("@SectionName", model.SectionName);
-            var @LineName       = new SqlParameter("@LineName", model.LineName);
-            var @ProductNo      = new SqlParameter("@ProductNo", model.ProductNo);
-            var @StyleName      = new SqlParameter("@StyleName", model.StyleName);
-            var @OutsoleCode    = new SqlParameter("@OutsoleCode", model.OutsoleCode);
-            var @MachineType    = new SqlParameter("@MachineType", model.MachineType);
-            var @CreatedDate    = new SqlParameter("@CreatedDate", model.CreatedDate);
-            var @LeftImage      = new SqlParameter("@LeftImage", model.LeftImage);
-            var @RightImage     = new SqlParameter("@RightImage", model.RightImage);
-            var @CreatedBy      = new SqlParameter("@CreatedBy", createdBy);
+            var @SectionName        = new SqlParameter("@SectionName",  model.SectionName);
+            var @LineName           = new SqlParameter("@LineName",     model.LineName);
+            var @ProductNo          = new SqlParameter("@ProductNo",    model.ProductNo);
+            var @StyleName          = new SqlParameter("@StyleName",    model.StyleName);
+            var @OutsoleCode        = new SqlParameter("@OutsoleCode",  model.OutsoleCode);
+            var @MachineType        = new SqlParameter("@MachineType",  model.MachineType);
+            var @CreatedDate        = new SqlParameter("@CreatedDate",  model.CreatedDate);
+            var @LeftImage          = new SqlParameter("@LeftImage",    model.LeftImage);
+            var @RightImage         = new SqlParameter("@RightImage",   model.RightImage);
+            var @CreatedBy          = new SqlParameter("@CreatedBy",    createdBy);
 
             using (var db = new SewingMachineEntities())
             {

@@ -92,3 +92,15 @@ F:\SV PROJECT\WebTesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Deb
 F:\SV PROJECT\WebTesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
 F:\SV PROJECT\WebTesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.dll
 F:\SV PROJECT\WebTesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\bin\Reports\LoadingSystem\PackingReport.rdlc
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\bin\WebsiteTesting.dll
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\bin\WebsiteTesting.pdb
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\bin\EntityFramework.dll
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\bin\Newtonsoft.Json.dll
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\bin\EntityFramework.xml
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\bin\Newtonsoft.Json.xml
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csprojAssemblyReference.cache
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CoreCompileInputs.cache
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.dll
+C:\Users\ToanNg\Desktop\AngularAndT\SV\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.pdb

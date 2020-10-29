@@ -118,7 +118,7 @@
                                     Left Image
                                 </div>
                                 <div class="col-12 col-md-8 text-center">
-                                    <canvas id="canvasLeftImage" width="280" height="280"></canvas>
+                                    <canvas id="canvasLeftImage" style="display:block;background-color:lightgrey;" width="280" height="280"></canvas>
                                 </div>
                             </div>
 
@@ -127,7 +127,7 @@
                                     Right Image
                                 </div>
                                 <div class="col-12 col-md-8 text-center">
-                                    <canvas id="canvasRightImage" width="280" height="280"></canvas>
+                                    <canvas id="canvasRightImage" style="display:block;background-color:lightgrey;" width="280" height="280"></canvas>
                                 </div>
                             </div>
                             <div class="row mt-2">
@@ -136,7 +136,7 @@
                                         <button class="btn btn-primary rounded-0 mb-sm-0" type="button" id="btnOpenCamera">Open Camera</button>
                                         <button type="button" id="btnSnapLeft" style="display:none;" class="btn btn-success rounded-0 mt-1">Snap Left</button>
                                         <button type="button" id="btnSnapRight" style="display:none;" class="btn btn-info rounded-0 mt-1">Snap Right</button>
-                                        <button type="button" id="btnCloseCamera" style="display:none;" class="btn btn-danger rounded-0 mt-2">Close Camera</button>
+                                        <button type="button" id="btnCloseCamera" style="display:none;" class="btn btn-danger rounded-0 mt-2">Close</button>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-8 mt-2 mt-sm-0 text-center" id="cameraArea" style="display:none;">
@@ -149,9 +149,11 @@
                                 <div class="col-12 col-md-4">
                                 </div>
                                 <div class="col-12 col-md-8">
-                                    <%--<asp:Button CssClass="btn btn-primary rounded-0" ID="btnSave" runat="server" Text="Save" OnClientClick="Confirm()"/>--%>
-                                    <%--<button type="button" class="btn btn-info rounded-0" onclick="buttonUpdateClick">Save</button>--%>
-                                    <input type="button" id="btnSave" class="btn btn-info rounded-0" value="Save"/>
+                                    <div class="btn-sm-group">
+                                        <input type="button" id="btnSave" class="btn btn-info rounded-0" value="Save"/>
+                                        <input type="button" id="btnDelete" class="btn btn-danger rounded-0 ml-2" value="Delete"/>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             <script type="text/javascript">  
@@ -202,6 +204,7 @@
                                 // Below code to capture image from Video tag (Webcam streaming)
                                 $("#btnSnapLeft").click(function () {
                                     var canvas = document.getElementById('canvasLeftImage');
+                                    //canvas.style.display = 'block';
                                     var context = canvas.getContext('2d');
                                     // Capture the image into canvas from Webcam streaming Video element
                                     context.drawImage(video, 0, 0);
@@ -210,6 +213,7 @@
 
                                 $("#btnSnapRight").click(function () {
                                     var canvas = document.getElementById('canvasRightImage');
+                                    //canvas.style.display = 'block';
                                     var context = canvas.getContext('2d');
                                     // Capture the image into canvas from Webcam streaming Video element
                                     context.drawImage(video, 0, 0);
@@ -234,8 +238,10 @@
                                     var outsoleCode = $('#<%=txtOutsoleCode.ClientID %>').val();
                                     var createdDate = $('#<%=txtCreatedDate.ClientID %>').val();
 
-                                    //var dropdownMachineType = document.getElementById("cboMachineType");
-                                    //var machineType = e.options[e.selectedIndex].dropdownMachineType;
+                                    <%--var value = document.getElementById('#<%=cboMachineType.ClientID%>');
+                                    var machineType = value.options[value.selectedIndex].text; --%>
+
+                                    var machineType = 'TopDown';
 
                                     // Get image data to send to server for upload
                                     //var image = document.getElementById("canvasLeftImage").toDataURL("image/png");
@@ -249,7 +255,7 @@
 
                                     var confirmUpdate = confirm('Confirm Update Machine Image ?');
                                     if (confirmUpdate == true) {
-                                        PageMethods.UploadImage(sectionName, lineName, productNo, style, outsoleCode, createdDate, leftImage, rightImage, onSuccess, onError);
+                                        PageMethods.UploadImage(sectionName, lineName, productNo, style, outsoleCode, machineType, createdDate, leftImage, rightImage, onSuccess, onError);
                                         function onSuccess(result) {
                                             alert(result);
                                         }

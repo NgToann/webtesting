@@ -9,7 +9,6 @@ using System.Web.UI.WebControls;
 using WebsiteTesting.Controllers.SewingMachineController;
 using WebsiteTesting.Models.SewingMachine;
 using Newtonsoft.Json;
-using System.Drawing;
 using System.IO;
 
 
@@ -26,36 +25,68 @@ namespace WebsiteTesting.Pages.SewingMachines
             cboMachineType.DataSource = osMachineTypeList;
             cboMachineType.DataBind();
 
+            var par = Request.Params["par"];
+            // Not Null is Update
+            if (!String.IsNullOrEmpty(par))
+            {
+                try
+                {
+                    int idFromPar = 0;
+                    Int32.TryParse(par, out idFromPar);
+                    var osPaperMachineById = CommonController.GetOutsolePaperMachineById(idFromPar);
+                    cboMachineType.SelectedValue = osMachineTypeList.FirstOrDefault(f => f.Equals(osPaperMachineById.MachineType));
+
+                    txtSection.Text = osPaperMachineById.SectionName;
+                    txtLine.Text = osPaperMachineById.LineName;
+                    txtProductNo.Text = osPaperMachineById.ProductNo;
+                    txtStyleName.Text = osPaperMachineById.StyleName;
+                    txtOutsoleCode.Text = osPaperMachineById.OutsoleCode;
+                    txtCreatedDate.Text = string.Format("{0:MM/dd/yyyy}", osPaperMachineById.CreatedDate);
+
+                    //Image imgLeft = new Image();
+                    //imgLeft.ImageUrl = "data:image;base64," + osPaperMachineById.LeftImage;
+                    //imgLeft.Height = 280;
+                    //imgLeft.Width = 280;
+                    //canvasLeftImage.Attributes.Add("style", "display:block");
+                    //canvasLeftImage.Controls.Add(imgLeft);
+
+                    //Image imgRight = new Image();
+                    //imgRight.ImageUrl = "data:image;base64," + osPaperMachineById.RightImage;
+                    //imgRight.Height = 280;
+                    //imgRight.Width = 280;
+                    //canvasRightImage.Attributes.Add("style", "display:block");
+                    //canvasRightImage.Controls.Add(imgRight);
+                }
+                catch (Exception ex) {
+                    ShowAlert(ex.Message.ToString());
+                }
+            }
         }
 
+
         [WebMethod]
-        public static string UploadImage(string sectionName, string lineName, string productNo, string style, string outsoleCode, string createdDate, string leftImage, string rightImage)
+        public static string UploadImage(string sectionName, string lineName, string productNo, string style, string outsoleCode, string machineType ,string createdDate, string leftImage, string rightImage)
         {
             byte[] imgLeftByte  = Convert.FromBase64String(leftImage);
-            byte[] imgRightByte = Convert.FromBase64String(rightImage);
-
-            using (var str = new MemoryStream(imgLeftByte))
-            {
-                var bitmapFromStream = new Bitmap(str);
-
-            };
+            byte[] imgRightByte = Convert.FromBase64String(rightImage);            
 
             var modelUpdate = new OutsolePaperMachineModel
             {
                 SectionName = sectionName,
                 LineName    = lineName,
-                ProductNo = productNo,
-                StyleName = style,
+                ProductNo   = productNo,
+                StyleName   = style,
                 OutsoleCode = outsoleCode,
+                MachineType = machineType,
                 CreatedDate = ConvertDateStatic(createdDate),
-                LeftImage = imgLeftByte,
-                RightImage = imgRightByte
+                LeftImage   = imgLeftByte,
+                RightImage  = imgRightByte
             };
 
             try
             {
                 CommonController.InsertOutsoleMachineImage(modelUpdate);
-                return "Saved !";
+                return "Successful !";
             }
             catch (Exception ex)
             {
@@ -85,11 +116,14 @@ namespace WebsiteTesting.Pages.SewingMachines
             catch { return result; }
             return result;
         }
-        //public static byte[] GetJPGFromBitmapImage(Bitmap bitmapImage)
-        //{
-        //    //MemoryStream memoryStream = new MemoryStream();
-        //    //bitmapImage.Save(memoryStream, ImageFormat.Jpeg);
-        //    //return memoryStream.ToArray();
-        //}
+
+        private void ShowAlert(string msg)
+        {
+            string script = string.Format("alert('{0}');", msg);
+            if (Page != null && !Page.ClientScript.IsClientScriptBlockRegistered("alert"))
+            {
+                Page.ClientScript.RegisterClientScriptBlock(Page.GetType(), "alert", script, true);
+            }
+        }
     }
 }

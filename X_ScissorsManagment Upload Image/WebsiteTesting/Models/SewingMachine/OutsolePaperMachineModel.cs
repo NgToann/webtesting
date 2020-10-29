@@ -8,6 +8,7 @@ namespace WebsiteTesting.Models.SewingMachine
     [Serializable]
     public class OutsolePaperMachineModel
     {
+        public int OutsolePaperImageId { get; set; }
         public string SectionName { get; set; }
         public string LineName { get; set; }
         public string ProductNo { get; set; }
