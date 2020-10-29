@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SampleRoomModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="SampleRoomEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BorrowShoes" EntityType="SampleRoomModel.BorrowSho" />
+    <EntitySet Name="SampleShoes" EntityType="SampleRoomModel.SampleSho" />
+    <EntitySet Name="SystemConfigs" EntityType="SampleRoomModel.SystemConfig" />
+    <FunctionImport Name="InsertSampleShoes_1">
+      <Parameter Name="Article" Mode="In" Type="String" />
+      <Parameter Name="RDNumber" Mode="In" Type="String" />
+      <Parameter Name="ArticleName" Mode="In" Type="String" />
+      <Parameter Name="Color" Mode="In" Type="String" />
+      <Parameter Name="ShoelastCode" Mode="In" Type="String" />
+      <Parameter Name="Season" Mode="In" Type="String" />
+      <Parameter Name="Customer" Mode="In" Type="String" />
+      <Parameter Name="Size" Mode="In" Type="String" />
+      <Parameter Name="Factory" Mode="In" Type="String" />
+      <Parameter Name="Location" Mode="In" Type="String" />
+      <Parameter Name="ImagePath" Mode="In" Type="String" />
+      <Parameter Name="Quantity" Mode="In" Type="Int32" />
+      <Parameter Name="ModifiedTime" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="SelectShoesImageByArticle" ReturnType="Collection(SampleRoomModel.SelectShoesImageByArticle_Result)">
+      <Parameter Name="Article" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateSampleShoes_1">
+      <Parameter Name="Article" Mode="In" Type="String" />
+      <Parameter Name="RDNumber" Mode="In" Type="String" />
+      <Parameter Name="ArticleName" Mode="In" Type="String" />
+      <Parameter Name="Color" Mode="In" Type="String" />
+      <Parameter Name="ShoelastCode" Mode="In" Type="String" />
+      <Parameter Name="Season" Mode="In" Type="String" />
+      <Parameter Name="Customer" Mode="In" Type="String" />
+      <Parameter Name="Size" Mode="In" Type="String" />
+      <Parameter Name="Factory" Mode="In" Type="String" />
+      <Parameter Name="Location" Mode="In" Type="String" />
+      <Parameter Name="Quantity" Mode="In" Type="Int32" />
+      <Parameter Name="ModifiedTime" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateShoesImage">
+      <Parameter Name="Article" Mode="In" Type="String" />
+      <Parameter Name="Image" Mode="In" Type="Binary" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="BorrowSho">
+    <Key>
+      <PropertyRef Name="BorrowShoesId" />
+    </Key>
+    <Property Name="BorrowShoesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmployeeId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="EmployeeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="EmployeeSection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Article" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="EmployeeImagePath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="EmployeeLine" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BorrowTime" Type="DateTime" Precision="3" />
+    <Property Name="PayTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="SampleSho">
+    <Key>
+      <PropertyRef Name="Article" />
+    </Key>
+    <Property Name="Article" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="RDNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ArticleName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Color" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ShoelastCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Season" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Customer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Size" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Factory" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ImagePath" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="ModifiedTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="SystemConfig">
+    <Key>
+      <PropertyRef Name="CabinetCount" />
+      <PropertyRef Name="RackCount" />
+    </Key>
+    <Property Name="CabinetCount" Type="Int32" Nullable="false" />
+    <Property Name="RackCount" Type="Int32" Nullable="false" />
+  </EntityType>
+  <ComplexType Name="SelectShoesImageByArticle_Result">
+    <Property Type="Int32" Name="ShoesImageId" Nullable="false" />
+    <Property Type="String" Name="Article" Nullable="true" MaxLength="10" />
+    <Property Type="Binary" Name="Image" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+</Schema>

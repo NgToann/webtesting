@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SampleRoomModelStoreContainer" CdmEntityContainer="SampleRoomEntities">
+    <EntitySetMapping Name="BorrowShoes">
+      <EntityTypeMapping TypeName="SampleRoomModel.BorrowSho">
+        <MappingFragment StoreEntitySet="BorrowShoes">
+          <ScalarProperty Name="PayTime" ColumnName="PayTime" />
+          <ScalarProperty Name="BorrowTime" ColumnName="BorrowTime" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="EmployeeLine" ColumnName="EmployeeLine" />
+          <ScalarProperty Name="EmployeeImagePath" ColumnName="EmployeeImagePath" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Article" ColumnName="Article" />
+          <ScalarProperty Name="EmployeeSection" ColumnName="EmployeeSection" />
+          <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+          <ScalarProperty Name="BorrowShoesId" ColumnName="BorrowShoesId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SampleShoes">
+      <EntityTypeMapping TypeName="SampleRoomModel.SampleSho">
+        <MappingFragment StoreEntitySet="SampleShoes">
+          <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="Factory" ColumnName="Factory" />
+          <ScalarProperty Name="Size" ColumnName="Size" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="Season" ColumnName="Season" />
+          <ScalarProperty Name="ShoelastCode" ColumnName="ShoelastCode" />
+          <ScalarProperty Name="Color" ColumnName="Color" />
+          <ScalarProperty Name="ArticleName" ColumnName="ArticleName" />
+          <ScalarProperty Name="RDNumber" ColumnName="RDNumber" />
+          <ScalarProperty Name="Article" ColumnName="Article" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SystemConfigs">
+      <EntityTypeMapping TypeName="SampleRoomModel.SystemConfig">
+        <MappingFragment StoreEntitySet="SystemConfig">
+          <ScalarProperty Name="RackCount" ColumnName="RackCount" />
+          <ScalarProperty Name="CabinetCount" ColumnName="CabinetCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="InsertSampleShoes_1" FunctionName="SampleRoomModel.Store.InsertSampleShoes_1" />
+    <FunctionImportMapping FunctionImportName="SelectShoesImageByArticle" FunctionName="SampleRoomModel.Store.SelectShoesImageByArticle">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SampleRoomModel.SelectShoesImageByArticle_Result">
+          <ScalarProperty Name="ShoesImageId" ColumnName="ShoesImageId" />
+          <ScalarProperty Name="Article" ColumnName="Article" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="UpdateSampleShoes_1" FunctionName="SampleRoomModel.Store.UpdateSampleShoes_1" />
+    <FunctionImportMapping FunctionImportName="UpdateShoesImage" FunctionName="SampleRoomModel.Store.UpdateShoesImage" />
+  </EntityContainerMapping>
+</Mapping>

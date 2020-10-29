@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SewingMachineModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityType Name="AccessControl">
+    <Key>
+      <PropertyRef Name="Number" />
+    </Key>
+    <Property Name="Number" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="AccessTime" Type="DateTime" Precision="3" />
+    <Property Name="FromDevice" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Machine">
+    <Key>
+      <PropertyRef Name="MachineId" />
+    </Key>
+    <Property Name="MachineId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Number" Type="Int32" />
+    <Property Name="MachineType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Barcode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Schedule">
+    <Key>
+      <PropertyRef Name="ScheduleId" />
+    </Key>
+    <Property Name="ScheduleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MachineId" Type="Int32" />
+    <Property Name="FromDate" Type="DateTime" Precision="0" />
+    <Property Name="ToDate" Type="DateTime" Precision="0" />
+    <Property Name="Style" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="PatternNo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="LineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedTime" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="UserSM">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityContainer Name="SewingMachineEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AccessControls" EntityType="Self.AccessControl" />
+    <EntitySet Name="Machines" EntityType="Self.Machine" />
+    <EntitySet Name="Schedules" EntityType="Self.Schedule" />
+    <EntitySet Name="UserSMs" EntityType="Self.UserSM" />
+    <FunctionImport Name="spm_SelectMachine" ReturnType="Collection(SewingMachineModel.spm_SelectMachine_Result)" />
+    <FunctionImport Name="spm_SelectSchedule" ReturnType="Collection(SewingMachineModel.spm_SelectSchedule_Result)" />
+    <FunctionImport Name="spm_SelectScheduleByMachineTypeFromTo" ReturnType="Collection(SewingMachineModel.spm_SelectScheduleByMachineTypeFromTo_Result)">
+      <Parameter Name="MachineType" Mode="In" Type="String" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="spm_SelectUserSM" ReturnType="Collection(SewingMachineModel.spm_SelectUserSM_Result)" />
+    <FunctionImport Name="spm_UpdateBarcodeSewingMachine">
+      <Parameter Name="MachineId" Mode="In" Type="Int32" />
+      <Parameter Name="Barcode" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="ScheduleDetails" EntityType="SewingMachineModel.ScheduleDetail" />
+    <FunctionImport Name="spm_DeleteScheduleDetail">
+      <Parameter Name="ScheduleDetailId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="spm_InsertSchedule">
+      <Parameter Name="MachineId" Mode="In" Type="Int32" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="Style" Mode="In" Type="String" />
+      <Parameter Name="PatternNo" Mode="In" Type="String" />
+      <Parameter Name="LineName" Mode="In" Type="String" />
+      <Parameter Name="CreatedBy" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="spm_InsertScheduleDetail">
+      <Parameter Name="ScheduleDetailId" Mode="In" Type="String" />
+      <Parameter Name="MachineId" Mode="In" Type="Int32" />
+      <Parameter Name="ScheduleDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="spm_SelectScheduleFromTo" ReturnType="Collection(SewingMachineModel.spm_SelectScheduleFromTo_Result)">
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="spm_UpdateMachineBarcode">
+      <Parameter Name="MachineId" Mode="In" Type="Int32" />
+      <Parameter Name="Barcode" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="spm_SelectMachine_Result">
+    <Property Type="Int32" Name="MachineId" Nullable="false" />
+    <Property Type="Int32" Name="Number" Nullable="true" />
+    <Property Type="String" Name="MachineType" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Code" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Barcode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="20" />
+    <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="UpdateTime" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="spm_SelectSchedule_Result">
+    <Property Type="Int32" Name="ScheduleId" Nullable="false" />
+    <Property Type="Int32" Name="MachineId" Nullable="true" />
+    <Property Type="DateTime" Name="FromDate" Nullable="true" />
+    <Property Type="DateTime" Name="ToDate" Nullable="true" />
+    <Property Type="String" Name="Style" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="PatternNo" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="LineName" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="UpdatedTime" Nullable="true" Precision="23" />
+    <Property Type="String" Name="CreatedBy" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="spm_SelectScheduleByMachineTypeFromTo_Result">
+    <Property Type="Int32" Name="ScheduleId" Nullable="false" />
+    <Property Type="Int32" Name="MachineId" Nullable="true" />
+    <Property Type="DateTime" Name="FromDate" Nullable="true" />
+    <Property Type="DateTime" Name="ToDate" Nullable="true" />
+    <Property Type="String" Name="Style" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="PatternNo" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="LineName" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="UpdatedTime" Nullable="true" Precision="23" />
+    <Property Type="String" Name="CreatedBy" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="spm_SelectUserSM_Result">
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="UserName" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="FullName" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
+  </ComplexType>
+  <EntityType Name="ScheduleDetail">
+    <Key>
+      <PropertyRef Name="ScheduleDetailId" />
+    </Key>
+    <Property Name="ScheduleDetailId" Type="Int32" Nullable="false" />
+    <Property Name="MachineId" Type="Int32" />
+    <Property Name="ScheduleDate" Type="DateTime" Precision="0" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <ComplexType Name="spm_SelectScheduleFromTo_Result">
+    <Property Type="Int32" Name="ScheduleId" Nullable="false" />
+    <Property Type="Int32" Name="MachineId" Nullable="true" />
+    <Property Type="DateTime" Name="FromDate" Nullable="true" />
+    <Property Type="DateTime" Name="ToDate" Nullable="true" />
+    <Property Type="String" Name="Style" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="PatternNo" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="LineName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="MachineType" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="CreatedBy" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="UpdatedTime" Nullable="true" Precision="23" />
+  </ComplexType>
+</Schema>

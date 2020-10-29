@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="C:\wwwRoot" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="Pages/LoginPage.aspx" publishTime="08/05/2016 15:42:06" />
+    <file relUrl="Pages/Saoviet/LineDetailPage.aspx" publishTime="08/03/2016 13:36:12" />
+    <file relUrl="bin/WebsiteTesting.dll" publishTime="11/11/2016 10:23:25" />
+    <file relUrl="Pages/LoadingSystem/PackingReportPage.aspx" publishTime="08/03/2016 11:30:25" />
+    <file relUrl="bin/WebsiteTesting.pdb" publishTime="11/11/2016 10:23:25" />
+    <file relUrl="bin/BarcodeLib.BarcodeReader.dll" publishTime="05/05/2015 17:37:40" />
+    <file relUrl="Pages/Saoviet/ChangeCustomerModePage.aspx" publishTime="11/01/2016 11:04:44" />
+    <file relUrl="Pages/CheckInSystem/AttendancePage.aspx" publishTime="08/03/2016 11:43:11" />
+    <file relUrl="Pages/MachineInventory/Default.aspx" publishTime="11/11/2016 09:59:53" />
+    <file relUrl="Pages/LoadingSystem/ImportPackingListPage.aspx" publishTime="11/11/2016 08:53:56" />
+    <file relUrl="Default.aspx" publishTime="11/11/2016 08:50:16" />
+    <file relUrl="Pages/CheckInSystem/Default.aspx" publishTime="08/03/2016 11:32:54" />
+    <file relUrl="bin/Reports/LoadingSystem/PackingReport.rdlc" publishTime="06/29/2016 15:40:00" />
+    <file relUrl="Pages/LoadingSystem/CalTotalWeightPage.aspx" publishTime="08/03/2016 13:30:15" />
+    <file relUrl="Web.Config" publishTime="11/11/2016 10:23:25" />
+    <file relUrl="Main.Master" publishTime="08/03/2016 14:00:20" />
+    <file relUrl="Pages/Saoviet/Default.aspx" publishTime="08/03/2016 13:27:54" />
+    <file relUrl="Pages/Saoviet/SaovietWebService.asmx" publishTime="11/03/2016 14:26:37" />
+  </publishProfile>
+</publishData>

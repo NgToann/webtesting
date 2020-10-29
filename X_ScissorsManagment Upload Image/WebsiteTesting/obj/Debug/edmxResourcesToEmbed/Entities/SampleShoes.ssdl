@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SampleRoomModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityType Name="BorrowShoes">
+    <Key>
+      <PropertyRef Name="BorrowShoesId" />
+    </Key>
+    <Property Name="BorrowShoesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmployeeId" Type="nvarchar" MaxLength="20" />
+    <Property Name="EmployeeName" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeSection" Type="nvarchar" MaxLength="200" />
+    <Property Name="Article" Type="nvarchar" MaxLength="10" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+    <Property Name="EmployeeImagePath" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeLine" Type="nvarchar" MaxLength="200" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="BorrowTime" Type="datetime" />
+    <Property Name="PayTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="OthersEmployee">
+    <Key>
+      <PropertyRef Name="OthersEmployeeId" />
+    </Key>
+    <Property Name="OthersEmployeeId" Type="int" Nullable="false" />
+    <Property Name="EmployeeId" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="SampleShoes">
+    <Key>
+      <PropertyRef Name="Article" />
+    </Key>
+    <Property Name="Article" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="RDNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="ArticleName" Type="nvarchar" MaxLength="100" />
+    <Property Name="Color" Type="nvarchar" MaxLength="100" />
+    <Property Name="ShoelastCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="Season" Type="nvarchar" MaxLength="100" />
+    <Property Name="Customer" Type="nvarchar" MaxLength="100" />
+    <Property Name="Size" Type="nvarchar" MaxLength="100" />
+    <Property Name="Factory" Type="nvarchar" MaxLength="100" />
+    <Property Name="Location" Type="nvarchar" MaxLength="100" />
+    <Property Name="ImagePath" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Image" Type="image" />
+    <Property Name="ModifiedTime" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'SampleRoom.dbo.SystemConfig' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="SystemConfig">
+    <Key>
+      <PropertyRef Name="CabinetCount" />
+      <PropertyRef Name="RackCount" />
+    </Key>
+    <Property Name="CabinetCount" Type="int" Nullable="false" />
+    <Property Name="RackCount" Type="int" Nullable="false" />
+  </EntityType>
+  <Function Name="CountBorrowShoesByArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="CountBorrowShoesByArticleStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Status" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="CountBorrowShoesByEmployeeIdArticleStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Status" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="CountSampleShoesByArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="DeleteSampleShoes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="InsertBorrowShoes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+  </Function>
+  <Function Name="InsertBorrowShoes_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+    <Parameter Name="EmployeeSection" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeImagePath" Type="nvarchar" Mode="In" />
+    <Parameter Name="Description" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeLine" Type="nvarchar" Mode="In" />
+    <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="InsertSampleShoes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="RDNumber" Type="nvarchar" Mode="In" />
+    <Parameter Name="ArticleName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Color" Type="nvarchar" Mode="In" />
+    <Parameter Name="ShoelastCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="Season" Type="nvarchar" Mode="In" />
+    <Parameter Name="Customer" Type="nvarchar" Mode="In" />
+    <Parameter Name="Size" Type="nvarchar" Mode="In" />
+    <Parameter Name="Factory" Type="nvarchar" Mode="In" />
+    <Parameter Name="Location" Type="nvarchar" Mode="In" />
+    <Parameter Name="ImagePath" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+    <Parameter Name="ModifiedTime" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="InsertSampleShoes_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="RDNumber" Type="nvarchar" Mode="In" />
+    <Parameter Name="ArticleName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Color" Type="nvarchar" Mode="In" />
+    <Parameter Name="ShoelastCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="Season" Type="nvarchar" Mode="In" />
+    <Parameter Name="Customer" Type="nvarchar" Mode="In" />
+    <Parameter Name="Size" Type="nvarchar" Mode="In" />
+    <Parameter Name="Factory" Type="nvarchar" Mode="In" />
+    <Parameter Name="Location" Type="nvarchar" Mode="In" />
+    <Parameter Name="ImagePath" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+    <Parameter Name="ModifiedTime" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="SelectBorrowShoes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SelectBorrowShoesByArticleStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Status" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="SelectBorrowShoesByEmployeeId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SelectBorrowShoesByEmployeeIdArticleStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Status" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="SelectBorrowShoesLikeArticleStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Status" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="SelectBorrowShoesLikeEmployeeIdAndArticleStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Status" Type="bit" Mode="In" />
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SelectEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SelectEmployeeByEmployeeId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SelectOthersEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SelectSampleShoesByArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SelectSampleShoesLikeArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SelectSampleShoesLikeArticleQuantity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SelectShoesImageByArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SelectSystemConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="TranferBorrowShoes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeIdTranfer" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeNameTranfer" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeSectionTranfer" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeImagePathTranfer" Type="nvarchar" Mode="In" />
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="UpdateBorrowShoesStatusByEmployeeIdArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Description" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="UpdateBorrowShoesStatusByEmployeeIdArticle_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="EmployeeId" Type="nvarchar" Mode="In" />
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="EmployeeLine" Type="nvarchar" Mode="In" />
+    <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="UpdateSampleShoes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="RDNumber" Type="nvarchar" Mode="In" />
+    <Parameter Name="ArticleName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Color" Type="nvarchar" Mode="In" />
+    <Parameter Name="ShoelastCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="Season" Type="nvarchar" Mode="In" />
+    <Parameter Name="Customer" Type="nvarchar" Mode="In" />
+    <Parameter Name="Size" Type="nvarchar" Mode="In" />
+    <Parameter Name="Factory" Type="nvarchar" Mode="In" />
+    <Parameter Name="Location" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+    <Parameter Name="ModifiedTime" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="UpdateSampleShoes_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="RDNumber" Type="nvarchar" Mode="In" />
+    <Parameter Name="ArticleName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Color" Type="nvarchar" Mode="In" />
+    <Parameter Name="ShoelastCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="Season" Type="nvarchar" Mode="In" />
+    <Parameter Name="Customer" Type="nvarchar" Mode="In" />
+    <Parameter Name="Size" Type="nvarchar" Mode="In" />
+    <Parameter Name="Factory" Type="nvarchar" Mode="In" />
+    <Parameter Name="Location" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+    <Parameter Name="ModifiedTime" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="UpdateSampleShoesQuantityByArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Quantity" Type="int" Mode="In" />
+  </Function>
+  <Function Name="UpdateShoesImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Article" Type="nvarchar" Mode="In" />
+    <Parameter Name="Image" Type="image" Mode="In" />
+  </Function>
+  <EntityContainer Name="SampleRoomModelStoreContainer">
+    <EntitySet Name="BorrowShoes" EntityType="Self.BorrowShoes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OthersEmployee" EntityType="Self.OthersEmployee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SampleShoes" EntityType="Self.SampleShoes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SystemConfig" EntityType="Self.SystemConfig" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[SystemConfig].[CabinetCount] AS [CabinetCount], 
+[SystemConfig].[RackCount] AS [RackCount]
+FROM [dbo].[SystemConfig] AS [SystemConfig]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
