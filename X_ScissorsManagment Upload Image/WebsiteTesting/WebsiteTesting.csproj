@@ -323,6 +323,7 @@
     <Compile Include="Models\ScissorsManagmentSystem\IssuanceModel.cs" />
     <Compile Include="Models\ScissorsManagmentSystem\ScissorsModel.cs" />
     <Compile Include="Models\ScissorsManagmentSystem\UserModel.cs" />
+    <Compile Include="Models\SewingMachine\OutsoleImageEmpty.cs" />
     <Compile Include="Models\SewingMachine\MachineModel.cs" />
     <Compile Include="Models\SewingMachine\OutsoleMachineTypeModel.cs" />
     <Compile Include="Models\SewingMachine\OutsolePaperMachineModel.cs" />

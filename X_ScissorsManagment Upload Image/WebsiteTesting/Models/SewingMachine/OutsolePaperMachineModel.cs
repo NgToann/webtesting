@@ -21,5 +21,7 @@ namespace WebsiteTesting.Models.SewingMachine
         public string CreatedBy { get; set; }
         public string LeftImageString { get; set; }
         public string RightImageString { get; set; }
+        public string UpdateLeftImage { get; set; }
+        public string UpdateRightImage { get; set; }
     }
 }

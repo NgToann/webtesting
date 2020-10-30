@@ -216,8 +216,9 @@ namespace WebsiteTesting.Controllers.SewingMachineController
             try { deviceName = System.Environment.MachineName; }
             catch { deviceName = ""; }
 
-            var createdBy = model.CreatedBy != null ? string.Format("{0}-{1}", model.CreatedBy, deviceName) : deviceName;
 
+            var createdBy = model.CreatedBy != null ? string.Format("{0}-{1}", model.CreatedBy, deviceName) : deviceName;
+            var @OutsolePaperImageId = new SqlParameter("@OutsolePaperImageId", model.OutsolePaperImageId);
             var @SectionName        = new SqlParameter("@SectionName",  model.SectionName);
             var @LineName           = new SqlParameter("@LineName",     model.LineName);
             var @ProductNo          = new SqlParameter("@ProductNo",    model.ProductNo);
@@ -228,11 +229,13 @@ namespace WebsiteTesting.Controllers.SewingMachineController
             var @LeftImage          = new SqlParameter("@LeftImage",    model.LeftImage);
             var @RightImage         = new SqlParameter("@RightImage",   model.RightImage);
             var @CreatedBy          = new SqlParameter("@CreatedBy",    createdBy);
+            var @UpdateLeftImage    = new SqlParameter("@UpdateLeftImage", model.UpdateLeftImage);
+            var @UpdateRightImage   = new SqlParameter("@UpdateRightImage", model.UpdateRightImage);
 
             using (var db = new SewingMachineEntities())
             {
-                if (db.Database.ExecuteSqlCommand("EXEC spm_os_InsertOutsoleMachineImage @SectionName, @LineName, @ProductNo, @StyleName, @OutsoleCode, @MachineType, @CreatedDate, @LeftImage, @RightImage, @CreatedBy",
-                                                                                         @SectionName, @LineName, @ProductNo, @StyleName, @OutsoleCode, @MachineType, @CreatedDate, @LeftImage, @RightImage, @CreatedBy) > 0)
+                if (db.Database.ExecuteSqlCommand("EXEC spm_os_InsertOutsoleMachineImage @OutsolePaperImageId, @SectionName, @LineName, @ProductNo, @StyleName, @OutsoleCode, @MachineType, @CreatedDate, @LeftImage, @RightImage, @CreatedBy, @UpdateLeftImage, @UpdateRightImage",
+                                                                                         @OutsolePaperImageId, @SectionName, @LineName, @ProductNo, @StyleName, @OutsoleCode, @MachineType, @CreatedDate, @LeftImage, @RightImage, @CreatedBy, @UpdateLeftImage, @UpdateRightImage) > 0)
                 {
                     return true;
                 }

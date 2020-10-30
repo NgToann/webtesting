@@ -24,6 +24,24 @@ namespace WebsiteTesting.Pages.SewingMachines
         protected global::System.Web.UI.ScriptManager scriptManagerUpdateMachineImage;
 
         /// <summary>
+        /// lblTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTitle;
+
+        /// <summary>
+        /// lblId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblId;
+
+        /// <summary>
         /// cboMachineType control.
         /// </summary>
         /// <remarks>
@@ -31,6 +49,15 @@ namespace WebsiteTesting.Pages.SewingMachines
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList cboMachineType;
+
+        /// <summary>
+        /// txtCreatedDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCreatedDate;
 
         /// <summary>
         /// txtSection control.
@@ -78,12 +105,21 @@ namespace WebsiteTesting.Pages.SewingMachines
         protected global::System.Web.UI.WebControls.TextBox txtOutsoleCode;
 
         /// <summary>
-        /// txtCreatedDate control.
+        /// imgLeftDisplay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCreatedDate;
+        protected global::System.Web.UI.WebControls.Image imgLeftDisplay;
+
+        /// <summary>
+        /// imgRightDisplay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgRightDisplay;
     }
 }

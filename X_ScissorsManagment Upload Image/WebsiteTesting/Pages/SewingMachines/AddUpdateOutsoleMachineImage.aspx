@@ -44,7 +44,8 @@
                 
                 <!--Header-->
                 <div class="text-center">
-                    <h3 class="font-weight-bold">Update Image Machine</h3>
+                    <h3 class="font-weight-bold"><asp:Label ID="lblTitle" Text="Add New Image" runat="server"></asp:Label></h3>
+                    <asp:Label ID="lblId" CssClass="d-none" runat="server"></asp:Label>
                 </div>
                 
                 <!--Content-->
@@ -58,7 +59,15 @@
                                     Machine Type
                                 </div>
                                 <div class="col-12 col-sm-8 col-md-8">
-                                    <asp:DropDownList ID="cboMachineType" CssClass="btn rounded-0 border-dark" runat="server" AutoPostBack="true"/>
+                                    <asp:DropDownList ID="cboMachineType" CssClass="btn rounded-0 border-dark" runat="server" AutoPostBack="false"/>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12 col-md-4 mt-2">
+                                    Date
+                                </div>
+                                <div class="col-12 col-md-8">
+                                    <asp:TextBox ID="txtCreatedDate" CssClass="form-control rounded-0" runat="server"></asp:TextBox>
                                 </div>
                             </div>
 
@@ -103,22 +112,15 @@
                                 <div class="col-12 col-md-8">
                                     <asp:TextBox ID="txtOutsoleCode" CssClass="form-control rounded-0" runat="server"></asp:TextBox>
                                 </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-12 col-md-4 mt-2">
-                                    Created Date
-                                </div>
-                                <div class="col-12 col-md-8">
-                                    <asp:TextBox ID="txtCreatedDate" CssClass="form-control rounded-0" runat="server"></asp:TextBox>
-                                </div>
-                            </div>
+                            </div>                            
 
                             <div class="row mt-2">
                                 <div class="col-12 col-md-4 mt-2 mb-2 mb-sm-0">
                                     Left Image
                                 </div>
                                 <div class="col-12 col-md-8 text-center">
-                                    <canvas id="canvasLeftImage" style="display:block;background-color:lightgrey;" width="280" height="280"></canvas>
+                                    <asp:Image runat="server" ID="imgLeftDisplay" width="280" height="280" Visible="false"/>
+                                    <canvas id="canvasLeftImage" style="display:none;background-color:lightgrey; margin:0 auto;" width="280" height="280"></canvas>
                                 </div>
                             </div>
 
@@ -127,25 +129,40 @@
                                     Right Image
                                 </div>
                                 <div class="col-12 col-md-8 text-center">
-                                    <canvas id="canvasRightImage" style="display:block;background-color:lightgrey;" width="280" height="280"></canvas>
+                                    <asp:Image runat="server" ID="imgRightDisplay" width="280" height="280" Visible="false"/>
+                                    <canvas id="canvasRightImage" style="display:none;background-color:lightgrey; margin:0 auto;" width="280" height="280"></canvas>
                                 </div>
                             </div>
+
                             <div class="row mt-2">
                                 <div class="col-12 col-md-4 mt-2">
-                                    <div class="btn-sm-group btn-group-vertical">
-                                        <button class="btn btn-primary rounded-0 mb-sm-0" type="button" id="btnOpenCamera">Open Camera</button>
-                                        <button type="button" id="btnSnapLeft" style="display:none;" class="btn btn-success rounded-0 mt-1">Snap Left</button>
-                                        <button type="button" id="btnSnapRight" style="display:none;" class="btn btn-info rounded-0 mt-1">Snap Right</button>
-                                        <button type="button" id="btnCloseCamera" style="display:none;" class="btn btn-danger rounded-0 mt-2">Close</button>
-                                    </div>
                                 </div>
                                 <div class="col-12 col-md-8 mt-2 mt-sm-0 text-center" id="cameraArea" style="display:none;">
                                     <video id="video" playsinline autoplay width="280" height="280"></video>
                                 </div>
-                                
+                            </div>
+                            <div class="row mt-2" id="sourceSelectPanel" style="display:none">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <label for="sourceSelect" class="mt-1">Select Camera:</label>
+                                        <div class="input-group-append ml-2">
+                                            <select id="sourceSelect" class="rounded-0" style="max-width:350px"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2 mb-2">
+                                <div class="col text-center text-sm-left">
+                                    <div class="btn-group">
+                                        <button id="btnOpenCamera" class="btn btn-primary rounded-0  mr-1">Open</button>
+                                        <button id="btnSnapLeft" style="display:none;" class="btn btn-success rounded-0 mr-1">Snap Left</button>
+                                        <button id="btnSnapRight" style="display:none;" class="btn btn-info rounded-0 mr-1">Snap Right</button>
+                                        <button id="btnCloseCamera" style="display:none;" class="btn btn-warning rounded-0">Close</button>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="row mt-3 ">
+                            <div class="row mt-3">
                                 <div class="col-12 col-md-4">
                                 </div>
                                 <div class="col-12 col-md-8">
@@ -156,7 +173,33 @@
                                     
                                 </div>
                             </div>
-                            <script type="text/javascript">  
+                        </div>
+
+                        <!--initial camera envirorment-->
+                        <script type="text/javascript" src="assets/zxing.js"></script>
+                        <script type="text/javascript">
+                            let selectedDeviceId;
+                            const codeReader = new ZXing.BrowserMultiFormatReader()
+                            codeReader.getVideoInputDevices()
+                            .then((videoInputDevices) => {
+                                const sourceSelect = document.getElementById('sourceSelect')
+                                selectedDeviceId = videoInputDevices[0].deviceId
+                                if (videoInputDevices[videoInputDevices.length - 1] != null) {
+                                    selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
+                                }
+                                if (videoInputDevices.length >= 1) {
+                                    videoInputDevices.forEach((element) => {
+                                        const sourceOption = document.createElement('option')
+                                        sourceOption.text = element.label
+                                        sourceOption.value = element.deviceId
+                                        sourceSelect.appendChild(sourceOption)
+                                    })
+
+                                    sourceSelect.onchange = () => {
+                                        selectedDeviceId = sourceSelect.value;
+                                    };
+                                }
+
                                 var video = document.querySelector("#video");
                                 // Basic settings for the video to get from Webcam
                                 const constraints = {
@@ -164,9 +207,10 @@
                                     video: {
                                         width: 280, height: 280
                                     },
-                                    facingMode: {
-                                        exact: 'environment'
-                                    }
+                                    deviceId: { exact: selectedDeviceId }
+                                    //facingMode: {
+                                    //    exact: 'environment'
+                                    //}
                                 };
                                 // This condition will ask permission to user for Webcam access  
                                 if (navigator.mediaDevices.getUserMedia) {
@@ -178,7 +222,6 @@
                                             console.log("svqc can not access camera device!");
                                         });
                                 }
-
                                 function stop(e) {
                                     var stream = video.srcObject;
                                     var tracks = stream.getTracks();
@@ -189,100 +232,125 @@
                                     }
                                     video.srcObject = null;
                                 }
-                            </script> 
-                            <script type="text/javascript">
-                                // Show the camera
-                                $("#btnOpenCamera").click(function () {
-                                    cameraArea.style.display = 'block';
-                                    // Show buttons
-                                    btnSnapLeft.style.display = 'block';
-                                    btnSnapRight.style.display = 'block';
-                                    btnCloseCamera.style.display = 'block';
+                                
+                            })
+                            .catch((err) => {
+                                console.error(err)
+                            })
+                        </script>
+                        
+                        <!--client function-->
+                        <script type="text/javascript">
+                            // Show the camera
+                            $("#btnOpenCamera").click(function () {
+                                cameraArea.style.display = 'block';
+                                const sourceSelectPanel = document.getElementById('sourceSelectPanel');
+                                sourceSelectPanel.style.display = 'block';
 
-                                    return false;
-                                });
-                                // Below code to capture image from Video tag (Webcam streaming)
-                                $("#btnSnapLeft").click(function () {
-                                    var canvas = document.getElementById('canvasLeftImage');
-                                    //canvas.style.display = 'block';
-                                    var context = canvas.getContext('2d');
-                                    // Capture the image into canvas from Webcam streaming Video element
-                                    context.drawImage(video, 0, 0);
-                                    return false;
-                                });
+                                // Show buttons
+                                btnSnapLeft.style.display = 'block';
+                                btnSnapRight.style.display = 'block';
+                                btnCloseCamera.style.display = 'block';
 
-                                $("#btnSnapRight").click(function () {
-                                    var canvas = document.getElementById('canvasRightImage');
-                                    //canvas.style.display = 'block';
-                                    var context = canvas.getContext('2d');
-                                    // Capture the image into canvas from Webcam streaming Video element
-                                    context.drawImage(video, 0, 0);
-                                    return false;
-                                });
+                                return false;
+                            });
+                            // Below code to capture image from Video tag (Webcam streaming)
+                            $("#btnSnapLeft").click(function () {
+                                var canvas = document.getElementById('canvasLeftImage');
+                                var leftImage = document.getElementById('contentPlaceHolder_imgLeftDisplay');
+                                if (leftImage != null)
+                                    leftImage.style.display = 'none';
 
-                                $("#btnCloseCamera").click(function () {
-                                    cameraArea.style.display = 'none';
-                                    // Show buttons
-                                    btnSnapLeft.style.display = 'none';
-                                    btnSnapRight.style.display = 'none';
-                                    btnCloseCamera.style.display = 'none';
-                                    return false;
-                                });
+                                canvasLeftImage.style.display = 'block';
+                                var context = canvas.getContext('2d');
+                                context.drawImage(video, 0, 0);
+                                return false;
+                            });
 
-                                $("#btnSave").click(function () {
+                            $("#btnSnapRight").click(function () {
+                                var canvas = document.getElementById('canvasRightImage');
+                                var rightImage = document.getElementById('contentPlaceHolder_imgRightDisplay');
+                                if (rightImage != null)
+                                    rightImage.style.display = 'none';
+                                canvasRightImage.style.display = 'block';
+                                var context = canvas.getContext('2d');
+                                context.drawImage(video, 0, 0);
+                                return false;
+                            });
 
-                                    var sectionName = $('#<%=txtSection.ClientID %>').val();
-                                    var lineName = $('#<%=txtLine.ClientID %>').val();
-                                    var productNo = $('#<%=txtProductNo.ClientID %>').val();
-                                    var style = $('#<%=txtStyleName.ClientID %>').val();
-                                    var outsoleCode = $('#<%=txtOutsoleCode.ClientID %>').val();
-                                    var createdDate = $('#<%=txtCreatedDate.ClientID %>').val();
+                            $("#btnCloseCamera").click(function () {
+                                cameraArea.style.display = 'none';
+                                // Show buttons
+                                btnSnapLeft.style.display = 'none';
+                                btnSnapRight.style.display = 'none';
+                                btnCloseCamera.style.display = 'none';
+                                const sourceSelectPanel = document.getElementById('sourceSelectPanel');
+                                sourceSelectPanel.style.display = 'none'
+                                return false;
+                            });
 
-                                    <%--var value = document.getElementById('#<%=cboMachineType.ClientID%>');
-                                    var machineType = value.options[value.selectedIndex].text; --%>
+                            $("#btnSave").click(function () {
+                                var updateWhat  = document.getElementById('contentPlaceHolder_lblId').innerHTML;
+                                var sectionName = $('#<%=txtSection.ClientID %>').val();
+                                var lineName    = $('#<%=txtLine.ClientID %>').val();
+                                var productNo   = $('#<%=txtProductNo.ClientID %>').val();
+                                var style       = $('#<%=txtStyleName.ClientID %>').val();
+                                var outsoleCode = $('#<%=txtOutsoleCode.ClientID %>').val();
+                                var createdDate = $('#<%=txtCreatedDate.ClientID %>').val();
 
-                                    var machineType = 'TopDown';
+                                var value = document.getElementById('contentPlaceHolder_cboMachineType');
+                                var machineType = value.options[value.selectedIndex].text;
 
-                                    // Get image data to send to server for upload
-                                    //var image = document.getElementById("canvasLeftImage").toDataURL("image/png");
-                                    //image = image.replace('data:image/png;base64,', '');
-                                    var leftImage = document.getElementById("canvasLeftImage").toDataURL("image/png");
-                                    leftImage = leftImage.replace('data:image/png;base64,', '');
+                                if (sectionName === '' || lineName === '')
+                                {
+                                    alert('section or linename is emtpy !')
+                                    return;
+                                }
 
-                                    var rightImage = document.getElementById("canvasRightImage").toDataURL("image/png");
-                                    rightImage = rightImage.replace('data:image/png;base64,', '');
+                                // Get image data to send to server for upload
+                                var leftImage = document.getElementById("canvasLeftImage").toDataURL("image/png");
+                                leftImage = leftImage.replace('data:image/png;base64,', '');
 
+                                var rightImage = document.getElementById("canvasRightImage").toDataURL("image/png");
+                                rightImage = rightImage.replace('data:image/png;base64,', '');
 
-                                    var confirmUpdate = confirm('Confirm Update Machine Image ?');
-                                    if (confirmUpdate == true) {
-                                        PageMethods.UploadImage(sectionName, lineName, productNo, style, outsoleCode, machineType, createdDate, leftImage, rightImage, onSuccess, onError);
-                                        function onSuccess(result) {
-                                            alert(result);
-                                        }
-                                        function onError(result) {
-                                            alert('An error occurred !');
-                                        }
-                                        //$.ajax({
-                                        //    type: "POST",
-                                        //    url: "AddUpdateOutsoleMachineImage.aspx/UploadImageTest",
-                                        //    data: '{"imageData": "' + image + '"}',
-                                        //    contentType: "application/json; charset=utf-8",
-                                        //    dataType: "json",
-                                        //    success: function (response) {
-                                        //        alert("User has been added successfully.");
-                                        //        window.location.reload();
-                                        //    }
-                                        //});
-                                        return false;
+                                var confirmUpdate = confirm('Confirm Update Machine Image ?');
+                                if (confirmUpdate == true) {
+                                    PageMethods.UploadImage(updateWhat, sectionName, lineName, productNo, style, outsoleCode, machineType, createdDate, leftImage, rightImage, onSuccess, onError);
+                                    function onSuccess(result) {
+                                        alert(result);
+                                        window.location.href = 'OutsolePaperHome.aspx?';
                                     }
-                                    else {
-                                        return;
+                                    function onError(result) {
+                                        alert(result.d);
                                     }
-                                });
-                            </script>
-                        </div>
+                                    return false;
+                                }
+                                else {
+                                    return;
+                                }
+                            });
+
+                            $("#btnDelete").click(function () {
+                                var deleteWhat = document.getElementById('contentPlaceHolder_lblId').innerHTML;
+                                var confirmDelete = confirm('Confirm delete this record ?');
+                                if (confirmDelete == true) {
+                                    PageMethods.DeleteRecord(deleteWhat, onSuccess, onError);
+                                    function onSuccess(result) {
+                                        alert(result);
+                                        window.location.href = 'OutsolePaperHome.aspx?';
+                                    }
+                                    function onError(result) {
+                                        alert(result.d);
+                                    }
+                                    return false;
+                                }
+                                else {
+                                    return;
+                                }
+                            });
+                        </script>
                     </div>
-
                     <div class="col-12 d-none col-sm-2 col-md-2 col-lg-3 d-sm-block d-md-block d-lg-block"></div>
                 </div>
             </div>

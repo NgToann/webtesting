@@ -61,7 +61,7 @@
                                     <li class="drop-down"><a href=""><i class="fa fa-cash-register"></i>Machines Managment</a>
                                         <ul class="drop-down-ul animated fadeIn">
                                             <li><asp:HyperLink runat="server" Enabled="false" ID="hlSewingMachines" NavigateUrl="~/Pages/SewingMachines/HomePage.aspx">Sewing Machines</asp:HyperLink></li>
-                                            <li><asp:HyperLink runat="server" ID="HyperLink2"  NavigateUrl="~/Pages/SewingMachines/OutsolePaperHome.aspx">Outsole Paper Image Upload</asp:HyperLink></li>
+                                            <li><asp:HyperLink runat="server" Enabled="false" ID="hlOutsoleMachines"  NavigateUrl="~/Pages/SewingMachines/OutsolePaperHome.aspx">Outsole Paper Image Upload</asp:HyperLink></li>
                                         </ul>
                                     </li>
 

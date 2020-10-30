@@ -51,6 +51,7 @@ namespace WebsiteTesting
                     hlSummaryInfo.Enabled               = false;
                     hlScissorsManagment.Enabled         = false;
                     hlSewingMachines.Enabled            = false;
+                    hlSewingMachines.Enabled = false;
                 }
                 if (userScissors != null)
                 {
@@ -63,6 +64,7 @@ namespace WebsiteTesting
                     hlSummaryInfo.Enabled               = false;
                     hlSampleRoom.Enabled                = false;
                     hlSewingMachines.Enabled            = false;
+                    hlSewingMachines.Enabled = false;
                 }
                 if (userSM != null)
                 {
@@ -75,7 +77,13 @@ namespace WebsiteTesting
                     hlSummaryInfo.Enabled               = false;
                     hlScissorsManagment.Enabled         = false;
                     hlSampleRoom.Enabled                = false;
-                    hlSewingMachines.Enabled            = true;
+
+                    hlSewingMachines.Enabled = false;
+                    hlOutsoleMachines.Enabled = false;
+                    if (userSM.IsOutsoleMachine == true)
+                        hlOutsoleMachines.Enabled = true;
+                    if (userSM.IsSewingMachine == true)
+                        hlSewingMachines.Enabled = true;
                 }
             }
         }

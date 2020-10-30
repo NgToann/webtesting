@@ -31,10 +31,12 @@ namespace WebsiteTesting.Pages.SewingMachines
             {
                 try
                 {
+                    lblTitle.Text = "Update Image Machine";
                     int idFromPar = 0;
                     Int32.TryParse(par, out idFromPar);
                     var osPaperMachineById = CommonController.GetOutsolePaperMachineById(idFromPar);
-                    cboMachineType.SelectedValue = osMachineTypeList.FirstOrDefault(f => f.Equals(osPaperMachineById.MachineType));
+                    var x = osMachineTypeList.FirstOrDefault(f => f.Equals(osPaperMachineById.MachineType));
+                    cboMachineType.SelectedValue = x;
 
                     txtSection.Text = osPaperMachineById.SectionName;
                     txtLine.Text = osPaperMachineById.LineName;
@@ -43,19 +45,13 @@ namespace WebsiteTesting.Pages.SewingMachines
                     txtOutsoleCode.Text = osPaperMachineById.OutsoleCode;
                     txtCreatedDate.Text = string.Format("{0:MM/dd/yyyy}", osPaperMachineById.CreatedDate);
 
-                    //Image imgLeft = new Image();
-                    //imgLeft.ImageUrl = "data:image;base64," + osPaperMachineById.LeftImage;
-                    //imgLeft.Height = 280;
-                    //imgLeft.Width = 280;
-                    //canvasLeftImage.Attributes.Add("style", "display:block");
-                    //canvasLeftImage.Controls.Add(imgLeft);
+                    imgLeftDisplay.ImageUrl = "data:image;base64," + Convert.ToBase64String(osPaperMachineById.LeftImage);
+                    imgLeftDisplay.Visible = true;
 
-                    //Image imgRight = new Image();
-                    //imgRight.ImageUrl = "data:image;base64," + osPaperMachineById.RightImage;
-                    //imgRight.Height = 280;
-                    //imgRight.Width = 280;
-                    //canvasRightImage.Attributes.Add("style", "display:block");
-                    //canvasRightImage.Controls.Add(imgRight);
+                    imgRightDisplay.ImageUrl = "data:image;base64," + Convert.ToBase64String(osPaperMachineById.RightImage);
+                    imgRightDisplay.Visible = true;
+
+                    lblId.Text = string.Format("{0}", osPaperMachineById.OutsolePaperImageId);
                 }
                 catch (Exception ex) {
                     ShowAlert(ex.Message.ToString());
@@ -65,13 +61,22 @@ namespace WebsiteTesting.Pages.SewingMachines
 
 
         [WebMethod]
-        public static string UploadImage(string sectionName, string lineName, string productNo, string style, string outsoleCode, string machineType ,string createdDate, string leftImage, string rightImage)
+        public static string UploadImage(string updateWhat, string sectionName, string lineName, string productNo, string style, string outsoleCode, string machineType ,string createdDate, string leftImage, string rightImage)
         {
+            var osImageEmpty = new OutsoleImageEmpty();
+
             byte[] imgLeftByte  = Convert.FromBase64String(leftImage);
-            byte[] imgRightByte = Convert.FromBase64String(rightImage);            
+            byte[] imgRightByte = Convert.FromBase64String(rightImage);
+
+            int outsolePaperImageId = 0;
+            if (!String.IsNullOrEmpty(updateWhat))
+            {
+                Int32.TryParse(updateWhat, out outsolePaperImageId);
+            }
 
             var modelUpdate = new OutsolePaperMachineModel
             {
+                OutsolePaperImageId = outsolePaperImageId,
                 SectionName = sectionName,
                 LineName    = lineName,
                 ProductNo   = productNo,
@@ -80,12 +85,30 @@ namespace WebsiteTesting.Pages.SewingMachines
                 MachineType = machineType,
                 CreatedDate = ConvertDateStatic(createdDate),
                 LeftImage   = imgLeftByte,
-                RightImage  = imgRightByte
+                RightImage  = imgRightByte,
+                UpdateLeftImage = leftImage != osImageEmpty.ImgString ? "UpdateLeftImage" : "None",
+                UpdateRightImage = rightImage != osImageEmpty.ImgString ? "UpdateRightImage" : "None",
             };
 
             try
             {
                 CommonController.InsertOutsoleMachineImage(modelUpdate);
+                return "Successful !";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.ToString();
+            }
+        }
+
+        [WebMethod]
+        public static string DeleteRecord(string deleteWhat)
+        {
+            int idDelete = 0;
+            Int32.TryParse(deleteWhat, out idDelete);
+            try 
+            {
+                CommonController.DeleteOSMachineById(idDelete);
                 return "Successful !";
             }
             catch (Exception ex)
@@ -125,5 +148,6 @@ namespace WebsiteTesting.Pages.SewingMachines
                 Page.ClientScript.RegisterClientScriptBlock(Page.GetType(), "alert", script, true);
             }
         }
+
     }
 }
