@@ -60,13 +60,13 @@ namespace WebsiteTesting.Pages.SewingMachines
         protected global::System.Web.UI.WebControls.TextBox txtCreatedDate;
 
         /// <summary>
-        /// txtSection control.
+        /// cboSectionName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSection;
+        protected global::System.Web.UI.WebControls.DropDownList cboSectionName;
 
         /// <summary>
         /// txtLine control.

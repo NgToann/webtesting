@@ -11,5 +11,6 @@ namespace WebsiteTesting.Models.SewingMachine
         public int Id { get; set; }
         public string MachineType { get; set; }
         public int OrderNo { get; set; }
+        public string SectionName { get; set; }
     }
 }

@@ -20,10 +20,12 @@ namespace WebsiteTesting.Pages.SewingMachines
         {
             if (IsPostBack)
                 return;
-
-            var osMachineTypeList = CommonController.GetOutsoleMachineTypeList().Select(s => s.MachineType).ToList();
-            cboMachineType.DataSource = osMachineTypeList;
+            var osMachineTypeList = CommonController.GetOutsoleMachineTypeList();
+            cboMachineType.DataSource = osMachineTypeList.Select(s => s.MachineType).Distinct().ToList();
             cboMachineType.DataBind();
+
+            cboSectionName.DataSource = osMachineTypeList.Select(s => s.SectionName).Distinct().ToList();
+            cboSectionName.DataBind();
 
             var par = Request.Params["par"];
             // Not Null is Update
@@ -35,10 +37,13 @@ namespace WebsiteTesting.Pages.SewingMachines
                     int idFromPar = 0;
                     Int32.TryParse(par, out idFromPar);
                     var osPaperMachineById = CommonController.GetOutsolePaperMachineById(idFromPar);
-                    var x = osMachineTypeList.FirstOrDefault(f => f.Equals(osPaperMachineById.MachineType));
-                    cboMachineType.SelectedValue = x;
 
-                    txtSection.Text = osPaperMachineById.SectionName;
+                    var mType = osMachineTypeList.FirstOrDefault(f => f.MachineType.Equals(osPaperMachineById.MachineType));
+                    cboMachineType.SelectedValue = mType != null ? mType.MachineType : "";
+
+                    var sectionX = osMachineTypeList.FirstOrDefault(f => f.SectionName.Equals(osPaperMachineById.SectionName));
+                    cboSectionName.SelectedValue = sectionX != null ? sectionX.SectionName : "";
+
                     txtLine.Text = osPaperMachineById.LineName;
                     txtProductNo.Text = osPaperMachineById.ProductNo;
                     txtStyleName.Text = osPaperMachineById.StyleName;

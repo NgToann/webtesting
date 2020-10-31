@@ -147,6 +147,7 @@
     <Content Include="Pages\SewingMachines\assets\jquery-1-12.4.js" />
     <Content Include="Pages\SewingMachines\assets\jquery-ui.css" />
     <Content Include="Pages\SewingMachines\assets\jquery-ui.js" />
+    <Content Include="Pages\SewingMachines\assets\main.js" />
     <Content Include="Pages\SewingMachines\assets\zxing.js" />
     <Content Include="Pages\SewingMachines\HomePage.aspx" />
     <Content Include="Pages\SewingMachines\MachineDatabase.aspx" />

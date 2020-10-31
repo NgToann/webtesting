@@ -118,3 +118,17 @@ F:\SV PROJECT\WebTesting\webtesting\X_ScissorsManagment Upload Image\WebsiteTest
 F:\SV PROJECT\WebTesting\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
 F:\SV PROJECT\WebTesting\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.dll
 F:\SV PROJECT\WebTesting\webtesting\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\bin\Reports\LoadingSystem\PackingReport.rdlc
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\bin\WebsiteTesting.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\bin\WebsiteTesting.pdb
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\bin\EntityFramework.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\bin\Newtonsoft.Json.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\bin\EntityFramework.xml
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\bin\Newtonsoft.Json.xml
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csprojAssemblyReference.cache
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\RdlCompile.cache
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\RdlCompile.compiled
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CoreCompileInputs.cache
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.pdb

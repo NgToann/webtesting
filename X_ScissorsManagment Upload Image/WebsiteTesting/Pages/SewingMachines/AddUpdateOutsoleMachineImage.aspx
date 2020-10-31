@@ -13,6 +13,14 @@
         <script src="//code.jquery.com/jquery-1.12.4.js"></script>
         <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         
+        <script type="text/javascript">
+            window.ga = window.ga || function () {
+                (ga.q = ga.q || []).push(arguments);
+            };
+            ga('create', 'UA-33848682-1', 'auto');
+            ga('set', 'transport', 'beacon');
+            ga('send', 'pageview');
+        </script>
         <script type="text/javascript" language="javascript">
             $(function () {
                 $('#<%=txtCreatedDate.ClientID %>').datepicker();
@@ -76,7 +84,7 @@
                                     Section
                                 </div>
                                 <div class="col-12 col-md-8">
-                                    <asp:TextBox ID="txtSection" CssClass="form-control rounded-0" runat="server"></asp:TextBox>
+                                    <asp:DropDownList ID="cboSectionName" CssClass="btn rounded-0 border-dark" runat="server" AutoPostBack="false"/>
                                 </div>
                             </div>
 
@@ -89,7 +97,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-2">
+                            <div class="row mt-2 d-none">
                                 <div class="col-12 col-md-4 mt-2">
                                     ProductNo
                                 </div>
@@ -138,7 +146,7 @@
                                 <div class="col-12 col-md-4 mt-2">
                                 </div>
                                 <div class="col-12 col-md-8 mt-2 mt-sm-0 text-center" id="cameraArea" style="display:none;">
-                                    <video id="video" playsinline autoplay width="280" height="280"></video>
+                                    <video id="video" muted playsinline autoplay width="280" height="280"></video>
                                 </div>
                             </div>
                             <div class="row mt-2" id="sourceSelectPanel" style="display:none">
@@ -146,7 +154,9 @@
                                     <div class="input-group">
                                         <label for="sourceSelect" class="mt-1">Select Camera:</label>
                                         <div class="input-group-append ml-2">
-                                            <select id="sourceSelect" class="rounded-0" style="max-width:350px"></select>
+                                            <%--<select id="sourceSelect" class="rounded-0" style="max-width:350px"></select>--%>
+                                            <select id="videoSource" class="rounded-0 py-2"></select>
+                                            <select class="d-none" id="audioSource"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +186,7 @@
                         </div>
 
                         <!--initial camera envirorment-->
-                        <script type="text/javascript" src="assets/zxing.js"></script>
+                        <%--<script type="text/javascript" src="assets/zxing.js"></script>
                         <script type="text/javascript">
                             let selectedDeviceId;
                             const codeReader = new ZXing.BrowserMultiFormatReader()
@@ -195,54 +205,20 @@
                                         sourceSelect.appendChild(sourceOption)
                                     })
 
-                                    sourceSelect.onchange = () => {
-                                        selectedDeviceId = sourceSelect.value;
-                                    };
+                                    //sourceSelect.onchange = () => {
+                                    //    selectedDeviceId = sourceSelect.value;
+                                    //};
                                 }
-
-                                var video = document.querySelector("#video");
-                                // Basic settings for the video to get from Webcam
-                                const constraints = {
-                                    audio: false,
-                                    video: {
-                                        width: 280, height: 280
-                                    },
-                                    deviceId: { exact: selectedDeviceId }
-                                    //facingMode: {
-                                    //    exact: 'environment'
-                                    //}
-                                };
-                                // This condition will ask permission to user for Webcam access  
-                                if (navigator.mediaDevices.getUserMedia) {
-                                    navigator.mediaDevices.getUserMedia(constraints)
-                                        .then(function (stream) {
-                                            video.srcObject = stream;
-                                        })
-                                        .catch(function (err0r) {
-                                            console.log("svqc can not access camera device!");
-                                        });
-                                }
-                                function stop(e) {
-                                    var stream = video.srcObject;
-                                    var tracks = stream.getTracks();
-
-                                    for (var i = 0; i < tracks.length; i++) {
-                                        var track = tracks[i];
-                                        track.stop();
-                                    }
-                                    video.srcObject = null;
-                                }
-                                
                             })
                             .catch((err) => {
                                 console.error(err)
                             })
-                        </script>
+                        </script>--%>
                         
+                        <script async src="assets/main.js"></script>
                         <!--client function-->
                         <script type="text/javascript">
-                            // Show the camera
-                            $("#btnOpenCamera").click(function () {
+                            function displayCamera() {
                                 cameraArea.style.display = 'block';
                                 const sourceSelectPanel = document.getElementById('sourceSelectPanel');
                                 sourceSelectPanel.style.display = 'block';
@@ -251,7 +227,10 @@
                                 btnSnapLeft.style.display = 'block';
                                 btnSnapRight.style.display = 'block';
                                 btnCloseCamera.style.display = 'block';
-
+                            }
+                            // Open the camera
+                            $("#btnOpenCamera").click(function () {
+                                displayCamera();
                                 return false;
                             });
                             // Below code to capture image from Video tag (Webcam streaming)
@@ -291,9 +270,9 @@
 
                             $("#btnSave").click(function () {
                                 var updateWhat  = document.getElementById('contentPlaceHolder_lblId').innerHTML;
-                                var sectionName = $('#<%=txtSection.ClientID %>').val();
                                 var lineName    = $('#<%=txtLine.ClientID %>').val();
-                                var productNo   = $('#<%=txtProductNo.ClientID %>').val();
+                                //var productNo   = $('#<%=txtProductNo.ClientID %>').val();
+                                var productNo   = '';
                                 var style       = $('#<%=txtStyleName.ClientID %>').val();
                                 var outsoleCode = $('#<%=txtOutsoleCode.ClientID %>').val();
                                 var createdDate = $('#<%=txtCreatedDate.ClientID %>').val();
@@ -301,9 +280,12 @@
                                 var value = document.getElementById('contentPlaceHolder_cboMachineType');
                                 var machineType = value.options[value.selectedIndex].text;
 
-                                if (sectionName === '' || lineName === '')
+                                var sectionFromCbo = document.getElementById('contentPlaceHolder_cboSectionName');
+                                var sectionName = sectionFromCbo.options[sectionFromCbo.selectedIndex].text;
+
+                                if (lineName === '')
                                 {
-                                    alert('section or linename is emtpy !')
+                                    alert('Linename is emtpy !')
                                     return;
                                 }
 

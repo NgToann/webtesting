@@ -40,13 +40,13 @@ namespace WebsiteTesting.Pages.SewingMachines
             tchLineName.Text = "<b><center>Line</center></b>";
             trHeader.Cells.Add(tchLineName);
 
-            TableCell tchProductNo = new TableCell();
-            tchProductNo.Text = "<b><center>PO#</center></b>";
-            trHeader.Cells.Add(tchProductNo);
-
             TableCell tchStyleName = new TableCell();
             tchStyleName.Text = "<b><center>Style</center></b>";
             trHeader.Cells.Add(tchStyleName);
+
+            TableCell tchOutsoleCode = new TableCell();
+            tchOutsoleCode.Text = "<b><center>O/S Code</center></b>";
+            trHeader.Cells.Add(tchOutsoleCode);
 
             TableCell tchMachineType = new TableCell();
             tchMachineType.Text = "<b><center>Machine Type</center></b>";
@@ -84,13 +84,13 @@ namespace WebsiteTesting.Pages.SewingMachines
                 trcLineName.Text = String.Format("{0}", osMachine.LineName);
                 trContent.Cells.Add(trcLineName);
 
-                TableCell trcProductNo = new TableCell();
-                trcProductNo.Text = String.Format("{0}", osMachine.ProductNo);
-                trContent.Cells.Add(trcProductNo);
-
                 TableCell trcStyleName = new TableCell();
                 trcStyleName.Text = String.Format("{0}", osMachine.StyleName);
                 trContent.Cells.Add(trcStyleName);
+
+                TableCell trcOSCOde = new TableCell();
+                trcOSCOde.Text = String.Format("{0}", osMachine.OutsoleCode);
+                trContent.Cells.Add(trcOSCOde);
 
                 TableCell trcMachineType = new TableCell();
                 trcMachineType.Text = String.Format("{0}", osMachine.MachineType);
