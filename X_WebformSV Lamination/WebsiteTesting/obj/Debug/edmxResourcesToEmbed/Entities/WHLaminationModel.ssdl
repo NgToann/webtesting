@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WHLaminationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'SaovietMasterSchedule.dbo.LaminationMaterial' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="LaminationMaterial">
+    <Key>
+      <PropertyRef Name="LaminationMaterialId" />
+    </Key>
+    <Property Name="LaminationMaterialId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderNoId" Type="nvarchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ArticleNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ShoeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="PatternNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProductNoList" Type="nvarchar(max)" />
+    <Property Name="Position" Type="nvarchar" MaxLength="50" />
+    <Property Name="MaterialPart" Type="nvarchar" MaxLength="50" />
+    <Property Name="MaterialName" Type="nvarchar(max)" />
+    <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+    <Property Name="POQuantity" Type="int" />
+    <Property Name="SendQuantity" Type="int" />
+    <Property Name="DeliveryDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="PurchaseDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="SupplierName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="nvarchar(max)" />
+    <Property Name="CreatedTime" Type="datetime" />
+    <Property Name="UpdatedTime" Type="datetime" />
+  </EntityType>
+  <Function Name="spm_SelectLaminationMaterialByOrderNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderNo" Type="nvarchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="WHLaminationModelStoreContainer">
+    <EntitySet Name="LaminationMaterial" EntityType="Self.LaminationMaterial" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[LaminationMaterial].[LaminationMaterialId] AS [LaminationMaterialId], 
+[LaminationMaterial].[OrderNoId] AS [OrderNoId], 
+[LaminationMaterial].[OrderNo] AS [OrderNo], 
+[LaminationMaterial].[ArticleNo] AS [ArticleNo], 
+[LaminationMaterial].[ShoeName] AS [ShoeName], 
+[LaminationMaterial].[PatternNo] AS [PatternNo], 
+[LaminationMaterial].[ProductNoList] AS [ProductNoList], 
+[LaminationMaterial].[Position] AS [Position], 
+[LaminationMaterial].[MaterialPart] AS [MaterialPart], 
+[LaminationMaterial].[MaterialName] AS [MaterialName], 
+[LaminationMaterial].[Unit] AS [Unit], 
+[LaminationMaterial].[POQuantity] AS [POQuantity], 
+[LaminationMaterial].[SendQuantity] AS [SendQuantity], 
+[LaminationMaterial].[DeliveryDate] AS [DeliveryDate], 
+[LaminationMaterial].[PurchaseDate] AS [PurchaseDate], 
+[LaminationMaterial].[SupplierName] AS [SupplierName], 
+[LaminationMaterial].[Remarks] AS [Remarks], 
+[LaminationMaterial].[CreatedTime] AS [CreatedTime], 
+[LaminationMaterial].[UpdatedTime] AS [UpdatedTime]
+FROM [dbo].[LaminationMaterial] AS [LaminationMaterial]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
