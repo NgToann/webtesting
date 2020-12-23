@@ -36,6 +36,9 @@ namespace WebsiteTesting.Pages.WHLamination
             try 
             {
                 var laminationMatsSerach = LaminationMaterialController.GetLaminationMaterialByOrderNo(orderNo).ToList();
+                if (laminationMatsSerach.Count() == 0)
+                    return "This PO does not exist in system !";
+                var x = JsonConvert.SerializeObject(laminationMatsSerach);
                 return JsonConvert.SerializeObject(laminationMatsSerach);
             }
             catch (Exception ex)
