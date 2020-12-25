@@ -198,6 +198,7 @@
     <Compile Include="Controllers\ScissorsController\ScissorsMainController.cs" />
     <Compile Include="Controllers\SewingMachineController\CommonController.cs" />
     <Compile Include="Controllers\WHLamination\LaminationMaterialController.cs" />
+    <Compile Include="Controllers\WHLamination\LaminationMaterialScoreController.cs" />
     <Compile Include="Entities\LaminationMaterial.cs">
       <DependentUpon>WHLaminationModel.tt</DependentUpon>
     </Compile>
@@ -367,6 +368,7 @@
     <Compile Include="Models\SewingMachine\ScheduleDetailModel.cs" />
     <Compile Include="Models\SewingMachine\SheduleModel.cs" />
     <Compile Include="Models\SewingMachine\UserSMModel.cs" />
+    <Compile Include="Models\WHLamination\LaminationMaterialScoreModel.cs" />
     <Compile Include="Pages\CheckInSystem\AttendancePage.aspx.cs">
       <DependentUpon>AttendancePage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

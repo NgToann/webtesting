@@ -12,48 +12,269 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
         
         <script type="text/javascript">
-            class MaterialCheckModel {
-                constructor (orderNoId, poQuantity, labelQuantity, actualQuantity, labelWidth, actualWidth) {
-                    this.orderNoId = orderNoId;
-                    this.poQuantity = poQuantity;
-                    this.labelQuantity = labelQuantity;
-                    this.actualQuantity = actualQuantity;
-                    this.actualWidth = actualWidth;
+            class LaminationMaterialScore {
+                constructor(OrderNoId, POQuantity, LabelQuantity, ActualQuantity, LabelWidth, ActualWidth, TotalScore, DefectType1, DefectType2, DefectType3, DefectType4, HoleType2, HoleType4, Reviser) {
+                    this.OrderNoId = OrderNoId;
+                    this.PoQuantity = POQuantity;
+                    this.LabelQuantity = LabelQuantity;
+                    this.ActualQuantity = ActualQuantity;
+                    this.LabelWidth = LabelWidth;
+                    this.ActualWidth = ActualWidth;
+                    this.DefectType1 = DefectType1;
+                    this.DefectType2 = DefectType2;
+                    this.DefectType3 = DefectType3;
+                    this.DefectType4 = DefectType4;
+
+                    this.HoleType2 = HoleType2;
+                    this.HoleType4 = HoleType4;
+                    this.Reviser = Reviser;
+                }
+                // function cal score.
+                calScore() {
+                    this.TotalScore = this.DefectType1 + this.DefectType2 * 2 + this.DefectType3 * 3 + this.DefectType4 * 4 + this.HoleType2 * 2 + this.HoleType4 * 4;
                 }
             };
-            //var toastItemEl = document.querySelector('#myToast');
-            //var toast = new bootstrap.Toast(toastItemEl);
-            //toast.show();
-            function buttonMaterialClick(buttonId, laminationMaterialList, laminationMaterial) {
+
+            function buttonMaterialClick(buttonId, laminationMaterialList, lamiMatsSelected) {
+                DisplayMatsInfor(null, null);
                 // Clear Highlight
-                laminationMaterialList.forEach(function (laminationMaterial) {
-                    document.getElementById(laminationMaterial.OrderNoId).setAttribute("class", "btn btn-outline-success btn-sm text-dark");
+                laminationMaterialList.forEach(function (lamiMats) {
+                    document.getElementById(lamiMats.OrderNoId).setAttribute("class", "btn btn-outline-success btn-sm text-dark text-wrap text-left");
                 });
                 // highlight button click
-                document.getElementById(buttonId).setAttribute("class", "btn btn-danger btn-sm");
-                document.getElementById("materialDetailTitle").innerText = laminationMaterial.MaterialName;
-                document.getElementById("spPosition").innerText = laminationMaterial.Position;
+                document.getElementById(buttonId).setAttribute("class", "btn btn-danger btn-sm text-wrap text-left");
+                document.getElementById("materialDetailTitle").innerText = lamiMatsSelected.MaterialName;
+                document.getElementById("spPosition").innerText = lamiMatsSelected.Position;
 
-                const materialCurrentCheck = new MaterialCheckModel(
-                    orderNoId       = laminationMaterial.OrderNoId,
-                    poQuantity      = laminationMaterial.POQuantity,
-                    labelQuantity   = 0,
-                    actualQuantity  = 0,
-                    labelWidth      = 0,
-                    actualWidth     = 0
+                const matsScoreFirst = new LaminationMaterialScore(
+                    OrderNoId = lamiMatsSelected.OrderNoId,
+                    POQuantity = lamiMatsSelected.POQuantity,
+                    LabelQuantity   = 0,
+                    ActualQuantity  = 0,
+                    LabelWidth      = 0,
+                    ActualWidth = 0,
+                    DefectType1 = 0,
+                    DefectType2 = 0,
+                    DefectType3 = 0,
+                    DefectType4 = 0,
+                    HoleType2 = 0,
+                    HoleType4 = 0,
+                    Reviser = "it02"
                 );
-                document.getElementById("btnStart").onclick = function () { buttonStartClick(materialCurrentCheck) };
+
+                $.ajax({
+                    url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetScoreByOrderNoId") %>',
+                    data: { "orderNoId": '"' + buttonId + '"' },
+                    type: "GET",
+                    datatype: "json",
+                    async: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.d.toString().includes('Exception:')) {
+                            alert(data.d);
+                        }
+                        // matsScore is first time
+                        else if (data.d === '[]') {
+                            DispayModalData(matsScoreFirst);
+                            document.getElementById("btnStart").onclick = function () { buttonStartClick(matsScoreFirst, lamiMatsSelected) };
+                        }
+                        // already matsScore already check
+                        else {
+                            const matsScoreCurrentCheck = JSON.parse(data.d);
+                            if (matsScoreCurrentCheck != null) {
+                                DispayModalData(matsScoreCurrentCheck);
+                                document.getElementById("btnStart").onclick = function () { buttonStartClick(matsScoreCurrentCheck, lamiMatsSelected) };
+                            }
+                        }
+                    },
+                    error: onError
+                });
+
                 return false;
             }
 
-            function buttonStartClick(materialCurrentCheck) {
-                alert(materialCurrentCheck.poQuantity);
+            function buttonStartClick(matsScore, lamiMatsSelected) {
+                var regexNumber = /^\d+$/;
+
+                // validate
+                var labelQty = document.getElementById('txtLabelQuantity');
+                labelQty.classList.remove('is-invalid');
+                var actualQty = document.getElementById('txtActualQuantity');
+                actualQty.classList.remove('is-invalid');
+                var labelWidth = document.getElementById('txtLabelWidth');
+                labelWidth.classList.remove('is-invalid');
+                var actualWidth = document.getElementById('txtActualWidth');
+                actualWidth.classList.remove('is-invalid');
+
+                var validateResult = true;
+                if (!regexNumber.test(labelQty.value.toString())) {
+                    labelQty.classList.add('is-invalid');
+                    validateResult = false;
+                }
+
+                if (actualQty.value <= 0 || actualQty.value > lamiMatsSelected.POQuantity || !regexNumber.test(actualQty.value.toString())) {
+                    actualQty.classList.add('is-invalid');
+                    validateResult = false;
+                }
+                if (!regexNumber.test(labelWidth.value.toString())) {
+                    labelWidth.classList.add('is-invalid');
+                    validateResult = false;
+                }
+                if (!regexNumber.test(actualWidth.value.toString())) {
+                    actualWidth.classList.add('is-invalid');
+                    validateResult = false;
+                }
+                if (!validateResult) {
+                    return;
+                }
+
+                matsScore.LabelQuantity = labelQty.value;
+                matsScore.ActualQuantity = actualQty.value;
+                matsScore.LabelWidth = labelWidth.value;
+                matsScore.ActualWidth = actualWidth.value;
+
+                DisplayMatsInfor(matsScore, lamiMatsSelected);
+                // Display divScore
+                const divScore = document.getElementById('divScore');
+                divScore.style.display = 'block';
+
+                // Clode Modal
                 $('#btnCloseModelInputMaterialDetail').click();
                 return false;
             }
 
+            function DispayModalData(matsScore) {
+                const txtLabelQuantity = document.getElementById('txtLabelQuantity');
+                txtLabelQuantity.setAttribute('class', 'form-control');
+                txtLabelQuantity.value = '';
+
+                const txtActualQuantity = document.getElementById('txtActualQuantity');
+                txtActualQuantity.setAttribute('class', 'form-control');
+                txtActualQuantity.value = '';
+
+                const txtLabelWidth = document.getElementById('txtLabelWidth');
+                txtLabelWidth.setAttribute('class', 'form-control');
+                txtLabelWidth.value = '';
+
+                const txtActualWidth = document.getElementById('txtActualWidth');
+                txtActualWidth.setAttribute('class', 'form-control');
+                txtActualWidth.value = '';
+
+                if (matsScore != null) {
+                    if (matsScore.LabelQuantity != 0) {
+                        txtLabelQuantity.value = matsScore.LabelQuantity;
+                    }
+                    if (matsScore.ActualQuantity != 0) {
+                        txtActualQuantity.value = matsScore.ActualQuantity;
+                    }
+                    if (matsScore.LabelWidth != 0) {
+                        txtLabelWidth.value = matsScore.LabelWidth;
+                    }
+                    if (matsScore.ActualWidth != 0) {
+                        txtActualWidth.value = matsScore.ActualWidth;
+                    }
+                }
+            }
+
+            function DisplayMatsInfor(matsScore, lamiMatsSelected) {
+                const divMatsInfor = document.getElementById('divMatsInfor');
+                divMatsInfor.style.display = 'none';
+                const divScore = document.getElementById('divScore');
+                divScore.style.display = 'none';
+
+                // Reset Value
+                const pMatsName = document.getElementById('pMatsName');
+                pMatsName.innerHTML = '';
+                const divMatsInforColumn1 = document.getElementById('divMatsInforColumn1');
+                divMatsInforColumn1.innerHTML = '';
+                const divMatsInforColumn2 = document.getElementById('divMatsInforColumn2');
+                divMatsInforColumn2.innerHTML = '';
+                const divMatsInforColumn3 = document.getElementById('divMatsInforColumn3');
+                divMatsInforColumn3.innerHTML = '';
+                const divMatsInforRow2 = document.getElementById('divMatsInforRow2');
+                divMatsInforRow2.innerHTML = '';
+                const divMatsInforColumn31 = document.getElementById('divMatsInforColumn31');
+                divMatsInforColumn31.innerHTML = '';
+                const divMatsInforColumn32 = document.getElementById('divMatsInforColumn32');
+                divMatsInforColumn32.innerHTML = '';
+                const divMatsInforColumn33 = document.getElementById('divMatsInforColumn33');
+                divMatsInforColumn33.innerHTML = '';
+
+                // Binding data
+                if (lamiMatsSelected != null) {
+                    const divMatsInfor = document.getElementById('divMatsInfor');
+                    divMatsInfor.style.display = 'block';
+
+                    pMatsName.innerText = lamiMatsSelected.MaterialName;
+
+                    const liOrderNo = document.createElement("li");
+                    liOrderNo.innerText = 'OrderNo: ' + lamiMatsSelected.OrderNo;
+                    const liArticle = document.createElement("li");
+                    liArticle.innerText = 'ArticleNo: ' + lamiMatsSelected.ArticleNo;
+
+                    divMatsInforColumn1.appendChild(liOrderNo);
+                    divMatsInforColumn1.appendChild(liArticle);
+
+                    const liPatternNo = document.createElement("li");
+                    liPatternNo.innerText = 'PatternNo: ' + lamiMatsSelected.PatternNo;
+                    const liPosition = document.createElement("li");
+                    liPosition.innerText = 'Positon: ' + lamiMatsSelected.Position;
+
+                    divMatsInforColumn2.appendChild(liPatternNo);
+                    divMatsInforColumn2.appendChild(liPosition);
+
+                    const liPart = document.createElement("li");
+                    liPart.innerText = 'Part: ' + lamiMatsSelected.MaterialPart;
+
+                    const liUnit = document.createElement("li");
+                    liUnit.innerText = 'Unit: ' + lamiMatsSelected.Unit;
+
+                    divMatsInforColumn3.appendChild(liPart);
+                    divMatsInforColumn3.appendChild(liUnit);
+
+                    const liShoeName = document.createElement("li");
+                    liShoeName.innerText = 'ShoeName: ' + lamiMatsSelected.ShoeName;
+
+                    const liPOList = document.createElement("li");
+                    liPOList.innerText = 'ProductNoList: ' + lamiMatsSelected.ProductNoList;
+
+                    divMatsInforRow2.appendChild(liShoeName);
+                    divMatsInforRow2.appendChild(liPOList);
+
+                    const liPOQuantity = document.createElement("li");
+                    liPOQuantity.innerText = 'Product Quantity: ' + lamiMatsSelected.POQuantity;
+
+                    const liSendQuantity = document.createElement("li");
+                    liSendQuantity.innerText = 'Send Quantity: ' + lamiMatsSelected.SendQuantity;
+
+                    divMatsInforColumn31.appendChild(liPOQuantity);
+                    divMatsInforColumn31.appendChild(liSendQuantity);
+                }
+                if (matsScore != null) {
+                    const liLabelQuantity = document.createElement("li");
+                    liLabelQuantity.innerText = 'Label Quantity: ' + matsScore.LabelQuantity;
+
+                    const liActualQuantity = document.createElement("li");
+                    liActualQuantity.innerText = 'Actual Quantity: ' + matsScore.ActualQuantity;
+
+                    divMatsInforColumn32.appendChild(liLabelQuantity);
+                    divMatsInforColumn32.appendChild(liActualQuantity);
+
+                    const liLabelWidth = document.createElement("li");
+                    liLabelWidth.innerText = 'Label Width: ' + matsScore.LabelWidth;
+
+                    const liActualWidth = document.createElement("li");
+                    liActualWidth.innerText = 'Actual Width: ' + matsScore.ActualWidth;
+
+                    divMatsInforColumn33.appendChild(liLabelWidth);
+                    divMatsInforColumn33.appendChild(liActualWidth);
+                }
+            }
+            
             // Get
             function Search() {
+                DisplayMatsInfor(null, null);
+
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetByOrderNo") %>',
                     data: { "orderNo": '"' + $('#txtOrderNoBarcode').val() + '"' },
@@ -71,13 +292,16 @@
                 const divMatsList = document.getElementById("divMatsList");
                 divMatsList.innerHTML = '';
 
-                //alert(data.d);
                 if (data.d === "This PO does not exist in system !")
                 {
                     $('#txtOrderNoBarcode').focus();
                     $('#txtOrderNoBarcode').select();
                     return;
-                }                
+                }
+                else if (data.d.toString().includes('Exception:')) {
+                    alert(data.d);
+                    return;
+                }
 
                 // Clear lamination material list
                 var laminationMaterialList = JSON.parse(data.d);
@@ -87,7 +311,7 @@
 
                     const matButton = document.createElement("button");
                     matButton.type = "button";
-                    matButton.className = "btn btn-outline-success btn-sm text-dark";
+                    matButton.className = "btn btn-outline-success btn-sm text-dark text-wrap text-left";
                     matButton.setAttribute("role", "group");
                     matButton.setAttribute("data-bs-toggle", "modal");
                     matButton.setAttribute("data-bs-target", "#modalInputMaterialDetail");
@@ -107,8 +331,9 @@
                 });
                 
             }
+
             function onError() {
-                alert('Failed !');
+                alert('An error occured at the backend !');
             }
         </script>
     </head>
@@ -116,22 +341,21 @@
         <body>
             <%--<asp:ScriptManager ID="scriptManagerWHLamination" runat="server" EnablePageMethods="true"/>--%>
             <div class="container-fluid" style="min-height: 100vh;">
-                <div class="row text-center align-content-center">
+                <div class="row text-center align-content-center" style="min-height: 10vh;">
                     <h2>WH Lamination</h2>
                 </div>
-                <div class="row">
+
+                <div class="row g-1">
                     <div class="col-12 col-sm-4">
                         <div class="input-group-append">
                             <button class="btn btn-lg rounded-0 border" type="button" id="btnScanBarcode"  data-bs-toggle="modal" data-bs-target="#modalBarcodeScan">
                                 <a><i class="fa fa-barcode"></i></a>
 				            </button>
-                            <%--<asp:TextBox ID="txtOrderNoBarcode" CssClass="form-control rounded-0" runat="server" ClientIDMode="Static" placeholder="Scan Barcode"></asp:TextBox>--%>
                             <input id="txtOrderNoBarcode" class="form-control rounded-0" placeholder="Scan Barcode"></input>
-                            <%--<asp:Button CssClass="btn btn-primary rounded-0" ID="btnSearchByOrderNo" runat="server" OnClientClick="btnSearchByOrderNoClick()" Text="OK"/>--%>
                             <button class="btn btn-primary rounded-0" id="btnSearchByOrderNo" onclick="Search(); return false;">Search</button>
                         </div>
                         
-                        <div id="divMatsList" class="row row-cols-auto g-1 mt-1">
+                        <div id="divMatsList" class="row row-cols-auto g-1 mt-1 overflow-auto"style="min-height:35vh; max-height:35vh;">
                         </div>
 
                         <script src="assets/zxing.js"></script>
@@ -219,10 +443,87 @@
 
                     </div>
 
-                    <div class="col-12 col-sm-8">
-                        
+                    <div id="divMatsInfor" class="col-12 col-sm-8" style="display:none;">
+                        <div class="card" >
+                          <div class="card-header small">
+                              <div class="row g-0">
+                                  <div class="col">
+                                      <p id="pMatsName" class="m-0 p-0 text-danger">Material Description</p>
+                                  </div>
+                                  <div class="col-auto">
+                                      Toast Area
+                                  </div>
+                              </div>
+
+                          </div>
+                          <div class="card-body overflow-auto small" style="min-height:35vh; max-height:35vh;">
+                              <div class="row g-1">
+                                  <div id="divMatsInforColumn1" class="col-12 col-sm-4">
+                                  </div>
+                                  <div id="divMatsInforColumn2" class="col-12 col-sm-4">
+                                  </div>
+                                  <div id="divMatsInforColumn3" class="col-12 col-sm-4">
+                                  </div>
+                              </div>
+                              <div id="divMatsInforRow2" class="row">
+                                  
+                              </div>
+                              <hr>
+                              <div class="row g-1">
+                                  <div id="divMatsInforColumn31" class="col-12 col-sm-4">
+                                  </div>
+                                  <div id="divMatsInforColumn32" class="col-12 col-sm-4">
+                                  </div>
+                                  <div id="divMatsInforColumn33" class="col-12 col-sm-4">
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
                     </div>
                 </div>
+
+                <div id="divScore" class="row mt-1" style="display:none;">
+                    <div class="col">
+                        <div class="card" >
+                            <div class="card-body overflow-auto " style="min-height:45vh; max-height:45vh;">
+                                <div class="row g-0">
+                                    <div class="col-12 col-sm-8">
+                                        <div class="row g-2">
+                                            <div class="col-3">
+                                                <button id="btnDefectType1" type="button" class="btn btn-outline-danger btn-lg rounded-2 shadow-lg p-4 w-100">1</button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-outline-danger btn-lg rounded-2 shadow-lg p-4 w-100">2</button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-outline-danger btn-lg rounded-0 shadow-lg p-4 w-100">3</button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-outline-danger btn-lg rounded-0 shadow-lg p-4 w-100">4</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-2 mt-1">
+                                            <div class="col-3">
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-outline-info btn-lg rounded-2 shadow-lg p-4 w-100">2</button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-outline-info btn-lg rounded-2 shadow-lg p-4 w-100">3</button>
+                                            </div>
+                                            <div class="col-3">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-12 col-sm-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             
             <!-- Modal Scan Barcode -->
@@ -262,25 +563,23 @@
                     <h6 class="modal-title" id="materialDetailTitle">Input Quantity</h6>
                     <button id="btnCloseModelInputMaterialDetail" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-body pt-0">
-                      <form>
-                          <div class="mb-1">
-                            <label for="txtLabelQuantity" class="col-form-label">Label Quantity</label>
-                            <input type="text" class="form-control" id="txtLabelQuantity">
-                          </div>
-                          <div class="mb-1">
-                            <label for="txtActualQuantity" class="col-form-label">Actual Quantity</label>
-                            <input type="text" class="form-control" id="txtActualQuantity">
-                          </div>
-                          <div class="mb-1">
-                            <label for="txtLabelWidth" class="col-form-label">Label Width</label>
-                            <input type="text" class="form-control" id="txtLabelWidth">
-                          </div>
-                          <div>
-                            <label for="txtActualWidth" class="col-form-label">Actual Width</label>
-                            <input type="text" class="form-control" id="txtActualWidth">
-                          </div>
-                        </form>
+                  <div class="modal-body">
+                      <div class="form-floating mb-1">
+                          <input class="form-control" id="txtLabelQuantity" placeholder=" ">
+                          <label for="txtLabelQuantity">Label Quantity</label>
+                      </div>
+                      <div class="form-floating mb-1">
+                          <input class="form-control" id="txtActualQuantity" placeholder=" ">
+                          <label for="txtActualQuantity">Actual Quantity</label>
+                      </div>
+                      <div class="form-floating mb-1">
+                          <input class="form-control" id="txtLabelWidth" placeholder=" ">
+                          <label for="txtLabelWidth">Label Width</label>
+                      </div>
+                      <div class="form-floating mb-1">
+                          <input class="form-control" id="txtActualWidth" placeholder=" ">
+                          <label for="txtActualWidth">Actual Width</label>
+                      </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

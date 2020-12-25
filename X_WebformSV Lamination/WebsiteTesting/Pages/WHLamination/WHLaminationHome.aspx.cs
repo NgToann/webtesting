@@ -28,18 +28,35 @@ namespace WebsiteTesting.Pages.WHLamination
             return x;
         }
 
-        //
+        // Get order Information by OrderNo
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]
         public static string GetByOrderNo(string orderNo)
         {
             try 
             {
-                var laminationMatsSerach = LaminationMaterialController.GetLaminationMaterialByOrderNo(orderNo).ToList();
-                if (laminationMatsSerach.Count() == 0)
+                var laminationMatsSearch = LaminationMaterialController.GetLaminationMaterialByOrderNo(orderNo).ToList();
+                if (laminationMatsSearch.Count() == 0)
                     return "This PO does not exist in system !";
-                var x = JsonConvert.SerializeObject(laminationMatsSerach);
-                return JsonConvert.SerializeObject(laminationMatsSerach);
+                return JsonConvert.SerializeObject(laminationMatsSearch);
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
+            }
+        }
+
+        // Get order Information by OrderNo
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public static string GetScoreByOrderNoId(string orderNoId)
+        {
+            try
+            {
+                var laminationMatsScore = LaminationMaterialScoreController.GetLaminationMatsScoreByOrderNoId(orderNoId);
+                if (laminationMatsScore != null)
+                    return JsonConvert.SerializeObject(laminationMatsScore);
+                else return "[]";
             }
             catch (Exception ex)
             {
