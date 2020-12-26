@@ -24,7 +24,6 @@
                     this.DefectType2 = DefectType2;
                     this.DefectType3 = DefectType3;
                     this.DefectType4 = DefectType4;
-
                     this.HoleType2 = HoleType2;
                     this.HoleType4 = HoleType4;
                     this.Reviser = Reviser;
@@ -34,7 +33,6 @@
                     this.TotalScore = this.DefectType1 + this.DefectType2 * 2 + this.DefectType3 * 3 + this.DefectType4 * 4 + this.HoleType2 * 2 + this.HoleType4 * 4;
                 }
             };
-
             function buttonMaterialClick(buttonId, laminationMaterialList, lamiMatsSelected) {
                 DisplayMatsInfor(null, null);
                 // Clear Highlight
@@ -45,13 +43,12 @@
                 document.getElementById(buttonId).setAttribute("class", "btn btn-danger btn-sm text-wrap text-left");
                 document.getElementById("materialDetailTitle").innerText = lamiMatsSelected.MaterialName;
                 document.getElementById("spPosition").innerText = lamiMatsSelected.Position;
-
                 const matsScoreFirst = new LaminationMaterialScore(
                     OrderNoId = lamiMatsSelected.OrderNoId,
                     POQuantity = lamiMatsSelected.POQuantity,
-                    LabelQuantity   = 0,
-                    ActualQuantity  = 0,
-                    LabelWidth      = 0,
+                    LabelQuantity = 0,
+                    ActualQuantity = 0,
+                    LabelWidth = 0,
                     ActualWidth = 0,
                     DefectType1 = 0,
                     DefectType2 = 0,
@@ -61,7 +58,6 @@
                     HoleType4 = 0,
                     Reviser = "it02"
                 );
-
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetScoreByOrderNoId") %>',
                     data: { "orderNoId": '"' + buttonId + '"' },
@@ -89,13 +85,10 @@
                     },
                     error: onError
                 });
-
                 return false;
             }
-
             function buttonStartClick(matsScore, lamiMatsSelected) {
                 var regexNumber = /^\d+$/;
-
                 // validate
                 var labelQty = document.getElementById('txtLabelQuantity');
                 labelQty.classList.remove('is-invalid');
@@ -105,13 +98,11 @@
                 labelWidth.classList.remove('is-invalid');
                 var actualWidth = document.getElementById('txtActualWidth');
                 actualWidth.classList.remove('is-invalid');
-
                 var validateResult = true;
                 if (!regexNumber.test(labelQty.value.toString())) {
                     labelQty.classList.add('is-invalid');
                     validateResult = false;
                 }
-
                 if (actualQty.value <= 0 || actualQty.value > lamiMatsSelected.POQuantity || !regexNumber.test(actualQty.value.toString())) {
                     actualQty.classList.add('is-invalid');
                     validateResult = false;
@@ -127,39 +118,31 @@
                 if (!validateResult) {
                     return;
                 }
-
                 matsScore.LabelQuantity = labelQty.value;
                 matsScore.ActualQuantity = actualQty.value;
                 matsScore.LabelWidth = labelWidth.value;
                 matsScore.ActualWidth = actualWidth.value;
-
                 DisplayMatsInfor(matsScore, lamiMatsSelected);
                 // Display divScore
                 const divScore = document.getElementById('divScore');
                 divScore.style.display = 'block';
-
                 // Clode Modal
                 $('#btnCloseModelInputMaterialDetail').click();
                 return false;
             }
-
             function DispayModalData(matsScore) {
                 const txtLabelQuantity = document.getElementById('txtLabelQuantity');
                 txtLabelQuantity.setAttribute('class', 'form-control');
                 txtLabelQuantity.value = '';
-
                 const txtActualQuantity = document.getElementById('txtActualQuantity');
                 txtActualQuantity.setAttribute('class', 'form-control');
                 txtActualQuantity.value = '';
-
                 const txtLabelWidth = document.getElementById('txtLabelWidth');
                 txtLabelWidth.setAttribute('class', 'form-control');
                 txtLabelWidth.value = '';
-
                 const txtActualWidth = document.getElementById('txtActualWidth');
                 txtActualWidth.setAttribute('class', 'form-control');
                 txtActualWidth.value = '';
-
                 if (matsScore != null) {
                     if (matsScore.LabelQuantity != 0) {
                         txtLabelQuantity.value = matsScore.LabelQuantity;
@@ -175,13 +158,11 @@
                     }
                 }
             }
-
             function DisplayMatsInfor(matsScore, lamiMatsSelected) {
                 const divMatsInfor = document.getElementById('divMatsInfor');
                 divMatsInfor.style.display = 'none';
                 const divScore = document.getElementById('divScore');
                 divScore.style.display = 'none';
-
                 // Reset Value
                 const pMatsName = document.getElementById('pMatsName');
                 pMatsName.innerHTML = '';
@@ -199,82 +180,61 @@
                 divMatsInforColumn32.innerHTML = '';
                 const divMatsInforColumn33 = document.getElementById('divMatsInforColumn33');
                 divMatsInforColumn33.innerHTML = '';
-
                 // Binding data
                 if (lamiMatsSelected != null) {
                     const divMatsInfor = document.getElementById('divMatsInfor');
                     divMatsInfor.style.display = 'block';
-
                     pMatsName.innerText = lamiMatsSelected.MaterialName;
-
                     const liOrderNo = document.createElement("li");
                     liOrderNo.innerText = 'OrderNo: ' + lamiMatsSelected.OrderNo;
                     const liArticle = document.createElement("li");
                     liArticle.innerText = 'ArticleNo: ' + lamiMatsSelected.ArticleNo;
-
                     divMatsInforColumn1.appendChild(liOrderNo);
                     divMatsInforColumn1.appendChild(liArticle);
-
                     const liPatternNo = document.createElement("li");
                     liPatternNo.innerText = 'PatternNo: ' + lamiMatsSelected.PatternNo;
                     const liPosition = document.createElement("li");
                     liPosition.innerText = 'Positon: ' + lamiMatsSelected.Position;
-
                     divMatsInforColumn2.appendChild(liPatternNo);
                     divMatsInforColumn2.appendChild(liPosition);
-
                     const liPart = document.createElement("li");
                     liPart.innerText = 'Part: ' + lamiMatsSelected.MaterialPart;
-
                     const liUnit = document.createElement("li");
                     liUnit.innerText = 'Unit: ' + lamiMatsSelected.Unit;
-
                     divMatsInforColumn3.appendChild(liPart);
                     divMatsInforColumn3.appendChild(liUnit);
-
                     const liShoeName = document.createElement("li");
                     liShoeName.innerText = 'ShoeName: ' + lamiMatsSelected.ShoeName;
-
                     const liPOList = document.createElement("li");
                     liPOList.innerText = 'ProductNoList: ' + lamiMatsSelected.ProductNoList;
-
                     divMatsInforRow2.appendChild(liShoeName);
                     divMatsInforRow2.appendChild(liPOList);
-
                     const liPOQuantity = document.createElement("li");
                     liPOQuantity.innerText = 'Product Quantity: ' + lamiMatsSelected.POQuantity;
-
                     const liSendQuantity = document.createElement("li");
                     liSendQuantity.innerText = 'Send Quantity: ' + lamiMatsSelected.SendQuantity;
-
                     divMatsInforColumn31.appendChild(liPOQuantity);
                     divMatsInforColumn31.appendChild(liSendQuantity);
                 }
                 if (matsScore != null) {
                     const liLabelQuantity = document.createElement("li");
                     liLabelQuantity.innerText = 'Label Quantity: ' + matsScore.LabelQuantity;
-
                     const liActualQuantity = document.createElement("li");
                     liActualQuantity.innerText = 'Actual Quantity: ' + matsScore.ActualQuantity;
-
                     divMatsInforColumn32.appendChild(liLabelQuantity);
                     divMatsInforColumn32.appendChild(liActualQuantity);
-
                     const liLabelWidth = document.createElement("li");
                     liLabelWidth.innerText = 'Label Width: ' + matsScore.LabelWidth;
-
                     const liActualWidth = document.createElement("li");
                     liActualWidth.innerText = 'Actual Width: ' + matsScore.ActualWidth;
-
                     divMatsInforColumn33.appendChild(liLabelWidth);
                     divMatsInforColumn33.appendChild(liActualWidth);
                 }
             }
-            
+
             // Get
             function Search() {
                 DisplayMatsInfor(null, null);
-
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetByOrderNo") %>',
                     data: { "orderNo": '"' + $('#txtOrderNoBarcode').val() + '"' },
@@ -286,14 +246,11 @@
                     error: onError
                 });
             }
-
             function OnSuccess(data) {
                 $('#btnCloseModel').click();
                 const divMatsList = document.getElementById("divMatsList");
                 divMatsList.innerHTML = '';
-
-                if (data.d === "This PO does not exist in system !")
-                {
+                if (data.d === "This PO does not exist in system !") {
                     $('#txtOrderNoBarcode').focus();
                     $('#txtOrderNoBarcode').select();
                     return;
@@ -302,13 +259,11 @@
                     alert(data.d);
                     return;
                 }
-
                 // Clear lamination material list
                 var laminationMaterialList = JSON.parse(data.d);
                 laminationMaterialList.forEach(function (laminationMaterial) {
                     const matDiv = document.createElement("div");
                     matDiv.className = "col";
-
                     const matButton = document.createElement("button");
                     matButton.type = "button";
                     matButton.className = "btn btn-outline-success btn-sm text-dark text-wrap text-left";
@@ -318,20 +273,16 @@
                     matButton.id = laminationMaterial.OrderNoId;
                     matButton.textContent = laminationMaterial.MaterialName;
                     matButton.onclick = function () { buttonMaterialClick(matButton.id, laminationMaterialList, laminationMaterial) };
-
                     const matSpan = document.createElement("span");
                     matSpan.className = "badge bg-info text-dark ml-1";
                     matSpan.textContent = laminationMaterial.Position;
-
                     matDiv.appendChild(matButton);
                     matButton.appendChild(matSpan);
-
                     divMatsList.appendChild(matDiv);
-                //}
+                    //}
                 });
-                
-            }
 
+            }
             function onError() {
                 alert('An error occured at the backend !');
             }
@@ -357,90 +308,6 @@
                         
                         <div id="divMatsList" class="row row-cols-auto g-1 mt-1 overflow-auto"style="min-height:35vh; max-height:35vh;">
                         </div>
-
-                        <script src="assets/zxing.js"></script>
-                        <script type="text/javascript" language="javascript">
-                            //window.addEventListener('load', function () {
-                            let selectedDeviceId;
-                            const codeReader = new ZXing.BrowserMultiFormatReader()
-                            console.log('ZXing code reader initialized')
-                            codeReader.getVideoInputDevices()
-                                .then((videoInputDevices) => {
-                                    const sourceSelect = document.getElementById('sourceSelect')
-                                    selectedDeviceId = videoInputDevices[0].deviceId
-                                    if (videoInputDevices[videoInputDevices.length - 1] != null) {
-                                        selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
-                                    }
-                                    
-                                    if (videoInputDevices.length >= 1) {
-                                        videoInputDevices.forEach((element) => {
-                                            const sourceOption = document.createElement('option')
-                                            sourceOption.text = element.label
-                                            sourceOption.value = element.deviceId
-                                            sourceSelect.appendChild(sourceOption)
-                                        })
-
-                                        sourceSelect.onchange = () => {
-                                            selectedDeviceId = sourceSelect.value;
-                                            codeReader.reset()
-                                            console.log('Reset.')
-                                            document.getElementById("txtOrderNoBarcode").value = ''
-                                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
-                                                if (result) {
-                                                    console.log(result)
-                                                    $(document).ready(function () {
-                                                        document.getElementById("txtOrderNoBarcode").value = result.text
-                                                        // Click OK Button
-                                                        document.getElementById('btnSearchByOrderNo').click();
-                                                        codeReader.reset();
-                                                    });
-                                                }
-                                                if (err && !(err instanceof ZXing.NotFoundException)) {
-                                                    console.error(err)
-                                                    document.getElementById("txtOrderNoBarcode").value = err
-                                                }
-                                            })
-                                            console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
-                                        };
-
-                                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
-                                        sourceSelectPanel.style.display = 'block'
-                                    }
-
-                                    // Barcode Button Click
-                                    document.getElementById("btnScanBarcode").addEventListener("click", function () {
-                                        codeReader.reset()
-                                        console.log('Reset.')
-                                        document.getElementById("txtOrderNoBarcode").value = ''
-                                        codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
-                                            if (result) {
-                                                console.log(result)
-                                                $(document).ready(function () {
-                                                    document.getElementById("txtOrderNoBarcode").value = result.text
-                                                    // Click OK Button
-                                                    document.getElementById('btnSearchByOrderNo').click();
-                                                    codeReader.reset();
-                                                });
-                                            }
-                                            if (err && !(err instanceof ZXing.NotFoundException)) {
-                                                console.error(err)
-                                                document.getElementById("txtOrderNoBarcode").value = err
-                                            }
-                                        })
-                                        console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
-                                    })
-                                    //document.getElementById("btnCloseModel").addEventListener("click", function () {
-                                    //    codeReader.reset()
-                                    //    console.log('Reset.')
-                                    //    document.getElementById("txtOrderNoBarcode").value = ''
-                                    //})
-                                })
-                                .catch((err) => {
-                                    console.error(err)
-                                })
-                            //})
-                        </script>
-
                     </div>
 
                     <div id="divMatsInfor" class="col-12 col-sm-8" style="display:none;">
@@ -486,38 +353,89 @@
                     <div class="col">
                         <div class="card" >
                             <div class="card-body overflow-auto " style="min-height:45vh; max-height:45vh;">
-                                <div class="row g-0">
+                                <div class="row h-100">
                                     <div class="col-12 col-sm-8">
-                                        <div class="row g-2">
-                                            <div class="col-3">
-                                                <button id="btnDefectType1" type="button" class="btn btn-outline-danger btn-lg rounded-2 shadow-lg p-4 w-100">1</button>
+                                        <div class="row h-50 g-2 align-items-center">
+                                            <div class="row">
+                                                <h6>Defects</h6>
                                             </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-outline-danger btn-lg rounded-2 shadow-lg p-4 w-100">2</button>
-                                            </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-outline-danger btn-lg rounded-0 shadow-lg p-4 w-100">3</button>
-                                            </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-outline-danger btn-lg rounded-0 shadow-lg p-4 w-100">4</button>
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">1</h2></div>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">3</h2></div>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
+                                                        </div>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <div class="row g-2 mt-1">
-                                            <div class="col-3">
+                                        
+                                        <div class="row h-50 g-2 mt-1 align-items-center">
+                                            <div class="row">
+                                                <h6>Hole</h6>
                                             </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-outline-info btn-lg rounded-2 shadow-lg p-4 w-100">2</button>
-                                            </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-outline-info btn-lg rounded-2 shadow-lg p-4 w-100">3</button>
-                                            </div>
-                                            <div class="col-3">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
+                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
+                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                                <div class="col-3">
+                                                </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="col-12 col-sm-4"></div>
+
+                                    <div class="col-12 col-sm-4 h-100">
+                                        <div class="row h-75 align-items-center">
+                                            <div class="col">
+                                                <h2 class="text-center">150</h2>
+                                            </div>
+                                        </div>
+                                        <div class="row h-25 align-items-center">
+                                            <div class="col">
+                                                <h3 class="text-center">SAVE</h3>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -588,8 +506,86 @@
                 </div>
               </div>
             </div>
+            
+            <script type="text/javascript" src="assets/zxing.js"></script>
+            <script type="text/javascript" language="javascript">
+                            //window.addEventListener('load', function () {
+                            let selectedDeviceId;
+                            const codeReader = new ZXing.BrowserMultiFormatReader()
+                            console.log('ZXing code reader initialized')
+                            codeReader.getVideoInputDevices()
+                                .then((videoInputDevices) => {
+                                    const sourceSelect = document.getElementById('sourceSelect')
+                                    selectedDeviceId = videoInputDevices[0].deviceId
+                                    if (videoInputDevices[videoInputDevices.length - 1] != null) {
+                                        selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
+                                    }
 
+                                    if (videoInputDevices.length >= 1) {
+                                        videoInputDevices.forEach((element) => {
+                                            const sourceOption = document.createElement('option')
+                                            sourceOption.text = element.label
+                                            sourceOption.value = element.deviceId
+                                            sourceSelect.appendChild(sourceOption)
+                                        })
+                                        sourceSelect.onchange = () => {
+                                            selectedDeviceId = sourceSelect.value;
+                                            codeReader.reset()
+                                            console.log('Reset.')
+                                            document.getElementById("txtOrderNoBarcode").value = ''
+                                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
+                                                if (result) {
+                                                    console.log(result)
+                                                    $(document).ready(function () {
+                                                        document.getElementById("txtOrderNoBarcode").value = result.text
+                                                        // Click OK Button
+                                                        document.getElementById('btnSearchByOrderNo').click();
+                                                        codeReader.reset();
+                                                    });
+                                                }
+                                                if (err && !(err instanceof ZXing.NotFoundException)) {
+                                                    console.error(err)
+                                                    document.getElementById("txtOrderNoBarcode").value = err
+                                                }
+                                            })
+                                            console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
+                                        };
+                                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
+                                        sourceSelectPanel.style.display = 'block'
+                                    }
+                                    // Barcode Button Click
+                                    document.getElementById("btnScanBarcode").addEventListener("click", function () {
+                                        codeReader.reset()
+                                        console.log('Reset.')
+                                        document.getElementById("txtOrderNoBarcode").value = ''
+                                        codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
+                                            if (result) {
+                                                console.log(result)
+                                                $(document).ready(function () {
+                                                    document.getElementById("txtOrderNoBarcode").value = result.text
+                                                    // Click OK Button
+                                                    document.getElementById('btnSearchByOrderNo').click();
+                                                    codeReader.reset();
+                                                });
+                                            }
+                                            if (err && !(err instanceof ZXing.NotFoundException)) {
+                                                console.error(err)
+                                                document.getElementById("txtOrderNoBarcode").value = err
+                                            }
+                                        })
+                                        console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
+                                    })
+                                    //document.getElementById("btnCloseModel").addEventListener("click", function () {
+                                    //    codeReader.reset()
+                                    //    console.log('Reset.')
+                                    //    document.getElementById("txtOrderNoBarcode").value = ''
+                                    //})
+                                })
+                                .catch((err) => {
+                                    console.error(err)
+                                })
+                            //})
+                        </script>
         </body>
     </html>
 </asp:Content>
-
