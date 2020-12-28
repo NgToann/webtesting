@@ -74,7 +74,7 @@
                             DispayModalData(matsScoreFirst);
                             document.getElementById("btnStart").onclick = function () { buttonStartClick(matsScoreFirst, lamiMatsSelected) };
                         }
-                        // already matsScore already check
+                        // matsScore already check
                         else {
                             const matsScoreCurrentCheck = JSON.parse(data.d);
                             if (matsScoreCurrentCheck != null) {
@@ -98,6 +98,7 @@
                 labelWidth.classList.remove('is-invalid');
                 var actualWidth = document.getElementById('txtActualWidth');
                 actualWidth.classList.remove('is-invalid');
+
                 var validateResult = true;
                 if (!regexNumber.test(labelQty.value.toString())) {
                     labelQty.classList.add('is-invalid');
@@ -125,7 +126,10 @@
                 DisplayMatsInfor(matsScore, lamiMatsSelected);
                 // Display divScore
                 const divScore = document.getElementById('divScore');
+                const divScoreSave = document.getElementById('divScoreSave');
+                //const divScore = document.querySelectorAll('divScore');
                 divScore.style.display = 'block';
+                divScoreSave.style.display = 'block';
                 // Clode Modal
                 $('#btnCloseModelInputMaterialDetail').click();
                 return false;
@@ -143,6 +147,7 @@
                 const txtActualWidth = document.getElementById('txtActualWidth');
                 txtActualWidth.setAttribute('class', 'form-control');
                 txtActualWidth.value = '';
+
                 if (matsScore != null) {
                     if (matsScore.LabelQuantity != 0) {
                         txtLabelQuantity.value = matsScore.LabelQuantity;
@@ -162,7 +167,10 @@
                 const divMatsInfor = document.getElementById('divMatsInfor');
                 divMatsInfor.style.display = 'none';
                 const divScore = document.getElementById('divScore');
+                const divScoreSave = document.getElementById('divScoreSave');
+                //const divScore = document.querySelectorAll('divScore');
                 divScore.style.display = 'none';
+                divScoreSave.style.display = 'none';
                 // Reset Value
                 const pMatsName = document.getElementById('pMatsName');
                 pMatsName.innerHTML = '';
@@ -291,157 +299,143 @@
     <html lang="en">
         <body>
             <%--<asp:ScriptManager ID="scriptManagerWHLamination" runat="server" EnablePageMethods="true"/>--%>
-            <div class="container-fluid" style="min-height: 100vh;">
-                <div class="row text-center align-content-center" style="min-height: 10vh;">
-                    <h2>WH Lamination</h2>
+
+            <div class="container-fluid" style="min-height:100vh;">
+                <div class="row align-items-center" style="min-height:10vh;">
+                    <%--<h2 class="text-center">WH Lamination</h2>--%>
                 </div>
-
-                <div class="row g-1">
-                    <div class="col-12 col-sm-4">
-                        <div class="input-group-append">
-                            <button class="btn btn-lg rounded-0 border" type="button" id="btnScanBarcode"  data-bs-toggle="modal" data-bs-target="#modalBarcodeScan">
-                                <a><i class="fa fa-barcode"></i></a>
-				            </button>
-                            <input id="txtOrderNoBarcode" class="form-control rounded-0" placeholder="Scan Barcode"></input>
-                            <button class="btn btn-primary rounded-0" id="btnSearchByOrderNo" onclick="Search(); return false;">Search</button>
+                <div class="row" style="min-height:90vh;">
+                    <div class="col-12 w-100">
+                        <div class="row">
+                        <div class="col-12 col-sm-4">
+                            <div class="row">
+                                <div class="input-group-append">
+                                    <button class="btn btn-lg rounded-0 border" type="button" id="btnScanBarcode" data-bs-toggle="modal" data-bs-target="#modalBarcodeScan">
+                                        <a><i class="fa fa-barcode"></i></a>
+				                    </button>
+                                    <input id="txtOrderNoBarcode" class="form-control rounded-0" placeholder="Scan Barcode"></input>
+                                    <button class="btn btn-primary rounded-0" id="btnSearchByOrderNo" onclick="Search(); return false;">Search</button>
+                                </div>
+                            </div>
+                            <div id="divMatsList" class="row row-cols-auto g-1 mt-1 overflow-auto" style="max-height:200px;">
+                            </div>
                         </div>
-                        
-                        <div id="divMatsList" class="row row-cols-auto g-1 mt-1 overflow-auto"style="min-height:35vh; max-height:35vh;">
-                        </div>
-                    </div>
-
-                    <div id="divMatsInfor" class="col-12 col-sm-8" style="display:none;">
-                        <div class="card" >
-                          <div class="card-header small">
-                              <div class="row g-0">
-                                  <div class="col">
-                                      <p id="pMatsName" class="m-0 p-0 text-danger">Material Description</p>
-                                  </div>
-                                  <div class="col-auto">
-                                      Toast Area
-                                  </div>
-                              </div>
-
-                          </div>
-                          <div class="card-body overflow-auto small" style="min-height:35vh; max-height:35vh;">
-                              <div class="row g-1">
-                                  <div id="divMatsInforColumn1" class="col-12 col-sm-4">
-                                  </div>
-                                  <div id="divMatsInforColumn2" class="col-12 col-sm-4">
-                                  </div>
-                                  <div id="divMatsInforColumn3" class="col-12 col-sm-4">
-                                  </div>
-                              </div>
-                              <div id="divMatsInforRow2" class="row">
-                                  
-                              </div>
-                              <hr>
-                              <div class="row g-1">
-                                  <div id="divMatsInforColumn31" class="col-12 col-sm-4">
-                                  </div>
-                                  <div id="divMatsInforColumn32" class="col-12 col-sm-4">
-                                  </div>
-                                  <div id="divMatsInforColumn33" class="col-12 col-sm-4">
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="divScore" class="row mt-1" style="display:none;">
-                    <div class="col">
-                        <div class="card" >
-                            <div class="card-body overflow-auto " style="min-height:45vh; max-height:45vh;">
-                                <div class="row h-100">
-                                    <div class="col-12 col-sm-8">
-                                        <div class="row h-50 g-2 align-items-center">
-                                            <div class="row">
-                                                <h6>Defects</h6>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-3">
-                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">1</h2></div>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                                <div class="col-3">
-                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                                <div class="col-3">
-                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">3</h2></div>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                                <div class="col-3">
-                                                    <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                            </div>
+                        <div id="divMatsInfor" class="col-12 col-sm-8 mt-1 mt-sm-0 overflow-auto" style="display:none;">
+                            <div class="card">
+                                <div class="card-header small">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <p id="pMatsName" class="m-0 p-0 text-danger">Material Description</p>
                                         </div>
-                                        
-                                        <div class="row h-50 g-2 mt-1 align-items-center">
-                                            <div class="row">
-                                                <h6>Hole</h6>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-3">
-                                                </div>
-                                                <div class="col-3">
-                                                    <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
-                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                                <div class="col-3">
-                                                    <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                                        <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                            <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
-                                                            <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                                <div class="col-3">
-                                                </div>
-                                            </div>
+                                        <div class="col-auto">
+                                            Toast Area
                                         </div>
                                     </div>
 
-                                    <div class="col-12 col-sm-4 h-100">
-                                        <div class="row h-75 align-items-center">
-                                            <div class="col">
-                                                <h2 class="text-center">150</h2>
-                                            </div>
+                                </div>
+                                <div class="card-body small h-auto">
+                                    <div class="row g-1">
+                                        <div id="divMatsInforColumn1" class="col-12 col-sm-4">
                                         </div>
-                                        <div class="row h-25 align-items-center">
-                                            <div class="col">
-                                                <h3 class="text-center">SAVE</h3>
-                                            </div>
+                                        <div id="divMatsInforColumn2" class="col-12 col-sm-4">
+                                        </div>
+                                        <div id="divMatsInforColumn3" class="col-12 col-sm-4">
+                                        </div>
+                                    </div>
+                                    <div id="divMatsInforRow2" class="row">
+                                  
+                                    </div>
+                                    <hr>
+                                    <div class="row g-1">
+                                        <div id="divMatsInforColumn31" class="col-12 col-sm-4">
+                                        </div>
+                                        <div id="divMatsInforColumn32" class="col-12 col-sm-4">
+                                        </div>
+                                        <div id="divMatsInforColumn33" class="col-12 col-sm-4">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        </div>
+                    </div>
+                    <div class="col-12 w-100 mt-1 mt-sm-0">
+                        <div class="row">
+                        <div id="divScore" class="col-12 col-sm-8" style="display:none;">
+                            <div class="row h-50 align-items-center">
+                                <h6>Defects</h6>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                            <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">1</h2></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                            <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                            <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">3</h2></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                            <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
+                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                            <div class="row h-50 align-items-center">
+                                <div class="row">
+                                    <h6>Hole</h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                            <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
+                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                            <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
+                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divScoreSave" class="col-12 col-sm-4 mt-1 mt-sm-0" style="display:none;">
+                        <div class="row h-100 align-items-center">
+                            <div class="col text-center">SAVING AREA</div>
+                        </div>
+                    </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
             
             <!-- Modal Scan Barcode -->
