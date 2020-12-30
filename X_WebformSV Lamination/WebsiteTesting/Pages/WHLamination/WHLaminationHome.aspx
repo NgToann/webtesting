@@ -5,17 +5,17 @@
         <title>WH Lamination</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
         
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
         
         <script type="text/javascript">
             class LaminationMaterialScore {
                 constructor(OrderNoId, POQuantity, LabelQuantity, ActualQuantity, LabelWidth, ActualWidth, TotalScore, DefectType1, DefectType2, DefectType3, DefectType4, HoleType2, HoleType4, Reviser) {
                     this.OrderNoId = OrderNoId;
-                    this.PoQuantity = POQuantity;
+                    this.POQuantity = POQuantity;
                     this.LabelQuantity = LabelQuantity;
                     this.ActualQuantity = ActualQuantity;
                     this.LabelWidth = LabelWidth;
@@ -28,11 +28,35 @@
                     this.HoleType4 = HoleType4;
                     this.Reviser = Reviser;
                 }
-                // function cal score.
-                calScore() {
-                    this.TotalScore = this.DefectType1 + this.DefectType2 * 2 + this.DefectType3 * 3 + this.DefectType4 * 4 + this.HoleType2 * 2 + this.HoleType4 * 4;
-                }
             };
+
+            function CalculatePoint(currentLMScore) {
+                var totalPoint = 0, totalPointDefect1 = 0, totalPointDefect2 = 0, totalPointDefect3 = 0, totalPointDefect4 = 0, totalPointHole2 = 0, totalPointHole4 = 0;
+                if (currentLMScore.DefectType1 != null) {
+                    totalPointDefect1 = currentLMScore.DefectType1;
+                }
+                if (currentLMScore.DefectType2 != null) {
+                    totalPointDefect2 = currentLMScore.DefectType2 * 2;
+                }
+                if (currentLMScore.DefectType3 != null) {
+                    totalPointDefect3 = currentLMScore.DefectType3 * 3;
+                }
+                if (currentLMScore.DefectType4 != null) {
+                    totalPointDefect4 = currentLMScore.DefectType4 * 4;
+                }
+                if (currentLMScore.HoleType2 != null) {
+                    totalPointHole2 = currentLMScore.HoleType2 * 2;
+                }
+                if (currentLMScore.HoleType4 != null) {
+                    totalPointHole4 = currentLMScore.HoleType4 * 4;
+                }
+
+                totalPoint = totalPointDefect1 + totalPointDefect2 + totalPointDefect3 + totalPointDefect4 + totalPointHole2 + totalPointHole4;
+                return totalPoint;
+            }
+
+            var currentLMScore = new LaminationMaterialScore();
+
             function buttonMaterialClick(buttonId, laminationMaterialList, lamiMatsSelected) {
                 DisplayMatsInfor(null, null);
                 // Clear Highlight
@@ -50,13 +74,14 @@
                     ActualQuantity = 0,
                     LabelWidth = 0,
                     ActualWidth = 0,
+                    TotalScore = 0,
                     DefectType1 = 0,
                     DefectType2 = 0,
                     DefectType3 = 0,
                     DefectType4 = 0,
                     HoleType2 = 0,
                     HoleType4 = 0,
-                    Reviser = "it02"
+                    Reviser = 'it02',
                 );
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetScoreByOrderNoId") %>',
@@ -76,7 +101,7 @@
                         }
                         // matsScore already check
                         else {
-                            const matsScoreCurrentCheck = JSON.parse(data.d);
+                            var matsScoreCurrentCheck = JSON.parse(data.d);
                             if (matsScoreCurrentCheck != null) {
                                 DispayModalData(matsScoreCurrentCheck);
                                 document.getElementById("btnStart").onclick = function () { buttonStartClick(matsScoreCurrentCheck, lamiMatsSelected) };
@@ -87,6 +112,7 @@
                 });
                 return false;
             }
+
             function buttonStartClick(matsScore, lamiMatsSelected) {
                 var regexNumber = /^\d+$/;
                 // validate
@@ -119,21 +145,42 @@
                 if (!validateResult) {
                     return;
                 }
+
                 matsScore.LabelQuantity = labelQty.value;
                 matsScore.ActualQuantity = actualQty.value;
                 matsScore.LabelWidth = labelWidth.value;
                 matsScore.ActualWidth = actualWidth.value;
                 DisplayMatsInfor(matsScore, lamiMatsSelected);
+
                 // Display divScore
                 const divScore = document.getElementById('divScore');
                 const divScoreSave = document.getElementById('divScoreSave');
-                //const divScore = document.querySelectorAll('divScore');
                 divScore.style.display = 'block';
                 divScoreSave.style.display = 'block';
-                // Clode Modal
+
+                // listen button score click
+                currentLMScore = matsScore;
+                DisplayPoint(currentLMScore, '', true);
+                //if (currentLMScore.OrderNoId == null) {
+                //    currentLMScore = matsScore;
+
+                //    document.getElementById("btnDefectType1").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType1', false) };
+                //    document.getElementById("btnDefectType2").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType2', false) };
+                //    document.getElementById("btnDefectType3").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType3', false) };
+                //    document.getElementById("btnDefectType4").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType4', false) };
+                //    document.getElementById("btnHoleType2").onclick = function () { DisplayPoint(currentLMScore, 'btnHoleType2', false) };
+                //    document.getElementById("btnHoleType4").onclick = function () { DisplayPoint(currentLMScore, 'btnHoleType4', false) };
+                //}
+                //else {
+                //    currentLMScore = lamiMatsSelected;
+                    
+                //}
+
+                // Close Modal
                 $('#btnCloseModelInputMaterialDetail').click();
                 return false;
             }
+
             function DispayModalData(matsScore) {
                 const txtLabelQuantity = document.getElementById('txtLabelQuantity');
                 txtLabelQuantity.setAttribute('class', 'form-control');
@@ -163,6 +210,7 @@
                     }
                 }
             }
+
             function DisplayMatsInfor(matsScore, lamiMatsSelected) {
                 const divMatsInfor = document.getElementById('divMatsInfor');
                 divMatsInfor.style.display = 'none';
@@ -240,6 +288,174 @@
                 }
             }
 
+            function DisplayPoint(currentLMScore, buttonId, displayOldData) {
+
+                document.getElementById('lblTotalScore').innerText = '';
+                document.getElementById('divCardScore').classList.remove('border-danger');
+                document.getElementById('divCardScore').classList.remove('bg-danger');
+                document.getElementById('lblTotalScore').classList.remove('text-danger');
+                document.getElementById('btnSave').classList.remove('btn-danger');
+
+                document.getElementById('divCardScore').classList.remove('border-success');
+                document.getElementById('divCardScore').classList.remove('bg-success');
+                document.getElementById('lblTotalScore').classList.remove('text-success');
+                document.getElementById('btnSave').classList.remove('btn-success');
+
+                if (displayOldData) {
+                    document.getElementById('spDefectType1').innerText = currentLMScore.DefectType1;
+                    document.getElementById('spDefectType2').innerText = currentLMScore.DefectType2;
+                    document.getElementById('spDefectType3').innerText = currentLMScore.DefectType3;
+                    document.getElementById('spDefectType4').innerText = currentLMScore.DefectType4;
+                    document.getElementById('spHoleType2').innerText = currentLMScore.HoleType2;
+                    document.getElementById('spHoleType4').innerText = currentLMScore.HoleType4;
+                }
+                else if (currentLMScore != null) {
+                    if (buttonId === 'btnDefectType1') {
+                        currentLMScore.DefectType1 = currentLMScore.DefectType1 + 1;
+                        document.getElementById('spDefectType1').innerText = currentLMScore.DefectType1;
+                    }
+                    else if (buttonId === 'btnDefectType2') {
+                        currentLMScore.DefectType2 = currentLMScore.DefectType2 + 1;
+                        document.getElementById('spDefectType2').innerText = currentLMScore.DefectType2;
+                    }
+                    else if (buttonId === 'btnDefectType3') {
+                        currentLMScore.DefectType3 = currentLMScore.DefectType3 + 1;
+                        document.getElementById('spDefectType3').innerText = currentLMScore.DefectType3;
+                    }
+                    else if (buttonId === 'btnDefectType4') {
+                        currentLMScore.DefectType4 = currentLMScore.DefectType4 + 1;
+                        document.getElementById('spDefectType4').innerText = currentLMScore.DefectType4;
+                    }
+                    else if (buttonId === 'btnHoleType2') {
+                        currentLMScore.HoleType2 = currentLMScore.HoleType2 + 1;
+                        document.getElementById('spHoleType2').innerText = currentLMScore.HoleType2;
+                    }
+                    else if (buttonId === 'btnHoleType4') {
+                        currentLMScore.HoleType4 = currentLMScore.HoleType4 + 1;
+                        document.getElementById('spHoleType4').innerText = currentLMScore.HoleType4;
+                    }
+
+
+                }
+
+                var totalPoint = CalculatePoint(currentLMScore);
+                document.getElementById('lblTotalScore').innerText = totalPoint;
+                currentLMScore.TotalScore = totalPoint;
+                // Material Fail
+                if (totalPoint > 0 && totalPoint < 80) {
+                    document.getElementById('divCardScore').classList.add('border-danger');
+                    document.getElementById('divCardScore').classList.add('bg-danger');
+                    document.getElementById('lblTotalScore').classList.add('text-danger');
+                    document.getElementById('btnSave').classList.add('btn-danger');
+                }
+                // Material Pass
+                else {
+                    document.getElementById('divCardScore').classList.add('border-success');
+                    document.getElementById('divCardScore').classList.add('bg-success');
+                    document.getElementById('lblTotalScore').classList.add('text-success');
+                    document.getElementById('btnSave').classList.add('btn-success');
+                }
+
+                document.getElementById("btnDefectType1").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType1', false) };
+                document.getElementById("btnDefectType2").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType2', false) };
+                document.getElementById("btnDefectType3").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType3', false) };
+                document.getElementById("btnDefectType4").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType4', false) };
+                document.getElementById("btnHoleType2").onclick = function () { DisplayPoint(currentLMScore, 'btnHoleType2', false) };
+                document.getElementById("btnHoleType4").onclick = function () { DisplayPoint(currentLMScore, 'btnHoleType4', false) };
+
+                document.getElementById("btnReset").onclick = function () { ResetScoreArea(currentLMScore) };
+                document.getElementById("btnSave").onclick = function () { SaveScore(currentLMScore) };
+
+                return false;
+            }
+
+            function SaveScore(currentLMScore) {
+                //var lamiScore = {};
+                //lamiScore.OrderNoId = currentLMScore.OrderNoId;
+                //lamiScore.POQuantity = currentLMScore.POQuantity;
+                //lamiScore.LabelQuantity = currentLMScore.LabelQuantity;
+                //lamiScore.ActualQuantity = currentLMScore.ActualQuantity;
+                //lamiScore.LabelWidth = currentLMScore.LabelWidth;
+                //lamiScore.ActualWidth = currentLMScore.ActualWidth;
+                //lamiScore.DefectType1 = currentLMScore.DefectType1;
+                //lamiScore.DefectType2 = currentLMScore.DefectType2;
+                //lamiScore.DefectType3 = currentLMScore.DefectType3;
+                //lamiScore.DefectType4 = currentLMScore.DefectType4;
+                //lamiScore.HoleType2 = currentLMScore.HoleType2;
+                //lamiScore.HoleType4 = currentLMScore.HoleType4;
+                //lamiScore.TotalScore = currentLMScore.TotalScore;
+                //lamiScore.Reviser = currentLMScore.Reviser;
+                var orderNoId       = currentLMScore.OrderNoId;
+                var poQuantity      = currentLMScore.POQuantity;
+                var labelQuantity   = currentLMScore.LabelQuantity;
+                var actualQuantity  = currentLMScore.ActualQuantity;
+                var labelWidth      = currentLMScore.LabelWidth;
+                var actualWidth     = currentLMScore.ActualWidth;
+                var defectType1     = currentLMScore.DefectType1;
+                var defectType2     = currentLMScore.DefectType2;
+                var defectType3     = currentLMScore.DefectType3;
+                var defectType4     = currentLMScore.DefectType4;
+                var holeType2       = currentLMScore.HoleType2;
+                var holeType4       = currentLMScore.HoleType4;
+                var totalScore      = currentLMScore.TotalScore;
+                var reviser         = currentLMScore.Reviser;
+                //jQuery.ajax({
+                $.ajax({
+                    url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/SaveScore") %>',
+                    data: {
+                        "orderNoId": '"' + orderNoId + '"', "poQuantity": '"' + poQuantity + '"', "labelQuantity": '"' + labelQuantity + '"', "actualQuantity": '"' + actualQuantity + '"',
+                        "labelWidth": '"' + labelWidth + '"', "actualWidth": '"' + actualWidth + '"', "defectType1": '"' + defectType1 + '"', "defectType2": '"' + defectType2 + '"',
+                        "defectType3": '"' + defectType3 + '"', "defectType4": '"' + defectType4 + '"', "holeType2": '"' + holeType2 + '"', "holeType4": '"' + holeType4 + '"',
+                        "totalScore": '"' + totalScore + '"', "reviser": '"' + reviser + '"'
+                    },
+                    type: "GET",
+                    datatype: "json",
+                    async: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.d === 'Successful !') {
+                            alert(data.d);
+                            //ResetScoreArea(currentLMScore);
+                        }
+                        else {
+                            alert(data.d + ' Please Try Again !');
+                        }
+                    },
+                    error: onError
+                });
+                return false;
+            }
+           
+            function ResetScoreArea(currentLMScore) {
+
+                document.getElementById('lblTotalScore').innerText = '0';
+                document.getElementById('divCardScore').classList.remove('border-danger');
+                document.getElementById('divCardScore').classList.remove('bg-danger');
+                document.getElementById('lblTotalScore').classList.remove('text-danger');
+                document.getElementById('btnSave').classList.remove('btn-danger');
+
+                document.getElementById('divCardScore').classList.remove('border-success');
+                document.getElementById('divCardScore').classList.remove('bg-success');
+                document.getElementById('lblTotalScore').classList.remove('text-success');
+                document.getElementById('btnSave').classList.remove('btn-success');
+
+                currentLMScore.DefectType1 = 0;
+                currentLMScore.DefectType2 = 0;
+                currentLMScore.DefectType3 = 0;
+                currentLMScore.DefectType4 = 0;
+
+                currentLMScore.HoleType2 = 0;
+                currentLMScore.HoleType4 = 0;
+                currentLMScore.TotalScore = 0;
+
+                document.getElementById('spDefectType1').innerText = '0';
+                document.getElementById('spDefectType2').innerText = '0';
+                document.getElementById('spDefectType3').innerText = '0';
+                document.getElementById('spDefectType4').innerText = '0';
+                document.getElementById('spHoleType2').innerText = '0';
+                document.getElementById('spHoleType4').innerText = '0';
+            }
+
             // Get
             function Search() {
                 DisplayMatsInfor(null, null);
@@ -254,6 +470,7 @@
                     error: onError
                 });
             }
+
             function OnSuccess(data) {
                 $('#btnCloseModel').click();
                 const divMatsList = document.getElementById("divMatsList");
@@ -291,44 +508,73 @@
                 });
 
             }
+
             function onError() {
                 alert('An error occured at the backend !');
+            }
+
+            window.addEventListener('load', function () {
+                showTime();
+            });
+            // Clock
+            function showTime() {
+                var date = new Date();
+                var h = date.getHours(); // 0 - 23
+                var m = date.getMinutes(); // 0 - 59
+                var s = date.getSeconds(); // 0 - 59
+                var session = "AM";
+
+                if (h == 0) {
+                    h = 12;
+                }
+
+                if (h > 12) {
+                    h = h - 12;
+                    session = "PM";
+                }
+
+                h = (h < 10) ? "0" + h : h;
+                m = (m < 10) ? "0" + m : m;
+                s = (s < 10) ? "0" + s : s;
+
+                var time = h + ":" + m + ":" + s + " " + session;
+                var pClock = document.getElementById('MyClockDisplay').innerText = time;
+                setTimeout(showTime, 1000);
             }
         </script>
     </head>
     <html lang="en">
         <body>
             <%--<asp:ScriptManager ID="scriptManagerWHLamination" runat="server" EnablePageMethods="true"/>--%>
-
             <div class="container-fluid" style="min-height:100vh;">
                 <div class="row align-items-center" style="min-height:10vh;">
-                    <%--<h2 class="text-center">WH Lamination</h2>--%>
+                    <h2 class="text-center">WH Lamination</h2>
                 </div>
                 <div class="row" style="min-height:90vh;">
-                    <div class="col-12 w-100">
-                        <div class="row">
-                        <div class="col-12 col-sm-4">
-                            <div class="row">
-                                <div class="input-group-append">
-                                    <button class="btn btn-lg rounded-0 border" type="button" id="btnScanBarcode" data-bs-toggle="modal" data-bs-target="#modalBarcodeScan">
-                                        <a><i class="fa fa-barcode"></i></a>
-				                    </button>
-                                    <input id="txtOrderNoBarcode" class="form-control rounded-0" placeholder="Scan Barcode"></input>
-                                    <button class="btn btn-primary rounded-0" id="btnSearchByOrderNo" onclick="Search(); return false;">Search</button>
+                    <div class="col-12 h-100 w-100">
+                        <div class="row" style="min-height: 45vh;">
+                            <div class="col-12 col-sm-4">
+                                <div class="row">
+                                    <div class="col input-group-append">
+                                        <button class="btn btn-lg rounded-0 border" type="button" id="btnScanBarcode" data-bs-toggle="modal" data-bs-target="#modalBarcodeScan">
+                                            <a><i class="fa fa-barcode"></i></a>
+				                        </button>
+                                        <input id="txtOrderNoBarcode" class="form-control rounded-0" placeholder="Scan Barcode"></input>
+                                        <button class="btn btn-primary rounded-0" id="btnSearchByOrderNo" onclick="Search(); return false;">Search</button>
+                                    </div>
+                                </div>
+                                <div id="divMatsList" class="row row-cols-auto g-1 mt-1 overflow-auto" style="max-height:240px;">
                                 </div>
                             </div>
-                            <div id="divMatsList" class="row row-cols-auto g-1 mt-1 overflow-auto" style="max-height:200px;">
-                            </div>
-                        </div>
-                        <div id="divMatsInfor" class="col-12 col-sm-8 mt-1 mt-sm-0 overflow-auto" style="display:none;">
+                            <div id="divMatsInfor" class="col-12 col-sm-8 mt-1 mt-sm-0 overflow-auto" style="display:none;">
                             <div class="card">
                                 <div class="card-header small">
                                     <div class="row g-0">
                                         <div class="col">
                                             <p id="pMatsName" class="m-0 p-0 text-danger">Material Description</p>
                                         </div>
-                                        <div class="col-auto">
-                                            Toast Area
+                                        <div class="col-auto text-center">
+                                            <i class="fa fa-clock-o"></i><a class="ml-1 p-0 text-danger" id="MyClockDisplay"></a>
                                         </div>
                                     </div>
 
@@ -342,8 +588,8 @@
                                         <div id="divMatsInforColumn3" class="col-12 col-sm-4">
                                         </div>
                                     </div>
-                                    <div id="divMatsInforRow2" class="row">
-                                  
+                                    <div class="row">
+                                        <div id="divMatsInforRow2" class="col-12"></div>
                                     </div>
                                     <hr>
                                     <div class="row g-1">
@@ -359,80 +605,86 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-12 w-100 mt-1 mt-sm-0">
-                        <div class="row">
-                        <div id="divScore" class="col-12 col-sm-8" style="display:none;">
-                            <div class="row h-50 align-items-center">
-                                <h6>Defects</h6>
-                                <div class="row">
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                            <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">1</h2></div>
-                                            </div>
-                                        </button>
-                                    </div>
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                            <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
-                                            </div>
-                                        </button>
-                                    </div>
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                            <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">3</h2></div>
-                                            </div>
-                                        </button>
-                                    </div>
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                            <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-danger rounded-2">0</span></h5></div>
-                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
-                                            </div>
-                                        </button>
+                    
+                    <div class="col-12 mt-1 mt-sm-0 h-100 w-100">
+                        <div class="row pt-1 pb-1 align-items-end" style="min-height: 45vh;">
+                            <div id="divScore" class="col-12 col-sm-8 h-100" style="display:none;">
+                                <div class="container p-0 m-0">
+                                    <div class="row"><h6>Defects</h6></div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <button id="btnDefectType1" type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                    <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span id="spDefectType1" class="badge bg-danger rounded-2">0</span></h5></div>
+                                                    <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">1</h2></div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="col-3">
+                                            <button id="btnDefectType2" type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                    <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span id="spDefectType2" class="badge bg-danger rounded-2">0</span></h5></div>
+                                                    <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="col-3">
+                                            <button id="btnDefectType3" type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                    <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span id="spDefectType3" class="badge bg-danger rounded-2">0</span></h5></div>
+                                                    <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">3</h2></div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="col-3">
+                                            <button id="btnDefectType4" type="button" class="btn btn-outline-danger pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
+                                                <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                    <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span id="spDefectType4" class="badge bg-danger rounded-2">0</span></h5></div>
+                                                    <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
+                                                </div>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                                 
-                            <div class="row h-50 align-items-center">
-                                <div class="row">
-                                    <h6>Hole</h6>
-                                </div>
-                                <div class="row">
-                                    <div class="col-3">
-                                    </div>
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                            <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
-                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
-                                            </div>
-                                        </button>
-                                    </div>
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-sm h-100 w-100">
-                                            <div class="container p-0 m-0 w-100 h-100 g-0">
-                                                <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span class="badge bg-info rounded-2">0</span></h5></div>
-                                                <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
-                                            </div>
-                                        </button>
-                                    </div>
-                                    <div class="col-3">
+                                <div class="container p-0 m-0">
+                                    <div class="row"><h6>Hole</h6></div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                        </div>
+                                        <div class="col-3">
+                                            <button id="btnHoleType2" type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-lg h-100 w-100">
+                                                <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                    <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span id="spHoleType2" class="badge bg-info rounded-2">0</span></h5></div>
+                                                    <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">2</h2></div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="col-3">
+                                            <button id="btnHoleType4" type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-lg h-100 w-100">
+                                                <div class="container p-0 m-0 w-100 h-100 g-0">
+                                                    <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span id="spHoleType4" class="badge bg-info rounded-2">0</span></h5></div>
+                                                    <div class="row p-0 m-0 w-100 text-center"><h2 class="p-0 m-0">4</h2></div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="col-3 float-right">
+                                            <button id="btnReset" type="button" class="btn btn-warning btn-sm rounded-0"><i class="fa fa-refresh fa-1x mr-2"></i>Reset</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="divScoreSave" class="col-12 col-sm-4 mt-1 mt-sm-0" style="display:none;">
-                        <div class="row h-100 align-items-center">
-                            <div class="col text-center">SAVING AREA</div>
-                        </div>
-                    </div>
+                            <div id="divScoreSave" class="col-12 col-sm-4 mt-1 mt-sm-0 h-100" style="display:none;">
+                                <div id="divCardScore" class="card rounded-0 shadow-sm w-100">
+                                    <div class="card-header rounded-0 text-center">Score</div>
+                                    <div class="card-body bg-white">
+                                    <h1 id="lblTotalScore" class="card-title text-center w-100 h-100" style="font-size:5rem;"></h1>
+                                    </div>
+                                    <div class="card-footer bg-transparent p-0 m-0">
+                                        <button id="btnSave" class="btn btn-lg w-100 rounded-0 border-0" type="button">SAVE</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -503,83 +755,78 @@
             
             <script type="text/javascript" src="assets/zxing.js"></script>
             <script type="text/javascript" language="javascript">
-                            //window.addEventListener('load', function () {
-                            let selectedDeviceId;
-                            const codeReader = new ZXing.BrowserMultiFormatReader()
-                            console.log('ZXing code reader initialized')
-                            codeReader.getVideoInputDevices()
-                                .then((videoInputDevices) => {
-                                    const sourceSelect = document.getElementById('sourceSelect')
-                                    selectedDeviceId = videoInputDevices[0].deviceId
-                                    if (videoInputDevices[videoInputDevices.length - 1] != null) {
-                                        selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
-                                    }
+                //window.addEventListener('load', function () {
+                let selectedDeviceId;
+                const codeReader = new ZXing.BrowserMultiFormatReader()
+                console.log('ZXing code reader initialized')
+                codeReader.getVideoInputDevices()
+                    .then((videoInputDevices) => {
+                        const sourceSelect = document.getElementById('sourceSelect')
+                        selectedDeviceId = videoInputDevices[0].deviceId
+                        if (videoInputDevices[videoInputDevices.length - 1] != null) {
+                            selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
+                        }
 
-                                    if (videoInputDevices.length >= 1) {
-                                        videoInputDevices.forEach((element) => {
-                                            const sourceOption = document.createElement('option')
-                                            sourceOption.text = element.label
-                                            sourceOption.value = element.deviceId
-                                            sourceSelect.appendChild(sourceOption)
-                                        })
-                                        sourceSelect.onchange = () => {
-                                            selectedDeviceId = sourceSelect.value;
-                                            codeReader.reset()
-                                            console.log('Reset.')
-                                            document.getElementById("txtOrderNoBarcode").value = ''
-                                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
-                                                if (result) {
-                                                    console.log(result)
-                                                    $(document).ready(function () {
-                                                        document.getElementById("txtOrderNoBarcode").value = result.text
-                                                        // Click OK Button
-                                                        document.getElementById('btnSearchByOrderNo').click();
-                                                        codeReader.reset();
-                                                    });
-                                                }
-                                                if (err && !(err instanceof ZXing.NotFoundException)) {
-                                                    console.error(err)
-                                                    document.getElementById("txtOrderNoBarcode").value = err
-                                                }
-                                            })
-                                            console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
-                                        };
-                                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
-                                        sourceSelectPanel.style.display = 'block'
+                        if (videoInputDevices.length >= 1) {
+                            videoInputDevices.forEach((element) => {
+                                const sourceOption = document.createElement('option')
+                                sourceOption.text = element.label
+                                sourceOption.value = element.deviceId
+                                sourceSelect.appendChild(sourceOption)
+                            })
+                            sourceSelect.onchange = () => {
+                                selectedDeviceId = sourceSelect.value;
+                                codeReader.reset()
+                                console.log('Reset.')
+                                document.getElementById("txtOrderNoBarcode").value = ''
+                                codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
+                                    if (result) {
+                                        console.log(result)
+                                        $(document).ready(function () {
+                                            document.getElementById("txtOrderNoBarcode").value = result.text
+                                            // Click OK Button
+                                            document.getElementById('btnSearchByOrderNo').click();
+                                            codeReader.reset();
+                                        });
                                     }
-                                    // Barcode Button Click
-                                    document.getElementById("btnScanBarcode").addEventListener("click", function () {
-                                        codeReader.reset()
-                                        console.log('Reset.')
-                                        document.getElementById("txtOrderNoBarcode").value = ''
-                                        codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
-                                            if (result) {
-                                                console.log(result)
-                                                $(document).ready(function () {
-                                                    document.getElementById("txtOrderNoBarcode").value = result.text
-                                                    // Click OK Button
-                                                    document.getElementById('btnSearchByOrderNo').click();
-                                                    codeReader.reset();
-                                                });
-                                            }
-                                            if (err && !(err instanceof ZXing.NotFoundException)) {
-                                                console.error(err)
-                                                document.getElementById("txtOrderNoBarcode").value = err
-                                            }
-                                        })
-                                        console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
-                                    })
-                                    //document.getElementById("btnCloseModel").addEventListener("click", function () {
-                                    //    codeReader.reset()
-                                    //    console.log('Reset.')
-                                    //    document.getElementById("txtOrderNoBarcode").value = ''
-                                    //})
+                                    if (err && !(err instanceof ZXing.NotFoundException)) {
+                                        console.error(err)
+                                        document.getElementById("txtOrderNoBarcode").value = err
+                                    }
                                 })
-                                .catch((err) => {
+                                console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
+                            };
+                            const sourceSelectPanel = document.getElementById('sourceSelectPanel')
+                            sourceSelectPanel.style.display = 'block'
+                        }
+                        // Barcode Button Click
+                        document.getElementById("btnScanBarcode").addEventListener("click", function () {
+                            codeReader.reset()
+                            console.log('Reset.')
+                            document.getElementById("txtOrderNoBarcode").value = ''
+                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
+                                if (result) {
+                                    console.log(result)
+                                    $(document).ready(function () {
+                                        document.getElementById("txtOrderNoBarcode").value = result.text
+                                        // Click OK Button
+                                        document.getElementById('btnSearchByOrderNo').click();
+                                        codeReader.reset();
+                                    });
+                                }
+                                if (err && !(err instanceof ZXing.NotFoundException)) {
                                     console.error(err)
-                                })
-                            //})
-                        </script>
+                                    document.getElementById("txtOrderNoBarcode").value = err
+                                }
+                            })
+                            console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
+                        })
+                    })
+                    .catch((err) => {
+                        console.error(err)
+                    })
+                //})
+            </script>
         </body>
     </html>
 </asp:Content>

@@ -64,6 +64,37 @@ namespace WebsiteTesting.Pages.WHLamination
             }
         }
 
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public static string SaveScore( string orderNoId, int poQuantity, int labelQuantity, int actualQuantity, int labelWidth, int actualWidth, int defectType1, int defectType2, int defectType3, int defectType4, int holeType2, int holeType4, int totalScore, string reviser)
+        {
+            var laminationScoreSave = new LaminationMaterialScoreModel()
+            {
+                OrderNoId = orderNoId,
+                POQuantity = poQuantity,
+                LabelQuantity = labelQuantity,
+                ActualQuantity = actualQuantity,
+                LabelWidth = labelWidth,
+                ActualWidth = actualWidth,
+                DefectType1 = defectType1,
+                DefectType2 = defectType2,
+                DefectType3 = defectType3,
+                DefectType4 = defectType4,
+                HoleType2 = holeType2,
+                HoleType4 = holeType4,
+                TotalScore = totalScore,
+                Reviser = reviser
+            };
+            try
+            {
+                LaminationMaterialScoreController.Insert(laminationScoreSave);
+                return "Successful !";
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
+            }
+        }
         private void ShowAlert(string msg)
         {
             string script = string.Format("alert('{0}');", msg);
