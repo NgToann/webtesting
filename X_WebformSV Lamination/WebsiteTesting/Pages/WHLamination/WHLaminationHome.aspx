@@ -4,12 +4,12 @@
     <head>
         <title>WH Lamination</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <%--<link rel="Stylesheet" href="assets/font-awesome.min.css" />--%>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
-        
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>        
         
         <script type="text/javascript">
             class LaminationMaterialScore {
@@ -58,6 +58,7 @@
             var currentLMScore = new LaminationMaterialScore();
 
             function buttonMaterialClick(buttonId, laminationMaterialList, lamiMatsSelected) {
+                var reviser = document.getElementById('contentPlaceHolder_lblUser').innerText;
                 DisplayMatsInfor(null, null);
                 // Clear Highlight
                 laminationMaterialList.forEach(function (lamiMats) {
@@ -81,7 +82,7 @@
                     DefectType4 = 0,
                     HoleType2 = 0,
                     HoleType4 = 0,
-                    Reviser = 'it02',
+                    Reviser = reviser,
                 );
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetScoreByOrderNoId") %>',
@@ -158,23 +159,9 @@
                 divScore.style.display = 'block';
                 divScoreSave.style.display = 'block';
 
-                // listen button score click
                 currentLMScore = matsScore;
+                // Display old data
                 DisplayPoint(currentLMScore, '', true);
-                //if (currentLMScore.OrderNoId == null) {
-                //    currentLMScore = matsScore;
-
-                //    document.getElementById("btnDefectType1").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType1', false) };
-                //    document.getElementById("btnDefectType2").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType2', false) };
-                //    document.getElementById("btnDefectType3").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType3', false) };
-                //    document.getElementById("btnDefectType4").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType4', false) };
-                //    document.getElementById("btnHoleType2").onclick = function () { DisplayPoint(currentLMScore, 'btnHoleType2', false) };
-                //    document.getElementById("btnHoleType4").onclick = function () { DisplayPoint(currentLMScore, 'btnHoleType4', false) };
-                //}
-                //else {
-                //    currentLMScore = lamiMatsSelected;
-                    
-                //}
 
                 // Close Modal
                 $('#btnCloseModelInputMaterialDetail').click();
@@ -334,8 +321,6 @@
                         currentLMScore.HoleType4 = currentLMScore.HoleType4 + 1;
                         document.getElementById('spHoleType4').innerText = currentLMScore.HoleType4;
                     }
-
-
                 }
 
                 var totalPoint = CalculatePoint(currentLMScore);
@@ -349,7 +334,7 @@
                     document.getElementById('btnSave').classList.add('btn-danger');
                 }
                 // Material Pass
-                else {
+                else if (totalPoint > 0 && totalPoint >= 80){
                     document.getElementById('divCardScore').classList.add('border-success');
                     document.getElementById('divCardScore').classList.add('bg-success');
                     document.getElementById('lblTotalScore').classList.add('text-success');
@@ -370,21 +355,7 @@
             }
 
             function SaveScore(currentLMScore) {
-                //var lamiScore = {};
-                //lamiScore.OrderNoId = currentLMScore.OrderNoId;
-                //lamiScore.POQuantity = currentLMScore.POQuantity;
-                //lamiScore.LabelQuantity = currentLMScore.LabelQuantity;
-                //lamiScore.ActualQuantity = currentLMScore.ActualQuantity;
-                //lamiScore.LabelWidth = currentLMScore.LabelWidth;
-                //lamiScore.ActualWidth = currentLMScore.ActualWidth;
-                //lamiScore.DefectType1 = currentLMScore.DefectType1;
-                //lamiScore.DefectType2 = currentLMScore.DefectType2;
-                //lamiScore.DefectType3 = currentLMScore.DefectType3;
-                //lamiScore.DefectType4 = currentLMScore.DefectType4;
-                //lamiScore.HoleType2 = currentLMScore.HoleType2;
-                //lamiScore.HoleType4 = currentLMScore.HoleType4;
-                //lamiScore.TotalScore = currentLMScore.TotalScore;
-                //lamiScore.Reviser = currentLMScore.Reviser;
+                var reviser = document.getElementById('contentPlaceHolder_lblUser').innerText;
                 var orderNoId       = currentLMScore.OrderNoId;
                 var poQuantity      = currentLMScore.POQuantity;
                 var labelQuantity   = currentLMScore.LabelQuantity;
@@ -398,7 +369,7 @@
                 var holeType2       = currentLMScore.HoleType2;
                 var holeType4       = currentLMScore.HoleType4;
                 var totalScore      = currentLMScore.TotalScore;
-                var reviser         = currentLMScore.Reviser;
+                var reviser         = reviser; 
                 //jQuery.ajax({
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/SaveScore") %>',
@@ -425,8 +396,8 @@
                 });
                 return false;
             }
-           
-            function ResetScoreArea(currentLMScore) {
+
+            function ToastReset(currentLMScore) {
 
                 document.getElementById('lblTotalScore').innerText = '0';
                 document.getElementById('divCardScore').classList.remove('border-danger');
@@ -454,6 +425,17 @@
                 document.getElementById('spDefectType4').innerText = '0';
                 document.getElementById('spHoleType2').innerText = '0';
                 document.getElementById('spHoleType4').innerText = '0';
+
+                $('.toast').toast('hide');
+            }
+            function ToastCancel() {
+                $('.toast').toast('hide');
+            }
+            function ResetScoreArea(currentLMScore) {
+                $('.toast').toast('show');
+                document.getElementById('toastTitle').textContent = 'Confirm Reset: ' + currentLMScore.OrderNoId + ' ?';
+                document.getElementById("btnResetToast").onclick = function () { ToastReset(currentLMScore) };
+                document.getElementById("btnCancelToast").onclick = function () { ToastCancel() };
             }
 
             // Get
@@ -515,6 +497,7 @@
 
             window.addEventListener('load', function () {
                 showTime();
+                //$('.dropdown-toggle').dropdown();
             });
             // Clock
             function showTime() {
@@ -546,9 +529,23 @@
     <html lang="en">
         <body>
             <%--<asp:ScriptManager ID="scriptManagerWHLamination" runat="server" EnablePageMethods="true"/>--%>
+            
             <div class="container-fluid" style="min-height:100vh;">
-                <div class="row align-items-center" style="min-height:10vh;">
-                    <h2 class="text-center">WH Lamination</h2>
+                <div class="row align-items-start" style="min-height:10vh;">
+                    <div class="col">
+                        <h2 class="text-center text-dark">WH Lamination</h2>
+                    </div>
+                    <div id="divUser" class="col-auto" runat="server">
+                        <div class="dropdown dropleft mt-1">
+                            <a class="btn bg-white shadow-sm rounded-0 dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user text-primary mr-1"></i><asp:Label ID="lblUser" runat="server"></asp:Label>
+                            </a>
+                            <div class="dropdown-menu fade" aria-labelledby="dropdownMenuLink" >
+                                <a class="dropdown-item text-danger text-center" href="../LoginPage.aspx">Logout !</a>
+                                <a class="dropdown-item text-primary text-center" href="Report.aspx">Report</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row" style="min-height:90vh;">
                     <div class="col-12 h-100 w-100">
@@ -577,8 +574,8 @@
                                             <i class="fa fa-clock-o"></i><a class="ml-1 p-0 text-danger" id="MyClockDisplay"></a>
                                         </div>
                                     </div>
-
                                 </div>
+
                                 <div class="card-body small h-auto">
                                     <div class="row g-1">
                                         <div id="divMatsInforColumn1" class="col-12 col-sm-4">
@@ -669,14 +666,23 @@
                                             </button>
                                         </div>
                                         <div class="col-3 float-right">
-                                            <button id="btnReset" type="button" class="btn btn-warning btn-sm rounded-0"><i class="fa fa-refresh fa-1x mr-2"></i>Reset</button>
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="divScoreSave" class="col-12 col-sm-4 mt-1 mt-sm-0 h-100" style="display:none;">
                                 <div id="divCardScore" class="card rounded-0 shadow-sm w-100">
-                                    <div class="card-header rounded-0 text-center">Score</div>
+                                    <div class="card-header rounded-0 text-center">
+                                        <div class="row p-0 m-0 align-items-center">
+                                            <div class="col text-left"><h4 class="p-0 m-0">SCORE</h4></div>
+                                            <div class="col-auto p-0 m-0">
+                                                <button id="btnReset" type="button" class="btn btn-warning shadow-sm btn-sm rounded-2" data-bs-toggle="modal" data-bs-target="#modalDisplayToast">
+                                                    <i class="fa fa-refresh fa-1x mr-2"></i>
+                                                    Reset</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body bg-white">
                                     <h1 id="lblTotalScore" class="card-title text-center w-100 h-100" style="font-size:5rem;"></h1>
                                     </div>
@@ -704,16 +710,22 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                    <div class="row" id="sourceSelectPanel" style="display:none">
-                        <div class="input-group">
-                            <label for="sourceSelect" class="mt-1">Select Camera:</label>
-                            <div class="input-group-append ml-2">
-                                <select id="sourceSelect" style="max-width:400px">
-                                </select>
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="row" id="sourceSelectPanel" style="display:none">
+                                    <div class="input-group">
+                                        <label for="sourceSelect" class="mt-1">Camera:</label>
+                                        <div class="input-group-append ml-2">
+                                            <select id="sourceSelect" style="max-width:400px">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <div class="col-auto float-right">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
                 </div>
@@ -753,6 +765,28 @@
               </div>
             </div>
             
+            <div class="modal fade w-auto rounded-0" id="modalDisplayToast" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="toast w-100 text-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                      <div class="toast-body">
+                        <h6 class="font-italic" id="toastTitle">Confirm Reset ?</h6>
+                        <div class="mt-2 pt-2 border-top">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button id="btnResetToast" type="button" class="btn btn-danger shadow-sm btn-sm" data-bs-dismiss="modal"> Reset </button>
+                                </div>
+                                <div class="col-auto">
+                                    <button id="btnCancelToast" type="button" class="btn btn-warning shadow-sm btn-sm" data-bs-dismiss="modal"> Cancel </button>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+
             <script type="text/javascript" src="assets/zxing.js"></script>
             <script type="text/javascript" language="javascript">
                 //window.addEventListener('load', function () {

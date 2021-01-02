@@ -8,8 +8,12 @@ using System.Web.Security;
 
 using WebsiteTesting.Models.ScissorsManagmentSystem;
 using WebsiteTesting.Models.SewingMachine;
+using WebsiteTesting.Models.WHLamination;
+
 using WebsiteTesting.Controllers.ScissorsController;
 using WebsiteTesting.Controllers.SewingMachineController;
+using WebsiteTesting.Controllers.WHLamination;
+
 using WebsiteTesting.Entities;
 
 namespace WebsiteTesting
@@ -28,19 +32,22 @@ namespace WebsiteTesting
             }
             lblWelcome.Text = String.Format("Hi, {0}   ", Page.User.Identity.Name.ToUpper());
 
-            var usernameGet     = Page.User.Identity.Name.ToString();
-            var userScissorsList = ScissorsMainController.GetUserList();
-            var userSewingMachineList = CommonController.GetUserSM();
+            var usernameGet             = Page.User.Identity.Name.ToString();
+
+            var userScissorsList        = ScissorsMainController.GetUserList();
+            var userSewingMachineList   = CommonController.GetUserSM();
+            var userWHLaminationList    = UserWebController.GetWHLaminationUser();
 
             //var userScissors    = Session["User"] as UserModel;
             //var userSM          = Session["User"] as UserSMModel;
 
             var userScissors = userScissorsList.FirstOrDefault(f => f.UserId == usernameGet);
             var userSM       = userSewingMachineList.FirstOrDefault(f => f.UserName == usernameGet);
+            var userWHLamination = userWHLaminationList.FirstOrDefault(f => f.UserName == usernameGet);
 
             if (usernameGet != null)
             {
-                if (usernameGet.Equals("whsv"))
+                if (userWHLamination != null)
                 {
                     Response.Redirect("~/Pages/WHLamination/WHLaminationHome.aspx");
                 }    

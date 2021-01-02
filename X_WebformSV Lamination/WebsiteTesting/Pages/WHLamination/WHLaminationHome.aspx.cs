@@ -17,7 +17,14 @@ namespace WebsiteTesting.Pages.WHLamination
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (IsPostBack)
+                return;
+            var currentUserName = Page.User.Identity.Name.ToString();
+            if(!String.IsNullOrEmpty(currentUserName))
+            {
+                lblUser.Text = currentUserName;
+                //divUser.Visible = true;
+            }
         }
 
         [WebMethod]
@@ -70,20 +77,20 @@ namespace WebsiteTesting.Pages.WHLamination
         {
             var laminationScoreSave = new LaminationMaterialScoreModel()
             {
-                OrderNoId = orderNoId,
-                POQuantity = poQuantity,
-                LabelQuantity = labelQuantity,
-                ActualQuantity = actualQuantity,
-                LabelWidth = labelWidth,
-                ActualWidth = actualWidth,
-                DefectType1 = defectType1,
-                DefectType2 = defectType2,
-                DefectType3 = defectType3,
-                DefectType4 = defectType4,
-                HoleType2 = holeType2,
-                HoleType4 = holeType4,
-                TotalScore = totalScore,
-                Reviser = reviser
+                OrderNoId       = orderNoId,
+                POQuantity      = poQuantity,
+                LabelQuantity   = labelQuantity,
+                ActualQuantity  = actualQuantity,
+                LabelWidth      = labelWidth,
+                ActualWidth     = actualWidth,
+                DefectType1     = defectType1,
+                DefectType2     = defectType2,
+                DefectType3     = defectType3,
+                DefectType4     = defectType4,
+                HoleType2       = holeType2,
+                HoleType4       = holeType4,
+                TotalScore      = totalScore,
+                Reviser         = reviser
             };
             try
             {

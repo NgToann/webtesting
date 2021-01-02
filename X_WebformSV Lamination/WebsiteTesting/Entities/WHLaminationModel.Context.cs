@@ -29,6 +29,7 @@ namespace WebsiteTesting.Entities
         }
     
         public DbSet<LaminationMaterial> LaminationMaterials { get; set; }
+        public DbSet<UserWeb> UserWebs { get; set; }
     
         public virtual ObjectResult<spm_SelectLaminationMaterialByOrderNo_Result> spm_SelectLaminationMaterialByOrderNo(string orderNo)
         {
@@ -37,6 +38,11 @@ namespace WebsiteTesting.Entities
                 new ObjectParameter("OrderNo", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spm_SelectLaminationMaterialByOrderNo_Result>("spm_SelectLaminationMaterialByOrderNo", orderNoParameter);
+        }
+    
+        public virtual ObjectResult<spm_SelectUserWeb_Result> spm_SelectUserWeb()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spm_SelectUserWeb_Result>("spm_SelectUserWeb");
         }
     }
 }

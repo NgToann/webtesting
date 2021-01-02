@@ -8,8 +8,10 @@ using System.Web.Security;
 
 using WebsiteTesting.Models.ScissorsManagmentSystem;
 using WebsiteTesting.Models.SewingMachine;
+using WebsiteTesting.Models.WHLamination;
 using WebsiteTesting.Controllers.ScissorsController;
 using WebsiteTesting.Controllers.SewingMachineController;
+using WebsiteTesting.Controllers.WHLamination;
 
 namespace WebsiteTesting.Pages
 {
@@ -17,6 +19,8 @@ namespace WebsiteTesting.Pages
     {
         private List<UserModel> userList;
         private List<UserSMModel> userSMList;
+        private List<UserWebModel> userWHLaminationList;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -25,6 +29,7 @@ namespace WebsiteTesting.Pages
                 lblFactory.Text = String.IsNullOrEmpty(factory) == false ? factory : "Sao Viet";
                 userList = ScissorsMainController.GetUserList();
                 userSMList = CommonController.GetUserSM();
+                userWHLaminationList = UserWebController.GetWHLaminationUser();
             }
             catch (Exception ex)
             {
@@ -47,16 +52,21 @@ namespace WebsiteTesting.Pages
             // Insert code that implements a site-specific custom
             // authentication method here.
             // This example implementation always returns false.
-            var userScissorsLogin = userList.FirstOrDefault(f => f.UserId == userName && f.Password == password);
-            var userSMLogin = userSMList.FirstOrDefault(f => f.UserName.Equals(userName) && f.Password.Equals(password));
-            if ((userName == "admin" && password == "admin") || (userName == "sampleroom" && password == "sampleroom") || (userName == "whsv" && password == "wh2020")
+            var userScissorsLogin   = userList.FirstOrDefault(f => f.UserId == userName && f.Password == password);
+            var userSMLogin         = userSMList.FirstOrDefault(f => f.UserName.Equals(userName) && f.Password.Equals(password));
+            var userWHLamination    = userWHLaminationList.FirstOrDefault(f => f.UserName.Equals(userName) && f.Password.Equals(password));
+
+            if ((userName == "admin" && password == "admin") || (userName == "sampleroom" && password == "sampleroom")
                 || userScissorsLogin != null 
-                || userSMLogin != null)
+                || userSMLogin != null
+                || userWHLamination != null)
             {
                 if (userScissorsLogin != null)
                     Session["User"] = userScissorsLogin;
                 if (userSMLogin != null)
                     Session["User"] = userSMLogin;
+                if (userWHLamination != null)
+                    Session["User"] = userWHLamination;
 
                 return true;
             }

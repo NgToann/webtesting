@@ -51,5 +51,27 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="UserWebs">
+      <EntityTypeMapping TypeName="WHLaminationModel.UserWeb">
+        <MappingFragment StoreEntitySet="UserWeb">
+          <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+          <ScalarProperty Name="WHLamination" ColumnName="WHLamination" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="spm_SelectUserWeb" FunctionName="WHLaminationModel.Store.spm_SelectUserWeb">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="WHLaminationModel.spm_SelectUserWeb_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="WHLamination" ColumnName="WHLamination" />
+          <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -80,6 +80,7 @@
     <Content Include="assets\css\bootstrap-reboot.min.css" />
     <Content Include="assets\css\bootstrap.css" />
     <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\font-awesome.min.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\css\styleForPage.css" />
     <Content Include="assets\images\home1.jpg" />
@@ -107,6 +108,7 @@
       <DependentUpon>WHLaminationModel.edmx</DependentUpon>
       <LastGenOutput>WHLaminationModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Pages\LoginNewPage.aspx" />
     <Content Include="Pages\ScissorsManagment\assets\jquery-1-12.4.js" />
     <Content Include="Pages\ScissorsManagment\assets\jquery-ui.css" />
     <Content Include="Pages\ScissorsManagment\assets\jquery-ui.js" />
@@ -166,7 +168,9 @@
     <Content Include="Pages\SewingMachines\SummaryAndInventory.aspx" />
     <Content Include="Pages\SewingMachines\SummaryDetail.aspx" />
     <Content Include="Pages\SewingMachines\UpdateSchedule.aspx" />
+    <Content Include="Pages\WHLamination\assets\font-awesome.min.css" />
     <Content Include="Pages\WHLamination\assets\zxing.js" />
+    <Content Include="Pages\WHLamination\Report.aspx" />
     <Content Include="Pages\WHLamination\WHLaminationHome.aspx" />
     <Content Include="Web.Config">
       <SubType>Designer</SubType>
@@ -199,10 +203,23 @@
     <Compile Include="Controllers\SewingMachineController\CommonController.cs" />
     <Compile Include="Controllers\WHLamination\LaminationMaterialController.cs" />
     <Compile Include="Controllers\WHLamination\LaminationMaterialScoreController.cs" />
+    <Compile Include="Controllers\WHLamination\ReportController.cs" />
+    <Compile Include="Controllers\WHLamination\UserWebController.cs" />
+    <Compile Include="DataSets\WHLamination\WHLaminationDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WHLaminationDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Entities\LaminationMaterial.cs">
       <DependentUpon>WHLaminationModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\spm_SelectLaminationMaterialByOrderNo_Result.cs">
+      <DependentUpon>WHLaminationModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\spm_SelectUserWeb_Result.cs">
+      <DependentUpon>WHLaminationModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\UserWeb.cs">
       <DependentUpon>WHLaminationModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\WHLaminationModel.Context.cs">
@@ -369,6 +386,8 @@
     <Compile Include="Models\SewingMachine\SheduleModel.cs" />
     <Compile Include="Models\SewingMachine\UserSMModel.cs" />
     <Compile Include="Models\WHLamination\LaminationMaterialScoreModel.cs" />
+    <Compile Include="Models\WHLamination\UserWebModel.cs" />
+    <Compile Include="Models\WHLamination\WHLaminationReportModel.cs" />
     <Compile Include="Pages\CheckInSystem\AttendancePage.aspx.cs">
       <DependentUpon>AttendancePage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -403,6 +422,13 @@
     </Compile>
     <Compile Include="Pages\LoadingSystem\PackingReportPage.aspx.designer.cs">
       <DependentUpon>PackingReportPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoginNewPage.aspx.cs">
+      <DependentUpon>LoginNewPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\LoginNewPage.aspx.designer.cs">
+      <DependentUpon>LoginNewPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\LoginPage.aspx.cs">
       <DependentUpon>LoginPage.aspx</DependentUpon>
@@ -583,6 +609,13 @@
     <Compile Include="Pages\SewingMachines\UpdateSchedule.aspx.designer.cs">
       <DependentUpon>UpdateSchedule.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\WHLamination\Report.aspx.cs">
+      <DependentUpon>Report.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\WHLamination\Report.aspx.designer.cs">
+      <DependentUpon>Report.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\WHLamination\WHLaminationHome.aspx.cs">
       <DependentUpon>WHLaminationHome.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -597,6 +630,7 @@
     <EmbeddedResource Include="Reports\LoadingSystem\PackingReport.rdlc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\WHLamination\WHLaminationReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -671,6 +705,17 @@
     </EntityDeploy>
     <Content Include="Entities\WHLaminationModel.edmx.diagram">
       <DependentUpon>WHLaminationModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="DataSets\WHLamination\WHLaminationDataSet.xsc">
+      <DependentUpon>WHLaminationDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSets\WHLamination\WHLaminationDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>WHLaminationDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSets\WHLamination\WHLaminationDataSet.xss">
+      <DependentUpon>WHLaminationDataSet.xsd</DependentUpon>
     </Content>
     <None Include="packages.config" />
   </ItemGroup>

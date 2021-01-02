@@ -8,7 +8,7 @@
     <Property Name="OrderNoId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ArticleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ShoeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ShoeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="PatternNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ProductNoList" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -29,6 +29,8 @@
     <FunctionImport Name="spm_SelectLaminationMaterialByOrderNo" ReturnType="Collection(WHLaminationModel.spm_SelectLaminationMaterialByOrderNo_Result)">
       <Parameter Name="OrderNo" Mode="In" Type="String" />
     </FunctionImport>
+    <EntitySet Name="UserWebs" EntityType="WHLaminationModel.UserWeb" />
+    <FunctionImport Name="spm_SelectUserWeb" ReturnType="Collection(WHLaminationModel.spm_SelectUserWeb_Result)" />
   </EntityContainer>
   <ComplexType Name="spm_SelectLaminationMaterialByOrderNo_Result">
     <Property Type="Int32" Name="LaminationMaterialId" Nullable="false" />
@@ -50,5 +52,22 @@
     <Property Type="String" Name="Remarks" Nullable="true" />
     <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
     <Property Type="DateTime" Name="UpdatedTime" Nullable="true" Precision="23" />
+  </ComplexType>
+  <EntityType Name="UserWeb">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="WHLamination" Type="Boolean" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <ComplexType Name="spm_SelectUserWeb_Result">
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="UserName" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Password" Nullable="true" MaxLength="200" />
+    <Property Type="Boolean" Name="WHLamination" Nullable="true" />
+    <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
   </ComplexType>
 </Schema>

@@ -15,7 +15,6 @@ namespace WebsiteTesting.Pages.LoadingSystem
 {
     public partial class PackingReportPage : System.Web.UI.Page
     {
-        
         protected void Page_Load(object sender, EventArgs e)
         {
             

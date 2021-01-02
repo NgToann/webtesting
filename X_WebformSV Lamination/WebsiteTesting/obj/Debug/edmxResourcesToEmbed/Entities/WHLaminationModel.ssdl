@@ -10,7 +10,7 @@ warning 6002: The table/view 'SaovietMasterSchedule.dbo.LaminationMaterial' does
     <Property Name="OrderNoId" Type="nvarchar" MaxLength="50" />
     <Property Name="OrderNo" Type="nvarchar" MaxLength="50" />
     <Property Name="ArticleNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="ShoeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ShoeName" Type="nvarchar(max)" />
     <Property Name="PatternNo" Type="nvarchar" MaxLength="50" />
     <Property Name="ProductNoList" Type="nvarchar(max)" />
     <Property Name="Position" Type="nvarchar" MaxLength="50" />
@@ -26,10 +26,22 @@ warning 6002: The table/view 'SaovietMasterSchedule.dbo.LaminationMaterial' does
     <Property Name="CreatedTime" Type="datetime" />
     <Property Name="UpdatedTime" Type="datetime" />
   </EntityType>
+  <EntityType Name="UserWeb">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Password" Type="nvarchar" MaxLength="200" />
+    <Property Name="WHLamination" Type="bit" />
+    <Property Name="CreatedTime" Type="datetime" />
+  </EntityType>
   <Function Name="spm_SelectLaminationMaterialByOrderNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="OrderNo" Type="nvarchar" Mode="In" />
   </Function>
+  <Function Name="spm_SelectUserWeb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="WHLaminationModelStoreContainer">
+    <EntitySet Name="UserWeb" EntityType="Self.UserWeb" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaminationMaterial" EntityType="Self.LaminationMaterial" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 
 [LaminationMaterial].[LaminationMaterialId] AS [LaminationMaterialId], 

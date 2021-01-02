@@ -5,14 +5,8 @@
 <head runat="server">
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="~/assets/css/bootstrap.css" rel="Stylesheet"/>
     <link href="~/assets/css/style.css" rel="Stylesheet"/>
-
-    <script src="~/assets/js/jquery-3.3.1.min.js"></script>
-    <script src="~/assets/js/popper.min.js"></script>
-    <script src="~/assetsjs/bootstrap.min.js"></script>
-
     <style>
         
         body {
@@ -21,11 +15,11 @@
           background: #fefefe;
         }
         .wrapper {
-          margin: 0 auto;
-          width: 400px;
+            margin-top: 20px !important;
+          margin: auto !important;
+          width: 400px !important;
+          height: 450px !important;
           box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-          vertical-align: central;
-          align-content: center;
         }
         .section {
           padding: 1rem;
@@ -144,7 +138,7 @@
 </head>
     
 <body>
-    <div class="container p-0 text-center align-items-center SVContent">
+    
         <div class="wrapper">
             <!--Header-->
             <header class="section header">
@@ -166,11 +160,6 @@
                 </form>
             </section>
         </div>
-
-        <footer class="page-footer font-small">
-            <div class="footer-copyright text-center py-3">© 2020 Created by:<a runat="server" href="#"> IT Saoviet</a></div>
-        </footer>
-    </div>
-    
+        
 </body>
 </html>
