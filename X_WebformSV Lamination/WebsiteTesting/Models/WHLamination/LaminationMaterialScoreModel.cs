@@ -10,6 +10,7 @@ namespace WebsiteTesting.Models.WHLamination
     {
         public int LaminationMaterialScoreId { get; set; }
         public string OrderNoId { get; set; }
+        public int CheckRound { get; set; }
         public int POQuantity { get; set; }
         public int LabelQuantity { get; set; }
         public int ActualQuantity { get; set; }
@@ -21,6 +22,7 @@ namespace WebsiteTesting.Models.WHLamination
         public int DefectType4 { get; set; }
         public int HoleType2 { get; set; }
         public int HoleType4 { get; set; }
+        public int NoOfDefects { get; set; }
         public int TotalScore { get; set; }
         public string Reviser { get; set; }
     }

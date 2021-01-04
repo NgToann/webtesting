@@ -13,7 +13,7 @@
         
         <script type="text/javascript">
             class LaminationMaterialScore {
-                constructor(OrderNoId, POQuantity, LabelQuantity, ActualQuantity, LabelWidth, ActualWidth, TotalScore, DefectType1, DefectType2, DefectType3, DefectType4, HoleType2, HoleType4, Reviser) {
+                constructor(OrderNoId, POQuantity, LabelQuantity, ActualQuantity, LabelWidth, ActualWidth, TotalScore, DefectType1, DefectType2, DefectType3, DefectType4, HoleType2, HoleType4, Reviser, NoOfDefects, RoundCheck) {
                     this.OrderNoId = OrderNoId;
                     this.POQuantity = POQuantity;
                     this.LabelQuantity = LabelQuantity;
@@ -27,10 +27,11 @@
                     this.HoleType2 = HoleType2;
                     this.HoleType4 = HoleType4;
                     this.Reviser = Reviser;
+                    this.RoundCheck = RoundCheck;
                 }
             };
 
-            function CalculatePoint(currentLMScore) {
+            function CalculateNoOfDefects(currentLMScore) {
                 var totalPoint = 0, totalPointDefect1 = 0, totalPointDefect2 = 0, totalPointDefect3 = 0, totalPointDefect4 = 0, totalPointHole2 = 0, totalPointHole4 = 0;
                 if (currentLMScore.DefectType1 != null) {
                     totalPointDefect1 = currentLMScore.DefectType1;
@@ -83,6 +84,8 @@
                     HoleType2 = 0,
                     HoleType4 = 0,
                     Reviser = reviser,
+                    NoOfDefects = 0,
+                    RoundCheck = 1
                 );
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetScoreByOrderNoId") %>',
@@ -277,15 +280,15 @@
 
             function DisplayPoint(currentLMScore, buttonId, displayOldData) {
 
-                document.getElementById('lblTotalScore').innerText = '';
+                document.getElementById('lblNoOfDefects').innerText = '';
                 document.getElementById('divCardScore').classList.remove('border-danger');
                 document.getElementById('divCardScore').classList.remove('bg-danger');
-                document.getElementById('lblTotalScore').classList.remove('text-danger');
+                document.getElementById('lblNoOfDefects').classList.remove('text-danger');
                 document.getElementById('btnSave').classList.remove('btn-danger');
 
                 document.getElementById('divCardScore').classList.remove('border-success');
                 document.getElementById('divCardScore').classList.remove('bg-success');
-                document.getElementById('lblTotalScore').classList.remove('text-success');
+                document.getElementById('lblNoOfDefects').classList.remove('text-success');
                 document.getElementById('btnSave').classList.remove('btn-success');
 
                 if (displayOldData) {
@@ -323,21 +326,29 @@
                     }
                 }
 
-                var totalPoint = CalculatePoint(currentLMScore);
-                document.getElementById('lblTotalScore').innerText = totalPoint;
-                currentLMScore.TotalScore = totalPoint;
+                var totalPoint = CalculateNoOfDefects(currentLMScore);
+                document.getElementById('lblNoOfDefects').innerText = totalPoint;
+                var actualQty   = txtPlusActualQuantity.value;
+                var actualWidth = txtPlusActualWidth.value;
+
+                var totalScore = (totalPoint / actualQty) * (36 / actualWidth) * 100;
+                document.getElementById('lblTotalScore').innerText = parseInt(totalScore.toString());
+
+
+                currentLMScore.NoOfDefects = totalPoint;
+
                 // Material Fail
                 if (totalPoint > 0 && totalPoint < 80) {
                     document.getElementById('divCardScore').classList.add('border-danger');
                     document.getElementById('divCardScore').classList.add('bg-danger');
-                    document.getElementById('lblTotalScore').classList.add('text-danger');
+                    document.getElementById('lblNoOfDefects').classList.add('text-danger');
                     document.getElementById('btnSave').classList.add('btn-danger');
                 }
                 // Material Pass
                 else if (totalPoint > 0 && totalPoint >= 80){
                     document.getElementById('divCardScore').classList.add('border-success');
                     document.getElementById('divCardScore').classList.add('bg-success');
-                    document.getElementById('lblTotalScore').classList.add('text-success');
+                    document.getElementById('lblNoOfDefects').classList.add('text-success');
                     document.getElementById('btnSave').classList.add('btn-success');
                 }
 
@@ -350,6 +361,10 @@
 
                 document.getElementById("btnReset").onclick = function () { ResetScoreArea(currentLMScore) };
                 document.getElementById("btnSave").onclick = function () { SaveScore(currentLMScore) };
+
+                //
+                document.getElementById("btnPlusActualWidth").onclick = function () { plusActualWidth() };
+                document.getElementById("btnPlusActualQuantity").onclick = function () { plusActualQuantity() };
 
                 return false;
             }
@@ -399,15 +414,15 @@
 
             function ToastReset(currentLMScore) {
 
-                document.getElementById('lblTotalScore').innerText = '0';
+                document.getElementById('lblNoOfDefects').innerText = '0';
                 document.getElementById('divCardScore').classList.remove('border-danger');
                 document.getElementById('divCardScore').classList.remove('bg-danger');
-                document.getElementById('lblTotalScore').classList.remove('text-danger');
+                document.getElementById('lblNoOfDefects').classList.remove('text-danger');
                 document.getElementById('btnSave').classList.remove('btn-danger');
 
                 document.getElementById('divCardScore').classList.remove('border-success');
                 document.getElementById('divCardScore').classList.remove('bg-success');
-                document.getElementById('lblTotalScore').classList.remove('text-success');
+                document.getElementById('lblNoOfDefects').classList.remove('text-success');
                 document.getElementById('btnSave').classList.remove('btn-success');
 
                 currentLMScore.DefectType1 = 0;
@@ -490,7 +505,7 @@
                 });
 
             }
-
+            
             function onError() {
                 alert('An error occured at the backend !');
             }
@@ -499,6 +514,38 @@
                 showTime();
                 //$('.dropdown-toggle').dropdown();
             });
+
+            function plusActualWidth() {
+                var currentValue = txtPlusActualWidth.value;
+                txtPlusActualWidth.classList.remove('is-invalid');
+                var regexNumber = /^\d+$/;
+                if (!regexNumber.test(currentValue.toString())) {
+                    $('#txtPlusActualWidth').select();
+                    txtPlusActualWidth.classList.add('is-invalid');
+                    return;
+                }
+                else {
+                    var currentValueInt = parseInt(currentValue);
+                    txtPlusActualWidth.value = currentValueInt + 1;
+                    DisplayPoint(currentLMScore, '', true);
+                }
+            }
+
+            function plusActualQuantity() {
+                var currentValue = txtPlusActualQuantity.value;
+                txtPlusActualQuantity.classList.remove('is-invalid');
+                var regexNumber = /^\d+$/;
+                if (!regexNumber.test(currentValue.toString())) {
+                    $('#txtPlusActualQuantity').select();
+                    txtPlusActualQuantity.classList.add('is-invalid');
+                    return;
+                }
+                else {
+                    var currentValueInt = parseInt(currentValue);
+                    txtPlusActualQuantity.value = currentValueInt + 1;
+                    DisplayPoint(currentLMScore, '', true);
+                }
+            }
             // Clock
             function showTime() {
                 var date = new Date();
@@ -605,7 +652,7 @@
                     
                     <div class="col-12 mt-1 mt-sm-0 h-100 w-100">
                         <div class="row pt-1 pb-1 align-items-end" style="min-height: 45vh;">
-                            <div id="divScore" class="col-12 col-sm-8 h-100" style="display:none;">
+                            <div id="divScore" class="col-12 col-sm-12 col-md-8 h-100" style="display:none;">
                                 <div class="container p-0 m-0">
                                     <div class="row"><h6>Defects</h6></div>
                                     <div class="row">
@@ -648,8 +695,6 @@
                                     <div class="row"><h6>Hole</h6></div>
                                     <div class="row">
                                         <div class="col-3">
-                                        </div>
-                                        <div class="col-3">
                                             <button id="btnHoleType2" type="button" class="btn btn-outline-info pt-0 pr-0 pl-0 pb-4 rounded-2 shadow-lg h-100 w-100">
                                                 <div class="container p-0 m-0 w-100 h-100 g-0">
                                                     <div class="row p-0 m-0 w-100 text-right"><h5 class="p-0 m-0"><span id="spHoleType2" class="badge bg-info rounded-2">0</span></h5></div>
@@ -665,17 +710,33 @@
                                                 </div>
                                             </button>
                                         </div>
-                                        <div class="col-3 float-right">
-                                            
+                                        
+                                        <div class="col-6">
+                                            <div class="row h-100 align-items-end">
+                                                <div class="col">
+                                                    <p class="m-0 text-center">Actual Qty</p>
+                                                    <div class="input-group input-group">
+                                                        <button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualQuantity"><i class="fa fa-plus text-info"></i></button>
+                                                        <input id="txtPlusActualQuantity" class="form-control rounded-0 text-center" value="1" aria-label="Sizing example input" aria-describedby="btnPlusActualQuantity">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="m-0 text-center">Actual Width</p>
+                                                    <div class="input-group input-group">
+                                                        <button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualWidth"><i class="fa fa-plus text-info"></i></button>
+                                                        <input class="form-control rounded-0 text-center" id="txtPlusActualWidth" value="1" aria-label="Sizing example input" aria-describedby="btnPlusActualWidth">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="divScoreSave" class="col-12 col-sm-4 mt-1 mt-sm-0 h-100" style="display:none;">
+                            <div id="divScoreSave" class="col-12 col-sm-12 col-md-4 mt-1 mt-md-0 h-100" style="display:none;">
                                 <div id="divCardScore" class="card rounded-0 shadow-sm w-100">
                                     <div class="card-header rounded-0 text-center">
                                         <div class="row p-0 m-0 align-items-center">
-                                            <div class="col text-left"><h4 class="p-0 m-0">SCORE</h4></div>
+                                            <div class="col text-left"><h4 class="p-0 m-0">Total</h4></div>
                                             <div class="col-auto p-0 m-0">
                                                 <button id="btnReset" type="button" class="btn btn-warning shadow-sm btn-sm rounded-2" data-bs-toggle="modal" data-bs-target="#modalDisplayToast">
                                                     <i class="fa fa-refresh fa-1x mr-2"></i>
@@ -684,7 +745,17 @@
                                         </div>
                                     </div>
                                     <div class="card-body bg-white">
-                                    <h1 id="lblTotalScore" class="card-title text-center w-100 h-100" style="font-size:5rem;"></h1>
+                                        <div class="row h-100 p-0">
+                                            <div class="col">
+                                                <p class="p-0 m-0 text-center">#Defect</p>
+                                                <h1 id="lblNoOfDefects" class="card-title text-center" style="font-size:3.5rem;"></h1>
+                                                
+                                            </div>
+                                            <div class="col">
+                                                <p class="p-0 m-0 text-center">Score</p>
+                                                <h1 id="lblTotalScore" data-bs-toggle="tooltip" data-bs-placement="bottom" title=" =(Defects/ActQty)*(36/ActWidth)*100" class="card-title text-center" style="font-size:3.5rem;"></h1>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-footer bg-transparent p-0 m-0">
                                         <button id="btnSave" class="btn btn-lg w-100 rounded-0 border-0" type="button">SAVE</button>
@@ -695,6 +766,7 @@
                     </div>
                 </div>
             </div>
+            
             
             <!-- Modal Scan Barcode -->
             <div class="modal fade" id="modalBarcodeScan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modelBarcodeTitle" aria-hidden="true">
