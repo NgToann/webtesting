@@ -53,14 +53,34 @@ namespace WebsiteTesting.Pages.WHLamination
             }
         }
 
-        // Get order Information by OrderNo
+        // Get LaminationScore by OrderNoId
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]
         public static string GetScoreByOrderNoId(string orderNoId)
         {
             try
             {
-                var laminationMatsScore = LaminationMaterialScoreController.GetLaminationMatsScoreByOrderNoId(orderNoId);
+                var laMatsByOrderNoIdList = LaminationMaterialScoreController.GetLaminationMatsScoreByOrderNoId(orderNoId);
+                if (laMatsByOrderNoIdList != null)
+                    return JsonConvert.SerializeObject(laMatsByOrderNoIdList);
+                else return "[]";
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
+            }
+        }
+
+        // Get LaminationScore by OrderNoId By RoundCheck
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public static string GetScoreByOrderNoIdByRound(string orderNoId, string btnRoundId)
+        {
+            try
+            {
+                int roundCheck = 0;
+                Int32.TryParse(btnRoundId, out roundCheck);
+                var laminationMatsScore = LaminationMaterialScoreController.GetLaminationMatsScoreByOrderNoIdByRound(orderNoId, roundCheck);
                 if (laminationMatsScore != null)
                     return JsonConvert.SerializeObject(laminationMatsScore);
                 else return "[]";
@@ -73,7 +93,7 @@ namespace WebsiteTesting.Pages.WHLamination
 
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]
-        public static string SaveScore( string orderNoId, int poQuantity, int labelQuantity, int actualQuantity, int labelWidth, int actualWidth, int defectType1, int defectType2, int defectType3, int defectType4, int holeType2, int holeType4, int totalScore, string reviser)
+        public static string SaveScore( string orderNoId, int poQuantity, int labelQuantity, int actualQuantity, int labelWidth, int actualWidth, int defectType1, int defectType2, int defectType3, int defectType4, int holeType2, int holeType4, int totalScore, string reviser, int roundCheck, int noOfDefects)
         {
             var laminationScoreSave = new LaminationMaterialScoreModel()
             {
@@ -90,7 +110,9 @@ namespace WebsiteTesting.Pages.WHLamination
                 HoleType2       = holeType2,
                 HoleType4       = holeType4,
                 TotalScore      = totalScore,
-                Reviser         = reviser
+                Reviser         = reviser,
+                RoundCheck      = roundCheck,
+                NoOfDefects     = noOfDefects,
             };
             try
             {

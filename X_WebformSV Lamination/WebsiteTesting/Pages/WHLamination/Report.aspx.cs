@@ -66,8 +66,8 @@ namespace WebsiteTesting.Pages.WHLamination
                     dr["HoleType4"] = whlReport.HoleType4.ToString();
                     dr["TotalPoints"] = whlReport.TotalScore.ToString();
                     dr["PointPerYards"] = (100 - whlReport.TotalScore).ToString();
-                    dr["Accept"] = whlReport.TotalScore >= 80 ? "1" : "";
-                    dr["Reject"] = whlReport.TotalScore < 80 ? "1" : "";
+                    dr["Accept"] = whlReport.TotalScore <= 20 ? "1" : "";
+                    dr["Reject"] = whlReport.TotalScore > 20 ? "1" : "";
                     dr["Remarks"] ="";
 
                     dt.Rows.Add(dr);

@@ -13,21 +13,23 @@
         
         <script type="text/javascript">
             class LaminationMaterialScore {
-                constructor(OrderNoId, POQuantity, LabelQuantity, ActualQuantity, LabelWidth, ActualWidth, TotalScore, DefectType1, DefectType2, DefectType3, DefectType4, HoleType2, HoleType4, Reviser, NoOfDefects, RoundCheck) {
-                    this.OrderNoId = OrderNoId;
-                    this.POQuantity = POQuantity;
-                    this.LabelQuantity = LabelQuantity;
+                constructor(OrderNoId, POQuantity, LabelQuantity, ActualQuantity, LabelWidth, ActualWidth, TotalScore, DefectType1, DefectType2, DefectType3, DefectType4, HoleType2, HoleType4, Reviser, NoOfDefects, RoundCheck, MaxRound) {
+                    this.OrderNoId      = OrderNoId;
+                    this.POQuantity     = POQuantity;
+                    this.LabelQuantity  = LabelQuantity;
                     this.ActualQuantity = ActualQuantity;
-                    this.LabelWidth = LabelWidth;
-                    this.ActualWidth = ActualWidth;
-                    this.DefectType1 = DefectType1;
-                    this.DefectType2 = DefectType2;
-                    this.DefectType3 = DefectType3;
-                    this.DefectType4 = DefectType4;
-                    this.HoleType2 = HoleType2;
-                    this.HoleType4 = HoleType4;
-                    this.Reviser = Reviser;
-                    this.RoundCheck = RoundCheck;
+                    this.LabelWidth     = LabelWidth;
+                    this.ActualWidth    = ActualWidth;
+                    this.DefectType1    = DefectType1;
+                    this.DefectType2    = DefectType2;
+                    this.DefectType3    = DefectType3;
+                    this.DefectType4    = DefectType4;
+                    this.HoleType2      = HoleType2;
+                    this.HoleType4      = HoleType4;
+                    this.Reviser        = Reviser;
+                    this.NoOfDefects    = NoOfDefects;
+                    this.RoundCheck     = RoundCheck;
+                    this.MaxRound       = MaxRound;
                 }
             };
 
@@ -65,6 +67,7 @@
                 laminationMaterialList.forEach(function (lamiMats) {
                     document.getElementById(lamiMats.OrderNoId).setAttribute("class", "btn btn-outline-success btn-sm text-dark text-wrap text-left");
                 });
+
                 // highlight button click
                 document.getElementById(buttonId).setAttribute("class", "btn btn-danger btn-sm text-wrap text-left");
                 document.getElementById("materialDetailTitle").innerText = lamiMatsSelected.MaterialName;
@@ -73,9 +76,9 @@
                     OrderNoId = lamiMatsSelected.OrderNoId,
                     POQuantity = lamiMatsSelected.POQuantity,
                     LabelQuantity = 0,
-                    ActualQuantity = 0,
+                    ActualQuantity = 1,
                     LabelWidth = 0,
-                    ActualWidth = 0,
+                    ActualWidth = 1,
                     TotalScore = 0,
                     DefectType1 = 0,
                     DefectType2 = 0,
@@ -95,6 +98,10 @@
                     async: true,
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
+                        // Clear RoundList
+                        const divRoundList = document.getElementById("divRoundList");
+                        divRoundList.innerHTML = '';
+
                         if (data.d.toString().includes('Exception:')) {
                             alert(data.d);
                         }
@@ -105,10 +112,35 @@
                         }
                         // matsScore already check
                         else {
-                            var matsScoreCurrentCheck = JSON.parse(data.d);
-                            if (matsScoreCurrentCheck != null) {
-                                DispayModalData(matsScoreCurrentCheck);
-                                document.getElementById("btnStart").onclick = function () { buttonStartClick(matsScoreCurrentCheck, lamiMatsSelected) };
+                            var roundCheckList = JSON.parse(data.d);
+                            if (roundCheckList != null) {
+                                var nextRound = 0;
+
+                                var pHistory = document.createElement("p");
+                                pHistory.className = "mt-2 mb-0";
+                                pHistory.innerText = 'Previous Scan';
+                                divRoundList.append(pHistory);
+
+                                roundCheckList.forEach(function (round) {
+                                    var roundDivCol = document.createElement("div");
+                                    roundDivCol.className = "col";
+                                    var roundButton = document.createElement("button");
+                                    roundButton.className = "btn btn-sm btn-info";
+                                    roundButton.type = "button";
+                                    roundButton.id = round.RoundCheck;
+                                    roundButton.textContent = 'Round ' + round.RoundCheck;
+                                    roundButton.onclick = function () { continueRoundCheck(round.OrderNoId, roundButton.id, lamiMatsSelected) };
+
+                                    roundDivCol.appendChild(roundButton);
+                                    divRoundList.append(roundDivCol);
+
+                                    nextRound = round.MaxRound + 1;
+                                });
+
+                                DispayModalData(matsScoreFirst);
+                                // Start New Round
+                                matsScoreFirst.RoundCheck = nextRound;
+                                document.getElementById("btnStart").onclick = function () { buttonStartClick(matsScoreFirst, lamiMatsSelected) };
                             }
                         }
                     },
@@ -122,38 +154,26 @@
                 // validate
                 var labelQty = document.getElementById('txtLabelQuantity');
                 labelQty.classList.remove('is-invalid');
-                var actualQty = document.getElementById('txtActualQuantity');
-                actualQty.classList.remove('is-invalid');
+                
                 var labelWidth = document.getElementById('txtLabelWidth');
                 labelWidth.classList.remove('is-invalid');
-                var actualWidth = document.getElementById('txtActualWidth');
-                actualWidth.classList.remove('is-invalid');
 
                 var validateResult = true;
                 if (!regexNumber.test(labelQty.value.toString())) {
                     labelQty.classList.add('is-invalid');
                     validateResult = false;
                 }
-                if (actualQty.value <= 0 || actualQty.value > lamiMatsSelected.POQuantity || !regexNumber.test(actualQty.value.toString())) {
-                    actualQty.classList.add('is-invalid');
-                    validateResult = false;
-                }
                 if (!regexNumber.test(labelWidth.value.toString())) {
                     labelWidth.classList.add('is-invalid');
                     validateResult = false;
                 }
-                if (!regexNumber.test(actualWidth.value.toString())) {
-                    actualWidth.classList.add('is-invalid');
-                    validateResult = false;
-                }
+
                 if (!validateResult) {
                     return;
                 }
 
                 matsScore.LabelQuantity = labelQty.value;
-                matsScore.ActualQuantity = actualQty.value;
                 matsScore.LabelWidth = labelWidth.value;
-                matsScore.ActualWidth = actualWidth.value;
                 DisplayMatsInfor(matsScore, lamiMatsSelected);
 
                 // Display divScore
@@ -171,32 +191,98 @@
                 return false;
             }
 
+            function continueRoundCheck(orderNoId, buttonId, lamiMatsSelected) {
+
+                var regexNumber = /^\d+$/;
+                // validate
+                var labelQty = document.getElementById('txtLabelQuantity');
+                labelQty.classList.remove('is-invalid');
+                var labelWidth = document.getElementById('txtLabelWidth');
+                labelWidth.classList.remove('is-invalid');
+                var labelQtyRevise = 0, labelWidthRevise = 0;
+                var validateResult = true;
+
+                if (labelQty.value != "" && !regexNumber.test(labelQty.value.toString())) {
+                    labelQty.classList.add('is-invalid');
+                    validateResult = false;
+                }
+                else if (labelQty.value != "") {
+                    labelQtyRevise = parseInt(labelQty.value);
+                }
+
+                if (labelWidth.value != "" && !regexNumber.test(labelWidth.value.toString())) {
+                    labelWidth.classList.add('is-invalid');
+                    validateResult = false;
+                }
+                else if (labelWidth.value != "") {
+                    labelWidthRevise = parseInt(labelWidth.value);
+                }
+
+                if (!validateResult) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/GetScoreByOrderNoIdByRound") %>',
+                    data: { "orderNoId": '"' + orderNoId + '"', "btnRoundId": '"' + buttonId + '"' },
+                    type: "GET",
+                    datatype: "json",
+                    async: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.d.toString().includes('Exception:')) {
+                            alert(data.d);
+                        }
+                        // matsScore is first time
+                        else if (data.d === '[]') {
+                            alert(data.d);
+                        }
+                        else {
+                            var matsScore = JSON.parse(data.d);
+                            if (labelWidthRevise > 0) {
+                                matsScore.LabelWidth = labelWidthRevise;
+                            }
+                            if (labelQtyRevise > 0) {
+                                matsScore.LabelQuantity = labelQtyRevise;
+                            }
+
+                            DisplayMatsInfor(matsScore, lamiMatsSelected);
+
+                            // Display divScore
+                            const divScore = document.getElementById('divScore');
+                            const divScoreSave = document.getElementById('divScoreSave');
+                            divScore.style.display = 'block';
+                            divScoreSave.style.display = 'block';
+
+                            currentLMScore = matsScore;
+                            DisplayPoint(currentLMScore, '', true);
+
+                            // Close Modal
+                            $('#btnCloseModelInputMaterialDetail').click();
+                            return false;
+                        }
+                    },
+                    error: onError
+                })
+            }
+
             function DispayModalData(matsScore) {
                 const txtLabelQuantity = document.getElementById('txtLabelQuantity');
                 txtLabelQuantity.setAttribute('class', 'form-control');
                 txtLabelQuantity.value = '';
-                const txtActualQuantity = document.getElementById('txtActualQuantity');
-                txtActualQuantity.setAttribute('class', 'form-control');
-                txtActualQuantity.value = '';
+                
                 const txtLabelWidth = document.getElementById('txtLabelWidth');
                 txtLabelWidth.setAttribute('class', 'form-control');
                 txtLabelWidth.value = '';
-                const txtActualWidth = document.getElementById('txtActualWidth');
-                txtActualWidth.setAttribute('class', 'form-control');
-                txtActualWidth.value = '';
+                
 
                 if (matsScore != null) {
                     if (matsScore.LabelQuantity != 0) {
                         txtLabelQuantity.value = matsScore.LabelQuantity;
                     }
-                    if (matsScore.ActualQuantity != 0) {
-                        txtActualQuantity.value = matsScore.ActualQuantity;
-                    }
+                    
                     if (matsScore.LabelWidth != 0) {
                         txtLabelWidth.value = matsScore.LabelWidth;
-                    }
-                    if (matsScore.ActualWidth != 0) {
-                        txtActualWidth.value = matsScore.ActualWidth;
                     }
                 }
             }
@@ -230,7 +316,7 @@
                 if (lamiMatsSelected != null) {
                     const divMatsInfor = document.getElementById('divMatsInfor');
                     divMatsInfor.style.display = 'block';
-                    pMatsName.innerText = lamiMatsSelected.MaterialName;
+                    pMatsName.innerText = lamiMatsSelected.MaterialName + ' Round: ' + matsScore.RoundCheck;
                     const liOrderNo = document.createElement("li");
                     liOrderNo.innerText = 'OrderNo: ' + lamiMatsSelected.OrderNo;
                     const liArticle = document.createElement("li");
@@ -256,39 +342,39 @@
                     divMatsInforRow2.appendChild(liShoeName);
                     divMatsInforRow2.appendChild(liPOList);
                     const liPOQuantity = document.createElement("li");
-                    liPOQuantity.innerText = 'Product Quantity: ' + lamiMatsSelected.POQuantity;
+                    liPOQuantity.innerText      = 'Product Quantity: ' + lamiMatsSelected.POQuantity;
                     const liSendQuantity = document.createElement("li");
-                    liSendQuantity.innerText = 'Send Quantity: ' + lamiMatsSelected.SendQuantity;
+                    liSendQuantity.innerText    = 'Send Quantity: ' + lamiMatsSelected.SendQuantity;
                     divMatsInforColumn31.appendChild(liPOQuantity);
                     divMatsInforColumn31.appendChild(liSendQuantity);
                 }
                 if (matsScore != null) {
                     const liLabelQuantity = document.createElement("li");
-                    liLabelQuantity.innerText = 'Label Quantity: ' + matsScore.LabelQuantity;
-                    const liActualQuantity = document.createElement("li");
-                    liActualQuantity.innerText = 'Actual Quantity: ' + matsScore.ActualQuantity;
-                    divMatsInforColumn32.appendChild(liLabelQuantity);
-                    divMatsInforColumn32.appendChild(liActualQuantity);
+                    liLabelQuantity.innerText   = 'Label Quantity: ' + matsScore.LabelQuantity;
+
                     const liLabelWidth = document.createElement("li");
-                    liLabelWidth.innerText = 'Label Width: ' + matsScore.LabelWidth;
-                    const liActualWidth = document.createElement("li");
-                    liActualWidth.innerText = 'Actual Width: ' + matsScore.ActualWidth;
-                    divMatsInforColumn33.appendChild(liLabelWidth);
-                    divMatsInforColumn33.appendChild(liActualWidth);
+                    liLabelWidth.innerText      = 'Label Width: ' + matsScore.LabelWidth;
+
+                    divMatsInforColumn32.appendChild(liLabelQuantity);
+                    divMatsInforColumn32.appendChild(liLabelWidth);
                 }
             }
 
             function DisplayPoint(currentLMScore, buttonId, displayOldData) {
 
                 document.getElementById('lblNoOfDefects').innerText = '';
+                document.getElementById('lblTotalScore').innerText = '';
+
                 document.getElementById('divCardScore').classList.remove('border-danger');
                 document.getElementById('divCardScore').classList.remove('bg-danger');
                 document.getElementById('lblNoOfDefects').classList.remove('text-danger');
+                document.getElementById('lblTotalScore').classList.remove('text-danger');
                 document.getElementById('btnSave').classList.remove('btn-danger');
 
                 document.getElementById('divCardScore').classList.remove('border-success');
                 document.getElementById('divCardScore').classList.remove('bg-success');
                 document.getElementById('lblNoOfDefects').classList.remove('text-success');
+                document.getElementById('lblTotalScore').classList.remove('text-success');
                 document.getElementById('btnSave').classList.remove('btn-success');
 
                 if (displayOldData) {
@@ -298,6 +384,9 @@
                     document.getElementById('spDefectType4').innerText = currentLMScore.DefectType4;
                     document.getElementById('spHoleType2').innerText = currentLMScore.HoleType2;
                     document.getElementById('spHoleType4').innerText = currentLMScore.HoleType4;
+
+                    txtPlusActualQuantity.value = currentLMScore.ActualQuantity;
+                    txtPlusActualWidth.value    = currentLMScore.ActualWidth;
                 }
                 else if (currentLMScore != null) {
                     if (buttonId === 'btnDefectType1') {
@@ -332,24 +421,28 @@
                 var actualWidth = txtPlusActualWidth.value;
 
                 var totalScore = (totalPoint / actualQty) * (36 / actualWidth) * 100;
-                document.getElementById('lblTotalScore').innerText = parseInt(totalScore.toString());
+                document.getElementById('lblTotalScore').innerText = Math.round(totalScore);
 
-
-                currentLMScore.NoOfDefects = totalPoint;
+                currentLMScore.NoOfDefects      = totalPoint;
+                currentLMScore.TotalScore       = Math.round(totalScore);;
+                currentLMScore.ActualWidth      = actualWidth;
+                currentLMScore.ActualQuantity   = actualQty;
 
                 // Material Fail
-                if (totalPoint > 0 && totalPoint < 80) {
-                    document.getElementById('divCardScore').classList.add('border-danger');
-                    document.getElementById('divCardScore').classList.add('bg-danger');
-                    document.getElementById('lblNoOfDefects').classList.add('text-danger');
-                    document.getElementById('btnSave').classList.add('btn-danger');
-                }
-                // Material Pass
-                else if (totalPoint > 0 && totalPoint >= 80){
+                if (totalScore > 0 && totalScore <= 20) {
                     document.getElementById('divCardScore').classList.add('border-success');
                     document.getElementById('divCardScore').classList.add('bg-success');
                     document.getElementById('lblNoOfDefects').classList.add('text-success');
+                    document.getElementById('lblTotalScore').classList.add('text-success');
                     document.getElementById('btnSave').classList.add('btn-success');
+                }
+                // Material Pass
+                else if (totalScore > 0 && totalScore > 20) {
+                    document.getElementById('divCardScore').classList.add('border-danger');
+                    document.getElementById('divCardScore').classList.add('bg-danger');
+                    document.getElementById('lblNoOfDefects').classList.add('text-danger');
+                    document.getElementById('lblTotalScore').classList.add('text-danger');
+                    document.getElementById('btnSave').classList.add('btn-danger');
                 }
 
                 document.getElementById("btnDefectType1").onclick = function () { DisplayPoint(currentLMScore, 'btnDefectType1', false) };
@@ -360,13 +453,28 @@
                 document.getElementById("btnHoleType4").onclick = function () { DisplayPoint(currentLMScore, 'btnHoleType4', false) };
 
                 document.getElementById("btnReset").onclick = function () { ResetScoreArea(currentLMScore) };
-                document.getElementById("btnSave").onclick = function () { SaveScore(currentLMScore) };
+                document.getElementById("btnSave").onclick = function () { ShowSavingData(currentLMScore) };
+                document.getElementById("btnConfirmSave").onclick = function () { SaveScore(currentLMScore) };
 
                 //
-                document.getElementById("btnPlusActualWidth").onclick = function () { plusActualWidth() };
-                document.getElementById("btnPlusActualQuantity").onclick = function () { plusActualQuantity() };
+                document.getElementById("btnPlusActualWidth").onclick = function () { plusActualWidth(currentLMScore) };
+                document.getElementById("btnPlusActualQuantity").onclick = function () { plusActualQuantity(currentLMScore) };
+
+                document.getElementById("txtPlusActualQuantity").onkeyup = function () { UpdateScoreByQuantity(currentLMScore) };
+                document.getElementById("txtPlusActualWidth").onkeyup = function () { UpdateScoreByWidth(currentLMScore) };
 
                 return false;
+            }
+
+            function ShowSavingData(currentLMScore) {
+                document.getElementById("pConfirmOrderNoId").textContent        = currentLMScore.OrderNoId;
+                document.getElementById("pConfirmRound").textContent            = currentLMScore.RoundCheck;
+                document.getElementById("pConfirmActualQuantity").textContent   = currentLMScore.ActualQuantity;
+                document.getElementById("pConfirmActualWidth").textContent      = currentLMScore.ActualWidth;
+                document.getElementById("pConfirmNoOfDefects").textContent      = currentLMScore.NoOfDefects;
+                document.getElementById("pConfirmTotalScore").textContent       = currentLMScore.TotalScore;
+                document.getElementById("pConfirmCreatedTime").textContent      = document.getElementById("MyClockDisplay").innerText;
+                document.getElementById("pConfirmUser").textContent             = currentLMScore.Reviser;
             }
 
             function SaveScore(currentLMScore) {
@@ -385,6 +493,8 @@
                 var holeType4       = currentLMScore.HoleType4;
                 var totalScore      = currentLMScore.TotalScore;
                 var reviser         = reviser; 
+                var noOfDefects     = currentLMScore.NoOfDefects;
+                var roundCheck      = currentLMScore.RoundCheck;
                 //jQuery.ajax({
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/WHLamination/WHLaminationHome.aspx/SaveScore") %>',
@@ -392,7 +502,7 @@
                         "orderNoId": '"' + orderNoId + '"', "poQuantity": '"' + poQuantity + '"', "labelQuantity": '"' + labelQuantity + '"', "actualQuantity": '"' + actualQuantity + '"',
                         "labelWidth": '"' + labelWidth + '"', "actualWidth": '"' + actualWidth + '"', "defectType1": '"' + defectType1 + '"', "defectType2": '"' + defectType2 + '"',
                         "defectType3": '"' + defectType3 + '"', "defectType4": '"' + defectType4 + '"', "holeType2": '"' + holeType2 + '"', "holeType4": '"' + holeType4 + '"',
-                        "totalScore": '"' + totalScore + '"', "reviser": '"' + reviser + '"'
+                        "totalScore": '"' + totalScore + '"', "reviser": '"' + reviser + '"', "roundCheck": '"' + roundCheck + '"', "noOfDefects": '"' + noOfDefects + '"'
                     },
                     type: "GET",
                     datatype: "json",
@@ -400,8 +510,9 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         if (data.d === 'Successful !') {
+                            $('#btnConfirmSaveClose').click();
                             alert(data.d);
-                            //ResetScoreArea(currentLMScore);
+                            ToastReset(currentLMScore);
                         }
                         else {
                             alert(data.d + ' Please Try Again !');
@@ -415,24 +526,32 @@
             function ToastReset(currentLMScore) {
 
                 document.getElementById('lblNoOfDefects').innerText = '0';
+                document.getElementById('lblTotalScore').innerText = '0';
                 document.getElementById('divCardScore').classList.remove('border-danger');
                 document.getElementById('divCardScore').classList.remove('bg-danger');
                 document.getElementById('lblNoOfDefects').classList.remove('text-danger');
+                document.getElementById('lblTotalScore').classList.remove('text-danger');
                 document.getElementById('btnSave').classList.remove('btn-danger');
 
                 document.getElementById('divCardScore').classList.remove('border-success');
                 document.getElementById('divCardScore').classList.remove('bg-success');
                 document.getElementById('lblNoOfDefects').classList.remove('text-success');
+                document.getElementById('lblTotalScore').classList.remove('text-success');
                 document.getElementById('btnSave').classList.remove('btn-success');
 
-                currentLMScore.DefectType1 = 0;
-                currentLMScore.DefectType2 = 0;
-                currentLMScore.DefectType3 = 0;
-                currentLMScore.DefectType4 = 0;
+                currentLMScore.DefectType1  = 0;
+                currentLMScore.DefectType2  = 0;
+                currentLMScore.DefectType3  = 0;
+                currentLMScore.DefectType4  = 0;
 
-                currentLMScore.HoleType2 = 0;
-                currentLMScore.HoleType4 = 0;
-                currentLMScore.TotalScore = 0;
+                currentLMScore.HoleType2    = 0;
+                currentLMScore.HoleType4    = 0;
+                currentLMScore.TotalScore   = 0;
+                currentLMScore.NoOfDefects  = 0;
+
+                currentLMScore.ActualWidth  = 1;
+                currentLMScore.ActualQuantity = 1;
+
 
                 document.getElementById('spDefectType1').innerText = '0';
                 document.getElementById('spDefectType2').innerText = '0';
@@ -441,11 +560,15 @@
                 document.getElementById('spHoleType2').innerText = '0';
                 document.getElementById('spHoleType4').innerText = '0';
 
+                txtPlusActualWidth.value    = 1;
+                txtPlusActualQuantity.value = 1;
                 $('.toast').toast('hide');
             }
+
             function ToastCancel() {
                 $('.toast').toast('hide');
             }
+
             function ResetScoreArea(currentLMScore) {
                 $('.toast').toast('show');
                 document.getElementById('toastTitle').textContent = 'Confirm Reset: ' + currentLMScore.OrderNoId + ' ?';
@@ -515,7 +638,7 @@
                 //$('.dropdown-toggle').dropdown();
             });
 
-            function plusActualWidth() {
+            function plusActualWidth(currentLMScore) {
                 var currentValue = txtPlusActualWidth.value;
                 txtPlusActualWidth.classList.remove('is-invalid');
                 var regexNumber = /^\d+$/;
@@ -527,11 +650,12 @@
                 else {
                     var currentValueInt = parseInt(currentValue);
                     txtPlusActualWidth.value = currentValueInt + 1;
+                    currentLMScore.ActualWidth = currentValueInt + 1;
                     DisplayPoint(currentLMScore, '', true);
                 }
             }
 
-            function plusActualQuantity() {
+            function plusActualQuantity(currentLMScore) {
                 var currentValue = txtPlusActualQuantity.value;
                 txtPlusActualQuantity.classList.remove('is-invalid');
                 var regexNumber = /^\d+$/;
@@ -543,9 +667,43 @@
                 else {
                     var currentValueInt = parseInt(currentValue);
                     txtPlusActualQuantity.value = currentValueInt + 1;
+                    currentLMScore.ActualQuantity = currentValueInt + 1;
                     DisplayPoint(currentLMScore, '', true);
                 }
             }
+
+            function UpdateScoreByQuantity(currentLMScore) {
+                var currentValue = txtPlusActualQuantity.value;
+                txtPlusActualQuantity.classList.remove('is-invalid');
+                var regexNumber = /^\d+$/;
+                if (!regexNumber.test(currentValue.toString())) {
+                    $('#txtPlusActualQuantity').select();
+                    txtPlusActualQuantity.classList.add('is-invalid');
+                    return;
+                }
+                else {
+                    var currentValueInt = parseInt(currentValue);
+                    currentLMScore.ActualQuantity = currentValueInt;
+                    DisplayPoint(currentLMScore, '', true);
+                }
+            }
+
+            function UpdateScoreByWidth(currentLMScore) {
+                var currentValue = txtPlusActualWidth.value;
+                txtPlusActualWidth.classList.remove('is-invalid');
+                var regexNumber = /^\d+$/;
+                if (!regexNumber.test(currentValue.toString())) {
+                    $('#txtPlusActualWidth').select();
+                    txtPlusActualWidth.classList.add('is-invalid');
+                    return;
+                }
+                else {
+                    var currentValueInt = parseInt(currentValue);
+                    currentLMScore.ActualWidth = currentValueInt;
+                    DisplayPoint(currentLMScore, '', true);
+                }
+            }
+
             // Clock
             function showTime() {
                 var date = new Date();
@@ -618,7 +776,7 @@
                                             <p id="pMatsName" class="m-0 p-0 text-danger">Material Description</p>
                                         </div>
                                         <div class="col-auto text-center">
-                                            <i class="fa fa-clock-o"></i><a class="ml-1 p-0 text-danger" id="MyClockDisplay"></a>
+                                            <i class="fa fa-clock-o text-info"></i><a class="ml-1 p-0 text-danger" id="MyClockDisplay"></a>
                                         </div>
                                     </div>
                                 </div>
@@ -717,14 +875,14 @@
                                                     <p class="m-0 text-center">Actual Qty</p>
                                                     <div class="input-group input-group">
                                                         <button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualQuantity"><i class="fa fa-plus text-info"></i></button>
-                                                        <input id="txtPlusActualQuantity" class="form-control rounded-0 text-center" value="1" aria-label="Sizing example input" aria-describedby="btnPlusActualQuantity">
+                                                        <input type="text" id="txtPlusActualQuantity" class="form-control rounded-0 text-center" aria-label="Sizing example input" aria-describedby="btnPlusActualQuantity">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <p class="m-0 text-center">Actual Width</p>
                                                     <div class="input-group input-group">
                                                         <button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualWidth"><i class="fa fa-plus text-info"></i></button>
-                                                        <input class="form-control rounded-0 text-center" id="txtPlusActualWidth" value="1" aria-label="Sizing example input" aria-describedby="btnPlusActualWidth">
+                                                        <input type="text" class="form-control rounded-0 text-center" id="txtPlusActualWidth" aria-label="Sizing example input" aria-describedby="btnPlusActualWidth">
                                                     </div>
                                                 </div>
                                             </div>
@@ -758,7 +916,7 @@
                                         </div>
                                     </div>
                                     <div class="card-footer bg-transparent p-0 m-0">
-                                        <button id="btnSave" class="btn btn-lg w-100 rounded-0 border-0" type="button">SAVE</button>
+                                        <button id="btnSave" class="btn btn-lg w-100 rounded-0 border-0" type="button" data-bs-toggle="modal" data-bs-target="#modalConfirmSave">SAVE</button>
                                     </div>
                                 </div>
                             </div>
@@ -773,8 +931,8 @@
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="modelBarcodeTitle">Scan barcode</h5>
-                    <button type="button" id="btnCloseModel" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="modelBarcodeTitle">Scan barcode</h5>
+                        <button type="button" id="btnCloseModel" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                     <div class="container text-center">
@@ -802,6 +960,7 @@
                 </div>
                 </div>
             </div>
+            
             <!-- Modal Input Material Quantity-->
             <div class="modal fade" id="modalInputMaterialDetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="materialDetailTitle" aria-hidden="true">
               <div class="modal-dialog">
@@ -812,31 +971,31 @@
                     <button id="btnCloseModelInputMaterialDetail" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                      <div class="form-floating mb-1">
-                          <input class="form-control" id="txtLabelQuantity" placeholder=" ">
-                          <label for="txtLabelQuantity">Label Quantity</label>
+                      <div class="row">
+                          <div class="col">
+                              <div class="form-floating">
+                                  <input class="form-control" id="txtLabelQuantity" placeholder=" ">
+                                  <label for="txtLabelQuantity">Label Quantity</label>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-floating">
+                                  <input class="form-control" id="txtLabelWidth" placeholder=" ">
+                                  <label for="txtLabelWidth">Label Width</label>
+                              </div>
+                          </div>
                       </div>
-                      <div class="form-floating mb-1">
-                          <input class="form-control" id="txtActualQuantity" placeholder=" ">
-                          <label for="txtActualQuantity">Actual Quantity</label>
-                      </div>
-                      <div class="form-floating mb-1">
-                          <input class="form-control" id="txtLabelWidth" placeholder=" ">
-                          <label for="txtLabelWidth">Label Width</label>
-                      </div>
-                      <div class="form-floating mb-1">
-                          <input class="form-control" id="txtActualWidth" placeholder=" ">
-                          <label for="txtActualWidth">Actual Width</label>
+                      <div id="divRoundList" class="row mt-1 g-1 row-cols-auto">
                       </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="btnStart" type="button" class="btn btn-success">Start</button>
+                    <button id="btnStart" type="button" class="btn btn-success">Start New Round</button>
                   </div>
                 </div>
               </div>
             </div>
             
+            <!-- Modal Toast Reset-->
             <div class="modal fade w-auto rounded-0" id="modalDisplayToast" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -855,6 +1014,56 @@
                         </div>
                       </div>
                     </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal Confirm Save-->
+            <div class="modal fade rounded-0" id="modalConfirmSave" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-success" id="staticBackdropLabel">Confirm Save</h5>
+                    <button id="btnConfirmSaveClose" type="button" class="btn-close text-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body text-primary">
+                      <div class="row">
+                          <div class="col-auto">
+                              <p class="mb-1">Order No Id:</p>
+                              <p class="mb-1">Round:</p>
+                              <p class="mb-1">Actual Quantity:</p>
+                              <p class="mb-1">Actual Width:</p>
+                              <p class="mb-1">No of Defects:</p>
+                              <p class="mb-1">Total Score:</p>
+                              <p class="mb-1">Created Time:</p>
+                              <p class="mb-0">User:</p>
+                          </div>
+                          <div class="col-auto">
+                              <p class="mb-1" id="pConfirmOrderNoId"></p>
+                              <p class="mb-1" id="pConfirmRound"></p>
+                              <p class="mb-1" id="pConfirmActualQuantity"></p>
+                              <p class="mb-1" id="pConfirmActualWidth"></p>
+                              <p class="mb-1" id="pConfirmNoOfDefects"></p>
+                              <p class="mb-1" id="pConfirmTotalScore"></p>
+                              <p class="mb-1" id="pConfirmCreatedTime"></p>
+                              <p class="mb-0" id="pConfirmUser"></p>
+                          </div>
+                      </div>
+                      
+                  </div>
+                  <div class="modal-footer">
+                      <div class="row w-100">
+                          <div class="col-3 float-left">
+                              <button id="btnConfirmSave" type="button" class="btn btn-outline-success"><i class="fa fa-check-circle text-info mr-2" aria-hidden="true"></i>Save</button>
+                          </div>
+                          <div class="col-6">
+
+                          </div>
+                          <div class="col-3 float-right">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fa fa-times-circle text-warning mr-2" aria-hidden="true"></i>Cancel</button>
+                          </div>
+                      </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -13,12 +13,23 @@ namespace WebsiteTesting.Controllers.WHLamination
     public class LaminationMaterialScoreController
     {
 
-        public static LaminationMaterialScoreModel GetLaminationMatsScoreByOrderNoId(string orderNoId)
+        public static List<LaminationMaterialScoreModel> GetLaminationMatsScoreByOrderNoId(string orderNoId)
         {
             var @OrderNoId = new SqlParameter("@OrderNoId", orderNoId);
             using (var db = new WHLaminationEntities())
             {
-                return db.Database.SqlQuery<LaminationMaterialScoreModel>("EXEC spm_SelectLaminationMaterialScoreByOrderNoId @OrderNoId", @OrderNoId).FirstOrDefault();
+                return db.Database.SqlQuery<LaminationMaterialScoreModel>("EXEC spm_SelectLaminationMaterialScoreByOrderNoId @OrderNoId", @OrderNoId).ToList();
+            }
+        }
+
+        //
+        public static LaminationMaterialScoreModel GetLaminationMatsScoreByOrderNoIdByRound(string orderNoId, int roundCheck)
+        {
+            var @OrderNoId = new SqlParameter("@OrderNoId", orderNoId);
+            var @RoundCheck = new SqlParameter("@RoundCheck", roundCheck);
+            using (var db = new WHLaminationEntities())
+            {
+                return db.Database.SqlQuery<LaminationMaterialScoreModel>("EXEC spm_SelectLaminationMaterialScoreByOrderNoIdByRound @OrderNoId, @RoundCheck", @OrderNoId, @RoundCheck).FirstOrDefault();
             }
         }
 
@@ -38,11 +49,13 @@ namespace WebsiteTesting.Controllers.WHLamination
             var @HoleType4      = new SqlParameter("@HoleType4", model.HoleType4);
             var @TotalScore     = new SqlParameter("@TotalScore", model.TotalScore);
             var @Reviser        = new SqlParameter("@Reviser", model.Reviser);
+            var @RoundCheck     = new SqlParameter("@RoundCheck", model.RoundCheck);
+            var @NoOfDefects    = new SqlParameter("@NoOfDefects", model.NoOfDefects);
 
             using (var db = new WHLaminationEntities())
             {
-                if (db.Database.ExecuteSqlCommand("EXEC spm_InsertLaminationMaterialScore @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser",
-                                                                                          @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser) > 0)
+                if (db.Database.ExecuteSqlCommand("EXEC spm_InsertLaminationMaterialScore_1 @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser, @RoundCheck, @NoOfDefects",
+                                                                                            @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser, @RoundCheck, @NoOfDefects) > 0)
                 {
                     return true;
                 }
