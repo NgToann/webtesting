@@ -14,5 +14,8 @@ namespace WebsiteTesting.Models.CheckInSystem
         public string Department { get; set; }
         public string Position { get; set; }
         public DateTime HiredDate { get; set; }
+        public string SectionId { get; set; }
+        public string Section { get; set; }
+        public string ReleaseBy { get; set; }
     }
 }

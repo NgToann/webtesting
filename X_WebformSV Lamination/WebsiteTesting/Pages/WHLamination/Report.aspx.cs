@@ -36,7 +36,6 @@ namespace WebsiteTesting.Pages.WHLamination
                 ShowAlert("FromDate or ToDate is invalid !");
                 return;
             }
-
             
             try {
 
@@ -45,30 +44,30 @@ namespace WebsiteTesting.Pages.WHLamination
                 var whlReportList = ReportController.GetWHLaminationUser(fromDate, toDate);
                 foreach(var whlReport in whlReportList)
                 {
-                    DataRow dr = dt.NewRow();
-                    dr["Date"] = String.Format("{0:MM/dd/yyyy}", whlReport.CreatedTime);
+                    DataRow dr          = dt.NewRow();
+                    dr["Date"]          = String.Format("{0:MM/dd/yyyy}", whlReport.CreatedTime);
                     dr["ProductNoList"] = whlReport.ProductNoList;
                     dr["MaterialDescription"] = whlReport.MaterialName;
-                    dr["CaseNo"] ="";
+                    dr["CaseNo"]        = "";
                     dr["LabelQuantity"] = whlReport.LabelQuantity.ToString();
                     dr["ActualQuantity"] = whlReport.ActualQuantity.ToString();
                     dr["RemainingQuantity"] = (whlReport.LabelQuantity - whlReport.ActualQuantity).ToString();
-                    dr["LabelWidth"] = whlReport.LabelWidth.ToString();
-                    dr["ActualWidth"] = whlReport.ActualWidth.ToString();
-                    dr["Length"] ="";
-                    dr["Width"] ="";
-                    dr["Supplier"] = whlReport.SupplierName;
-                    dr["DefectType1"] = whlReport.DefectType1.ToString();
-                    dr["DefectType2"] = whlReport.DefectType2.ToString();
-                    dr["DefectType3"] = whlReport.DefectType3.ToString();
-                    dr["DefectType4"] = whlReport.DefectType4.ToString();
-                    dr["HoleType2"] = whlReport.HoleType2.ToString();
-                    dr["HoleType4"] = whlReport.HoleType4.ToString();
-                    dr["TotalPoints"] = whlReport.TotalScore.ToString();
+                    dr["LabelWidth"]    = whlReport.LabelWidth.ToString();
+                    dr["ActualWidth"]   = whlReport.ActualWidth.ToString();
+                    dr["Length"]        = "";
+                    dr["Width"]         = "";
+                    dr["Supplier"]      = whlReport.SupplierName;
+                    dr["DefectType1"]   = whlReport.DefectType1.ToString();
+                    dr["DefectType2"]   = whlReport.DefectType2.ToString();
+                    dr["DefectType3"]   = whlReport.DefectType3.ToString();
+                    dr["DefectType4"]   = whlReport.DefectType4.ToString();
+                    dr["HoleType2"]     = whlReport.HoleType2.ToString();
+                    dr["HoleType4"]     = whlReport.HoleType4.ToString();
+                    dr["TotalPoints"]   = whlReport.TotalScore.ToString();
                     dr["PointPerYards"] = (100 - whlReport.TotalScore).ToString();
-                    dr["Accept"] = whlReport.TotalScore <= 20 ? "1" : "";
-                    dr["Reject"] = whlReport.TotalScore > 20 ? "1" : "";
-                    dr["Remarks"] ="";
+                    dr["Accept"]        = whlReport.TotalScore <= 20 ? "1" : "";
+                    dr["Reject"]        = whlReport.TotalScore > 20 ? "1" : "";
+                    dr["Remarks"]       = "";
 
                     dt.Rows.Add(dr);
                 }

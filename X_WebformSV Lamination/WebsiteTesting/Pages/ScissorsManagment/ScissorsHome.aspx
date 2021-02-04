@@ -34,7 +34,8 @@
                 <div class="row mt-3">
                     <div class="col-md-6 mt-3">
                         <div class="card-body border rounded-0">
-                            <a><asp:HyperLink runat="server" CssClass="btn btn-danger rounded-0" NavigateUrl="~/Pages/ScissorsManagment/IssuancePage.aspx">ISSUANCE</asp:HyperLink></a>
+                            <%--<a><asp:HyperLink runat="server" CssClass="btn btn-danger rounded-0" NavigateUrl="~/Pages/ScissorsManagment/IssuancePage.aspx">ISSUANCE</asp:HyperLink></a>--%>
+                            <a><asp:HyperLink runat="server" CssClass="btn btn-danger rounded-0" NavigateUrl="~/Pages/ScissorsManagment/ReleaseScissorsPage.aspx">ISSUANCE</asp:HyperLink></a>
                         </div>
                     </div>
                     <div class="col-md-6 mt-3">

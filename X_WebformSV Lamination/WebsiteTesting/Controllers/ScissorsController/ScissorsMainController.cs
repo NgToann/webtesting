@@ -35,7 +35,13 @@ namespace WebsiteTesting.Controllers.ScissorsController
                 return db.Database.SqlQuery<IssuanceModel>("EXEC spm_SelectIssuance").ToList();
             }
         }
-
+        public static List<ConfigModel> GetConfigSystem()
+        {
+            using (var db = new ScissorsManagmentEntities())
+            {
+                return db.Database.SqlQuery<ConfigModel>("EXEC spm_SelectConfig").ToList();
+            }
+        }
         public static List<IssuanceModel> GetReturnedScissors()
         {
             using (var db = new ScissorsManagmentEntities())
@@ -53,21 +59,58 @@ namespace WebsiteTesting.Controllers.ScissorsController
             }
         }
 
-        public static bool InsertIssuance (IssuanceModel model)
+        public static List<ReleaseScissorsModel> GetReleaseScissors()
         {
-            var @WorkerId               = new SqlParameter("@WorkerId", model.WorkerId);
-            var @WorkerName             = new SqlParameter("@WorkerName", model.WorkerName);
-            var @Section                = new SqlParameter("@Section", model.Section);
-            var @Line                   = new SqlParameter("@Line", model.Line);
-            var @ScissorsBarcode        = new SqlParameter("@ScissorsBarcode", model.ScissorsBarcode);
-            var @IssuanceBy             = new SqlParameter("@IssuanceBy", model.IssuanceBy);
-            var @IsBig                  = new SqlParameter("@IsBig", model.IsBig);
+            using (var db = new ScissorsManagmentEntities())
+            {
+                return db.Database.SqlQuery<ReleaseScissorsModel>("EXEC spm_SelectReleaseScissors").ToList();
+            }
+        }
+        public static List<ReleaseScissorsModel> GetReleaseWithBorrowedStatus()
+        {
+            using (var db = new ScissorsManagmentEntities())
+            {
+                return db.Database.SqlQuery<ReleaseScissorsModel>("EXEC spm_SelectReleaseWithBorrowedStatusScissors").ToList();
+            }
+        }
+        public static bool InsertReleaseScissors(ReleaseScissorsModel model)
+        {
+            var @WorkerId   = new SqlParameter("@WorkerId", model.WorkerId);
+            var @WorkerName = new SqlParameter("@WorkerName", model.WorkerName);
+            var @Section    = new SqlParameter("@Section", model.Section);
+            var @LineName   = new SqlParameter("@LineName", model.LineName);
+            var @Barcode    = new SqlParameter("@Barcode", model.Barcode);
+            var @ScissorsType = new SqlParameter("@ScissorsType", model.ScissorsType);
+            var @Status     = new SqlParameter("@Status", model.Status);
+            var @ReleaseBy  = new SqlParameter("@ReleaseBy", model.ReleaseBy);
+
+            using (var db = new ScissorsManagmentEntities())
+            {
+                if (db.Database.ExecuteSqlCommand("EXEC spm_InsertReleaseScissors @WorkerId, @WorkerName, @Section, @LineName, @Barcode, @ScissorsType, @Status, @ReleaseBy",
+                                                                                  @WorkerId, @WorkerName, @Section, @LineName, @Barcode, @ScissorsType, @Status, @ReleaseBy) > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+
+        public static bool InsertIssuance(IssuanceModel model)
+        {
+            var @WorkerId = new SqlParameter("@WorkerId", model.WorkerId);
+            var @WorkerName = new SqlParameter("@WorkerName", model.WorkerName);
+            var @Section = new SqlParameter("@Section", model.Section);
+            var @Line = new SqlParameter("@Line", model.Line);
+            var @ScissorsBarcode = new SqlParameter("@ScissorsBarcode", model.ScissorsBarcode);
+            var @IssuanceBy = new SqlParameter("@IssuanceBy", model.IssuanceBy);
+            var @IsBig = new SqlParameter("@IsBig", model.IsBig);
 
             var insertScissors = new ScissorsModel()
             {
-                Barcode         = model.ScissorsBarcode,
-                StatusCurrent   = "Assigned",
-                IsBig           = model.IsBig
+                Barcode = model.ScissorsBarcode,
+                StatusCurrent = "Assigned",
+                IsBig = model.IsBig
             };
             InsertScissors(insertScissors);
 

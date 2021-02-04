@@ -5,10 +5,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>WHLamination Report</title>
-        
-        <%--<link rel="stylesheet" href="assets/jquery-ui.css">
-        <script src="assets/jquery-1-12.4.js"></script>
-        <script src="assets/jquery-ui.js"></script>--%>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.12.4.js"></script>
         <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -37,14 +34,14 @@
                             </ol>
                         </div>
                     </div>
-                </div>
-                <div class="card-body h-100">
                     <div class="row align-items-center mb-1 small">
                         <div class="col-auto"><asp:TextBox ID="txtStart" CssClass="form-control p-0 pl-1 rounded-0" runat="server"></asp:TextBox></div>
                         <div class="col-auto p-0">To</div>
                         <div class="col-auto"><asp:TextBox ID="txtFinish" CssClass="form-control p-0 pl-1 rounded-0" runat="server"></asp:TextBox></div>
                         <div class="col-auto"><asp:Button ID="btnPreview" CssClass="btn btn-info btn-sm rounded-0" runat="server" OnClick="btnPreview_Click" Text="Preview"></asp:Button></div>
                     </div>
+                </div>
+                <div class="card-body h-100">
                     <asp:ScriptManager runat="server"></asp:ScriptManager>
                     <rsweb:reportviewer id="reportViewer" runat="server" showfindcontrols="true" width="100%"></rsweb:reportviewer>
                 </div>

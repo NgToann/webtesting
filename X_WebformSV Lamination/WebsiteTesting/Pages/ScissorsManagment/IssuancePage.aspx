@@ -8,11 +8,38 @@
         <link href="assets/style.css" rel="Stylesheet"/>
         <link href="../../assets/css/styleForPage.css" rel="Stylesheet"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!--Bootstrap 5-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">
+            function searchByWorkerId() {
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("contentPlaceHolder_tableIssuance");
+                tr = table.getElementsByTagName("tr");
+                for (i = 1; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[1];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
     </head>
     <body>
         <div class="container">
-
-            <nav class="breadcrumb breadcrumb_type5" aria-label="Breadcrumb">
+            <nav class="breadcrumb breadcrumb_type5" aria-label="Breadcrumb" style="padding: 12px 16px;">
                 <ol class="breadcrumb__list r-list">
                 <li class="breadcrumb__group">
                     <a href="../../Default.aspx" class="breadcrumb__point r-link"><i class="fa fa-home"></i>Home</a>
@@ -123,15 +150,12 @@
 
                 </div>
                 <div class="col-12 col-md-6 mt-2">
+                    <input id="myInput" onkeyup="searchByWorkerId()" type="text" class="form-control rounded-0 mb-1 text-primary" placeholder="Input Worker Id"/>
                     <asp:Table ID="tableIssuance" CssClass="table table-hover table-bordered" runat="server">
                     </asp:Table>
                 </div>
             </div>
         </div>
-
-        <footer class="page-footer font-small">
-            <div class="footer-copyright text-center py-3">© 2020 Created by:<a runat="server" href="../../Default.aspx"> IT Saoviet</a></div>
-        </footer>
 
         <script type="text/javascript" src="assets/zxing.js"></script>
         <script type="text/javascript">

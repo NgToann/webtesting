@@ -14,6 +14,7 @@ namespace WebsiteTesting.Models.ScissorsManagmentSystem
         public string Line { get; set; }
         public string ScissorsBarcode { get; set; }
         public bool IsBig { get; set; }
+        public string  Scanned { get; set; }
         public Nullable<DateTime> IssuanceTime { get; set; }
         public Nullable<DateTime> InspectionDate { get; set; }
         public Nullable<DateTime> CreatedTime { get; set; }

@@ -1,9 +1,4 @@
-﻿
-body {
-    background-color: #fff !important;
-}
-
-.card-body {
+﻿.card-body {
     background-color: #fff;
     vertical-align: central;
     height: 120px;
@@ -178,6 +173,7 @@ COMPONENT
 
 .breadcrumb__divider {
     margin-left: var(--uiBreadcrumbIndent);
+    margin-bottom: 2px !important;
     font-size: var(--uiBreadcrumbDividerSize);
 }
 
@@ -209,10 +205,10 @@ span.breadcrumb__point {
 SETTINGS
 =====
 */
-:root {
+/*:root {
     --breadcrumbTextColor: #D1C4E9;
     --breadcrumbTextColorActive: #fff;
-}
+}*/
 
 .breadcrumb_type2 {
     --breadcrumbDividerSize: 20px;
@@ -255,9 +251,9 @@ DEMO
     color: #fff;
 }
 
-    .page__section:nth-of-type(n+2) {
-        margin-top: 3rem;
-    }
+.page__section:nth-of-type(n+2) {
+    margin-top: 3rem;
+}
 
 
 .bodyreport {

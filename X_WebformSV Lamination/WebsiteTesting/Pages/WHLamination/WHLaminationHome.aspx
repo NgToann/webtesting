@@ -274,7 +274,6 @@
                 const txtLabelWidth = document.getElementById('txtLabelWidth');
                 txtLabelWidth.setAttribute('class', 'form-control');
                 txtLabelWidth.value = '';
-                
 
                 if (matsScore != null) {
                     if (matsScore.LabelQuantity != 0) {
@@ -733,8 +732,6 @@
     </head>
     <html lang="en">
         <body>
-            <%--<asp:ScriptManager ID="scriptManagerWHLamination" runat="server" EnablePageMethods="true"/>--%>
-            
             <div class="container-fluid" style="min-height:100vh;">
                 <div class="row align-items-start" style="min-height:10vh;">
                     <div class="col">
@@ -931,7 +928,7 @@
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modelBarcodeTitle">Scan barcode</h5>
+                        <h5 class="modal-title text-primary" id="modelBarcodeTitle">Scan barcode or qrcode</h5>
                         <button type="button" id="btnCloseModel" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -940,20 +937,10 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="row" id="sourceSelectPanel" style="display:none">
-                                    <div class="input-group">
-                                        <label for="sourceSelect" class="mt-1">Camera:</label>
-                                        <div class="input-group-append ml-2">
-                                            <select id="sourceSelect" style="max-width:400px">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto float-right">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <div class="row w-100 text-left align-items-center">
+                            <div class="input-group">
+                                <label for="sourceSelect" class="mt-1 mr-2">Camera:  </label>
+                                <select id="sourceSelect" class="form-select custom-select-sm rounded-0" style="max-width:400px; font-size: 0.85rem;"></select>
                             </div>
                         </div>                        
                     </div>
@@ -1053,14 +1040,14 @@
                   </div>
                   <div class="modal-footer">
                       <div class="row w-100">
-                          <div class="col-3 float-left">
-                              <button id="btnConfirmSave" type="button" class="btn btn-outline-success"><i class="fa fa-check-circle text-info mr-2" aria-hidden="true"></i>Save</button>
+                          <div class="col">
+                              <button id="btnConfirmSave" type="button" class="btn btn-outline-success float-left"><i class="fa fa-check-circle text-info mr-2" aria-hidden="true"></i>Save</button>
                           </div>
-                          <div class="col-6">
+                          <div class="col">
 
                           </div>
-                          <div class="col-3 float-right">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fa fa-times-circle text-warning mr-2" aria-hidden="true"></i>Cancel</button>
+                          <div class="col float">
+                              <button type="button" class="btn btn-outline-danger float-right" data-bs-dismiss="modal"><i class="fa fa-times-circle text-warning mr-2" aria-hidden="true"></i>Cancel</button>
                           </div>
                       </div>
                   </div>
@@ -1070,7 +1057,7 @@
 
             <script type="text/javascript" src="assets/zxing.js"></script>
             <script type="text/javascript" language="javascript">
-                //window.addEventListener('load', function () {
+                // ZXing Libary
                 let selectedDeviceId;
                 const codeReader = new ZXing.BrowserMultiFormatReader()
                 console.log('ZXing code reader initialized')
@@ -1078,17 +1065,18 @@
                     .then((videoInputDevices) => {
                         const sourceSelect = document.getElementById('sourceSelect')
                         selectedDeviceId = videoInputDevices[0].deviceId
-                        if (videoInputDevices[videoInputDevices.length - 1] != null) {
+                        if (videoInputDevices.length > 1) {
                             selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
                         }
 
-                        if (videoInputDevices.length >= 1) {
+                        //if (videoInputDevices.length >= 1) {
                             videoInputDevices.forEach((element) => {
                                 const sourceOption = document.createElement('option')
                                 sourceOption.text = element.label
                                 sourceOption.value = element.deviceId
                                 sourceSelect.appendChild(sourceOption)
                             })
+
                             sourceSelect.onchange = () => {
                                 selectedDeviceId = sourceSelect.value;
                                 codeReader.reset()
@@ -1097,11 +1085,14 @@
                                 codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
                                     if (result) {
                                         console.log(result)
+                                        //document.getElementById('result').textContent = result.text
                                         $(document).ready(function () {
                                             document.getElementById("txtOrderNoBarcode").value = result.text
-                                            // Click OK Button
+
+                                            // Close Modal
+                                            document.getElementById('btnCloseModal').click();
+                                            // Click Search Button
                                             document.getElementById('btnSearchByOrderNo').click();
-                                            codeReader.reset();
                                         });
                                     }
                                     if (err && !(err instanceof ZXing.NotFoundException)) {
@@ -1110,10 +1101,9 @@
                                     }
                                 })
                                 console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
-                            };
-                            const sourceSelectPanel = document.getElementById('sourceSelectPanel')
-                            sourceSelectPanel.style.display = 'block'
-                        }
+                            };                           
+                        //}
+
                         // Barcode Button Click
                         document.getElementById("btnScanBarcode").addEventListener("click", function () {
                             codeReader.reset()
@@ -1124,9 +1114,10 @@
                                     console.log(result)
                                     $(document).ready(function () {
                                         document.getElementById("txtOrderNoBarcode").value = result.text
-                                        // Click OK Button
+                                        // Close Modal
+                                        document.getElementById('btnCloseModal').click();
+                                        // Click Search Button
                                         document.getElementById('btnSearchByOrderNo').click();
-                                        codeReader.reset();
                                     });
                                 }
                                 if (err && !(err instanceof ZXing.NotFoundException)) {
@@ -1140,7 +1131,6 @@
                     .catch((err) => {
                         console.error(err)
                     })
-                //})
             </script>
         </body>
     </html>

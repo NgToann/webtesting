@@ -168,7 +168,7 @@ namespace WebsiteTesting.Pages.SewingMachines
                             {
                                 var linkSchedule = new HyperLink
                                 {
-                                    Text = i > 0 == true ? String.Format("</br>{0}", schedule.MachineName) : String.Format("{0}", schedule.MachineName),
+                                    Text = i > 0 == true ? String.Format("{0}", schedule.MachineName) : String.Format("{0}", schedule.MachineName),
                                     NavigateUrl = String.Format("SummaryDetail.aspx?par={0}[{1}-{2}", schedule.MachineId, fromDate.ToOADate(), toDate.ToOADate()),
                                     CssClass = "btn btn-outline-info btn-sm rounded-0"
                                 };

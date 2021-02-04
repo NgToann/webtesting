@@ -147,8 +147,10 @@
     <Content Include="Pages\ScissorsManagment\FloatingScissorsReportPage.aspx" />
     <Content Include="Pages\ScissorsManagment\InspectionPage.aspx" />
     <Content Include="Pages\ScissorsManagment\IssuancePage.aspx" />
+    <Content Include="Pages\ScissorsManagment\ReleaseScissorsPage.aspx" />
     <Content Include="Pages\ScissorsManagment\ReplaceScissorsPage.aspx" />
     <Content Include="Pages\ScissorsManagment\ReturnReplacePage.aspx" />
+    <Content Include="Pages\ScissorsManagment\ReturnReplaceScissorsPage.aspx" />
     <Content Include="Pages\ScissorsManagment\ScissorsHome.aspx" />
     <Content Include="Pages\ScissorsManagment\SummaryDetailReport.aspx" />
     <Content Include="Pages\ScissorsManagment\SummaryReport.aspx" />
@@ -160,7 +162,8 @@
     <Content Include="Pages\SewingMachines\assets\jquery-1-12.4.js" />
     <Content Include="Pages\SewingMachines\assets\jquery-ui.css" />
     <Content Include="Pages\SewingMachines\assets\jquery-ui.js" />
-    <Content Include="Pages\SewingMachines\assets\main.js" />
+    <Content Include="Pages\SewingMachines\assets\webcam.js" />
+    <Content Include="Pages\SewingMachines\assets\webcam.min.js" />
     <Content Include="Pages\SewingMachines\assets\zxing.js" />
     <Content Include="Pages\SewingMachines\HomePage.aspx" />
     <Content Include="Pages\SewingMachines\MachineDatabase.aspx" />
@@ -237,6 +240,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WHLaminationModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ScissorsManagmentSystem\ConfigModel.cs" />
+    <Compile Include="Models\ScissorsManagmentSystem\ReleaseScissorsModel.cs" />
     <Compile Include="Models\WHLamination\LaminationMaterialModel.cs" />
     <Compile Include="DataSets\LoadingSystem\CartonNumberingDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -518,6 +523,13 @@
     <Compile Include="Pages\ScissorsManagment\IssuancePage.aspx.designer.cs">
       <DependentUpon>IssuancePage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ScissorsManagment\ReleaseScissorsPage.aspx.cs">
+      <DependentUpon>ReleaseScissorsPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ScissorsManagment\ReleaseScissorsPage.aspx.designer.cs">
+      <DependentUpon>ReleaseScissorsPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ScissorsManagment\ReplaceScissorsPage.aspx.cs">
       <DependentUpon>ReplaceScissorsPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -531,6 +543,13 @@
     </Compile>
     <Compile Include="Pages\ScissorsManagment\ReturnReplacePage.aspx.designer.cs">
       <DependentUpon>ReturnReplacePage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ScissorsManagment\ReturnReplaceScissorsPage.aspx.cs">
+      <DependentUpon>ReturnReplaceScissorsPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ScissorsManagment\ReturnReplaceScissorsPage.aspx.designer.cs">
+      <DependentUpon>ReturnReplaceScissorsPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ScissorsManagment\ScissorsHome.aspx.cs">
       <DependentUpon>ScissorsHome.aspx</DependentUpon>

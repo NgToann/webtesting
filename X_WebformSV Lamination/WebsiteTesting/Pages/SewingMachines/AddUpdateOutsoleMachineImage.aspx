@@ -12,19 +12,36 @@
         <script src="assets/jquery-ui.js"></script>
         <script src="//code.jquery.com/jquery-1.12.4.js"></script>
         <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
         
-        <script type="text/javascript">
-            window.ga = window.ga || function () {
-                (ga.q = ga.q || []).push(arguments);
-            };
-            ga('create', 'UA-33848682-1', 'auto');
-            ga('set', 'transport', 'beacon');
-            ga('send', 'pageview');
-        </script>
-        <script type="text/javascript" language="javascript">
+	    <script type="text/javascript" language="javascript">
             $(function () {
                 $('#<%=txtCreatedDate.ClientID %>').datepicker();
             });
+        </script>
+        <script language="JavaScript">
+            function take_left_snapshot() {
+                // take snapshot and get image data
+                Webcam.snap(function (data_uri) {
+                    // display results in page
+                    document.getElementById('contentPlaceHolder_divLeftImage').innerHTML =
+                        '<img src="' + data_uri + '"/>';
+                    document.getElementById('btnCloseModal').click();
+                });
+            }
+            function take_right_snapshot() {
+                // take snapshot and get image data
+                Webcam.snap(function (data_uri) {
+                    // display results in page
+                    document.getElementById('contentPlaceHolder_divRightImage').innerHTML =
+                        '<img src="' + data_uri + '"/>';
+                    document.getElementById('btnCloseModal').click();
+                });
+            }
         </script>
     </head>
     <html>
@@ -32,10 +49,10 @@
             <asp:ScriptManager ID="scriptManagerUpdateMachineImage" runat="server" EnablePageMethods="true" />
             <!--Main layout-->
             <div class="container SVContent">
-                
+
                 <!--Navigator-->
-                <nav class="breadcrumb breadcrumb_type5" aria-label="Breadcrumb">
-                    <ol class="breadcrumb__list r-list">
+                <nav class="breadcrumb breadcrumb_type5" aria-label="Breadcrumb" style="padding: 12px 16px;">
+                    <ol class="breadcrumb__list r-list align-content-center">
                         <li class="breadcrumb__group">
                             <a href="../../Default.aspx" class="breadcrumb__point r-link"><i class="fa fa-home"></i>Home</a>
                             <span class="breadcrumb__divider" aria-hidden="true">›</span>
@@ -123,52 +140,28 @@
                             </div>                            
 
                             <div class="row mt-2">
-                                <div class="col-12 col-md-4 mt-2 mb-2 mb-sm-0">
+                                <div class="col-12 col-sm-12 col-md-3 col-lg-4 mt-2 mb-2 mb-sm-0 text-wrap">
                                     Left Image
                                 </div>
-                                <div class="col-12 col-md-8 text-center">
-                                    <asp:Image runat="server" ID="imgLeftDisplay" width="280" height="280" Visible="false"/>
-                                    <canvas id="canvasLeftImage" style="display:none;background-color:lightgrey; margin:0 auto;" width="280" height="280"></canvas>
+                                <div class="col-12 col-sm-12 col-md-9 col-lg-8 text-center">
+                                    <div id="divLeftImage" runat="server"></div>
                                 </div>
                             </div>
 
                             <div class="row mt-2">
-                                <div class="col-12 col-md-4 mt-2 mb-2 mb-sm-0">
+                                <div class="col-12 col-sm-12 col-md-3 col-lg-4 mt-2 mb-2 mb-sm-0 text-wrap">
                                     Right Image
                                 </div>
-                                <div class="col-12 col-md-8 text-center">
-                                    <asp:Image runat="server" ID="imgRightDisplay" width="280" height="280" Visible="false"/>
-                                    <canvas id="canvasRightImage" style="display:none;background-color:lightgrey; margin:0 auto;" width="280" height="280"></canvas>
+                                <div class="col-12 col-sm-12 col-md-9 col-lg-8 text-center">
+                                    <%--style="width: 320px !important; height:240px !important;"--%>
+                                    <div id="divRightImage" runat="server"></div>
                                 </div>
                             </div>
-
-                            <div class="row mt-2">
-                                <div class="col-12 col-md-4 mt-2">
-                                </div>
-                                <div class="col-12 col-md-8 mt-2 mt-sm-0 text-center" id="cameraArea" style="display:none;">
-                                    <video id="video" muted playsinline autoplay width="280" height="280"></video>
-                                </div>
-                            </div>
-                            <div class="row mt-2" id="sourceSelectPanel" style="display:none">
-                                <div class="col">
-                                    <div class="input-group">
-                                        <label for="sourceSelect" class="mt-1">Select Camera:</label>
-                                        <div class="input-group-append ml-2">
-                                            <%--<select id="sourceSelect" class="rounded-0" style="max-width:350px"></select>--%>
-                                            <select id="videoSource" class="rounded-0 py-2"></select>
-                                            <select class="d-none" id="audioSource"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="row mt-2 mb-2">
                                 <div class="col text-center text-sm-left">
-                                    <div class="btn-group">
-                                        <button id="btnOpenCamera" class="btn btn-primary rounded-0  mr-1">Open</button>
-                                        <button id="btnSnapLeft" style="display:none;" class="btn btn-success rounded-0 mr-1">Snap Left</button>
-                                        <button id="btnSnapRight" style="display:none;" class="btn btn-info rounded-0 mr-1">Snap Right</button>
-                                        <button id="btnCloseCamera" style="display:none;" class="btn btn-warning rounded-0">Close</button>
-                                    </div>
+                                    <button id="btnOpenCamera" class="btn btn-danger rounded-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                        Open Camera</button>
                                 </div>
                             </div>
 
@@ -177,94 +170,19 @@
                                 </div>
                                 <div class="col-12 col-md-8">
                                     <div class="btn-sm-group">
-                                        <input type="button" id="btnSave" class="btn btn-info rounded-0" value="Save"/>
-                                        <input type="button" id="btnDelete" class="btn btn-danger rounded-0 ml-2" value="Delete"/>
+                                        <%--<input type="button" id="" class="btn btn-info rounded-2" value="Save"/>--%>
+                                        <button id="btnSave" type="button" class="btn btn-outline-success"><i class="fa fa-check-circle text-info mr-2" style="font-size:1rem !important;" aria-hidden="true"></i>Save</button>
+                                        <button id="btnDelete" type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fa fa-times-circle text-warning mr-2" style="font-size:1rem !important;" aria-hidden="true"></i>Delete</button>
                                     </div>
                                     
                                 </div>
                             </div>
                         </div>
-
-                        <!--initial camera envirorment-->
-                        <%--<script type="text/javascript" src="assets/zxing.js"></script>
-                        <script type="text/javascript">
-                            let selectedDeviceId;
-                            const codeReader = new ZXing.BrowserMultiFormatReader()
-                            codeReader.getVideoInputDevices()
-                            .then((videoInputDevices) => {
-                                const sourceSelect = document.getElementById('sourceSelect')
-                                selectedDeviceId = videoInputDevices[0].deviceId
-                                if (videoInputDevices[videoInputDevices.length - 1] != null) {
-                                    selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
-                                }
-                                if (videoInputDevices.length >= 1) {
-                                    videoInputDevices.forEach((element) => {
-                                        const sourceOption = document.createElement('option')
-                                        sourceOption.text = element.label
-                                        sourceOption.value = element.deviceId
-                                        sourceSelect.appendChild(sourceOption)
-                                    })
-
-                                    //sourceSelect.onchange = () => {
-                                    //    selectedDeviceId = sourceSelect.value;
-                                    //};
-                                }
-                            })
-                            .catch((err) => {
-                                console.error(err)
-                            })
-                        </script>--%>
                         
-                        <script async src="assets/main.js"></script>
                         <!--client function-->
                         <script type="text/javascript">
-                            function displayCamera() {
-                                cameraArea.style.display = 'block';
-                                const sourceSelectPanel = document.getElementById('sourceSelectPanel');
-                                sourceSelectPanel.style.display = 'block';
-
-                                // Show buttons
-                                btnSnapLeft.style.display = 'block';
-                                btnSnapRight.style.display = 'block';
-                                btnCloseCamera.style.display = 'block';
-                            }
                             // Open the camera
                             $("#btnOpenCamera").click(function () {
-                                displayCamera();
-                                return false;
-                            });
-                            // Below code to capture image from Video tag (Webcam streaming)
-                            $("#btnSnapLeft").click(function () {
-                                var canvas = document.getElementById('canvasLeftImage');
-                                var leftImage = document.getElementById('contentPlaceHolder_imgLeftDisplay');
-                                if (leftImage != null)
-                                    leftImage.style.display = 'none';
-
-                                canvasLeftImage.style.display = 'block';
-                                var context = canvas.getContext('2d');
-                                context.drawImage(video, 0, 0);
-                                return false;
-                            });
-
-                            $("#btnSnapRight").click(function () {
-                                var canvas = document.getElementById('canvasRightImage');
-                                var rightImage = document.getElementById('contentPlaceHolder_imgRightDisplay');
-                                if (rightImage != null)
-                                    rightImage.style.display = 'none';
-                                canvasRightImage.style.display = 'block';
-                                var context = canvas.getContext('2d');
-                                context.drawImage(video, 0, 0);
-                                return false;
-                            });
-
-                            $("#btnCloseCamera").click(function () {
-                                cameraArea.style.display = 'none';
-                                // Show buttons
-                                btnSnapLeft.style.display = 'none';
-                                btnSnapRight.style.display = 'none';
-                                btnCloseCamera.style.display = 'none';
-                                const sourceSelectPanel = document.getElementById('sourceSelectPanel');
-                                sourceSelectPanel.style.display = 'none'
                                 return false;
                             });
 
@@ -290,11 +208,15 @@
                                 }
 
                                 // Get image data to send to server for upload
-                                var leftImage = document.getElementById("canvasLeftImage").toDataURL("image/png");
-                                leftImage = leftImage.replace('data:image/png;base64,', '');
+                                //var leftImage = document.getElementById("canvasLeftImage").toDataURL("image/jpeg");
+                                var leftImage = document.getElementById("contentPlaceHolder_divLeftImage").innerHTML;
+                                //leftImage = leftImage.replace('<img src=\"data:image/jpeg;base64,', '');
+                                //leftImage = leftImage.replace('\">', '');
 
-                                var rightImage = document.getElementById("canvasRightImage").toDataURL("image/png");
-                                rightImage = rightImage.replace('data:image/png;base64,', '');
+                                //var rightImage = document.getElementById("canvasRightImage").toDataURL("image/jpeg");
+                                var rightImage = document.getElementById("contentPlaceHolder_divRightImage").innerHTML;
+                                //rightImage = rightImage.replace('<img src=\"data:image/jpeg;base64,', '');
+                                //rightImage = rightImage.replace('\">', '');
 
                                 var confirmUpdate = confirm('Confirm Update Machine Image ?');
                                 if (confirmUpdate == true) {
@@ -337,10 +259,41 @@
                 </div>
             </div>
 
+            <!-- Open Camera Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-info" id="staticBackdropLabel">Take a picture <i class="fa fa-camera ml-2 text-danger fa-1x" aria-hidden="true"></i></h5>
+                    <button type="button" id="btnCloseModal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="container" id="my_camera">
+                      </div>
+                  </div>
+                    <!-- First, include the Webcam.js JavaScript Library -->
+	                <script type="text/javascript" src="assets/webcam.min.js"></script>
+	                <!-- Configure a few settings and attach camera -->
+	                <script language="javascript">
+                        Webcam.set({
+                            width: 320,
+                            height: 240,
+                            image_format: 'png',
+                            png_quality: 90
+                        });
+                        Webcam.attach('#my_camera');
+                    </script>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="take_left_snapshot()">Snap Left</button>
+                    <button type="button" class="btn btn-primary" onclick="take_right_snapshot()">Snap Right</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!--Footer-->
-            <footer class="page-footer font-small">
+            <%--<footer class="page-footer font-small">
                 <div class="footer-copyright text-center py-3">© 2020 Created by:<a runat="server" href="../../Default.aspx"> IT Saoviet</a></div>
-            </footer>
+            </footer>--%>
         </body>
     </html>
 </asp:Content>

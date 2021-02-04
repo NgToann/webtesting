@@ -33,6 +33,8 @@ namespace WebsiteTesting.Pages.SewingMachines
             {
                 try
                 {
+                    var osImageEmpty = new OutsoleImageEmpty();
+
                     lblTitle.Text = "Update Image Machine";
                     int idFromPar = 0;
                     Int32.TryParse(par, out idFromPar);
@@ -50,12 +52,21 @@ namespace WebsiteTesting.Pages.SewingMachines
                     txtOutsoleCode.Text = osPaperMachineById.OutsoleCode;
                     txtCreatedDate.Text = string.Format("{0:MM/dd/yyyy}", osPaperMachineById.CreatedDate);
 
-                    imgLeftDisplay.ImageUrl = "data:image;base64," + Convert.ToBase64String(osPaperMachineById.LeftImage);
-                    imgLeftDisplay.Visible = true;
+                    //divLeftImage.InnerHtml = "<img src=\"data:image/jpeg;base64," + osPaperMachineById.LeftImageString + "\">";
+                    var leftImage = new Image();
+                    if (osPaperMachineById.LeftImage != Convert.FromBase64String(osImageEmpty.ImgString))
+                    {
+                        leftImage.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(osPaperMachineById.LeftImage);
+                        divLeftImage.Controls.Add(leftImage);
+                    }
 
-                    imgRightDisplay.ImageUrl = "data:image;base64," + Convert.ToBase64String(osPaperMachineById.RightImage);
-                    imgRightDisplay.Visible = true;
-
+                    var rightImage = new Image();
+                    if (osPaperMachineById.RightImage != Convert.FromBase64String(osImageEmpty.ImgString))
+                    {
+                        rightImage.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(osPaperMachineById.RightImage);                        
+                        divRightImage.Controls.Add(rightImage);
+                    }
+                    
                     lblId.Text = string.Format("{0}", osPaperMachineById.OutsolePaperImageId);
                 }
                 catch (Exception ex) {
@@ -64,20 +75,31 @@ namespace WebsiteTesting.Pages.SewingMachines
             }
         }
 
-
         [WebMethod]
         public static string UploadImage(string updateWhat, string sectionName, string lineName, string productNo, string style, string outsoleCode, string machineType ,string createdDate, string leftImage, string rightImage)
         {
             var osImageEmpty = new OutsoleImageEmpty();
 
-            byte[] imgLeftByte  = Convert.FromBase64String(leftImage);
-            byte[] imgRightByte = Convert.FromBase64String(rightImage);
+            var leftImageByte = Convert.FromBase64String(osImageEmpty.ImgString);
+            if (!String.IsNullOrEmpty(leftImage))
+            {
+                var leftImageSplit = leftImage.Split(',')[1].ToString().Replace("\">", "").ToString();
+                leftImageByte = Convert.FromBase64String(leftImageSplit);
+            }
+
+            var rightImageByte = Convert.FromBase64String(osImageEmpty.ImgString);
+            if (!String.IsNullOrEmpty(rightImage))
+            {
+                var rightImageSplit = rightImage.Split(',')[1].ToString().Replace("\">", "").ToString();
+                rightImageByte = Convert.FromBase64String(rightImageSplit);
+            }
+
+
+            //byte[] imgLeftByte  = Convert.FromBase64String(leftImage);
+            //byte[] imgRightByte = Convert.FromBase64String(rightImage);
 
             int outsolePaperImageId = 0;
-            if (!String.IsNullOrEmpty(updateWhat))
-            {
-                Int32.TryParse(updateWhat, out outsolePaperImageId);
-            }
+            Int32.TryParse(updateWhat, out outsolePaperImageId);
 
             var modelUpdate = new OutsolePaperMachineModel
             {
@@ -88,11 +110,11 @@ namespace WebsiteTesting.Pages.SewingMachines
                 StyleName   = style,
                 OutsoleCode = outsoleCode,
                 MachineType = machineType,
-                CreatedDate = ConvertDateStatic(createdDate),
-                LeftImage   = imgLeftByte,
-                RightImage  = imgRightByte,
-                UpdateLeftImage = leftImage != osImageEmpty.ImgString ? "UpdateLeftImage" : "None",
-                UpdateRightImage = rightImage != osImageEmpty.ImgString ? "UpdateRightImage" : "None",
+                LeftImage   = leftImageByte,
+                RightImage  = rightImageByte,
+                CreatedDate         = ConvertDateStatic(createdDate),
+                UpdateLeftImage     = leftImage != osImageEmpty.ImgString ? "UpdateLeftImage" : "None",
+                UpdateRightImage    = rightImage != osImageEmpty.ImgString ? "UpdateRightImage" : "None",
             };
 
             try
