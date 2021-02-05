@@ -40,7 +40,8 @@
                     </div>
                     <div class="col-md-6 mt-3">
                         <div class="card-body border rounded-0">
-                            <asp:HyperLink runat="server" CssClass="btn btn-primary rounded-0" NavigateUrl="~/Pages/ScissorsManagment/ReturnReplacePage.aspx">RETURN / REPLACE</asp:HyperLink>
+                            <%--<asp:HyperLink runat="server" CssClass="btn btn-primary rounded-0" NavigateUrl="~/Pages/ScissorsManagment/ReturnReplacePage.aspx">RETURN / REPLACE</asp:HyperLink>--%>
+                            <asp:HyperLink runat="server" CssClass="btn btn-primary rounded-0" NavigateUrl="~/Pages/ScissorsManagment/ReturnReplaceScissorsPage.aspx">RETURN / REPLACE</asp:HyperLink>
                         </div>
                     </div>
                 </div>

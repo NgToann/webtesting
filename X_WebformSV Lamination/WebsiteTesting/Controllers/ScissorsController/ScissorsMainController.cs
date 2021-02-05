@@ -95,8 +95,21 @@ namespace WebsiteTesting.Controllers.ScissorsController
             }
         }
 
+        public static bool ReturnScissors_1(int releaseId)
+        {
+            var @ReleaseId = new SqlParameter("@ReleaseId", releaseId);
+            using (var db = new ScissorsManagmentEntities())
+            {
+                if (db.Database.ExecuteSqlCommand("EXEC spm_ReturnScissors_1 @ReleaseId",
+                                                                             @ReleaseId) > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
 
-        public static bool InsertIssuance(IssuanceModel model)
+            public static bool InsertIssuance(IssuanceModel model)
         {
             var @WorkerId = new SqlParameter("@WorkerId", model.WorkerId);
             var @WorkerName = new SqlParameter("@WorkerName", model.WorkerName);

@@ -611,8 +611,6 @@
                 };
 
                 function openModalScanBarcode() {
-                    //var modalConfirm = new bootstrap.Modal(document.getElementById('modalConfirmSubmit'));
-                    //modalConfirm.hide();
                 };
 
                 // ZXing Libary

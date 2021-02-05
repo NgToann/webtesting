@@ -27,7 +27,6 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             try
             {
                 var releaseScissorsList = ScissorsMainController.GetReleaseScissors();
-
                 var resource = new object[] { releaseScissorsList };
                 return JsonConvert.SerializeObject(resource);
             }
@@ -36,6 +35,24 @@ namespace WebsiteTesting.Pages.ScissorsManagment
                 return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
             }
             
+        }
+
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public static string ReturnScissors(string releaseId)
+        {
+            try
+            {
+                if (ScissorsMainController.ReturnScissors_1(int.Parse(releaseId)))
+                    return "Successful !";
+                else
+                    return "Please Reload Page and Try Again !";
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
+            }
+
         }
     }
 }
