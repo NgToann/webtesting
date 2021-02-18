@@ -109,7 +109,7 @@ namespace WebsiteTesting.Controllers.ScissorsController
             }
         }
 
-            public static bool InsertIssuance(IssuanceModel model)
+        public static bool InsertIssuance(IssuanceModel model)
         {
             var @WorkerId = new SqlParameter("@WorkerId", model.WorkerId);
             var @WorkerName = new SqlParameter("@WorkerName", model.WorkerName);
@@ -189,6 +189,25 @@ namespace WebsiteTesting.Controllers.ScissorsController
                 
                 if (db.Database.ExecuteSqlCommand("EXEC spm_ReplaceScissors  @IssuanceId, @ScissorsBarcode, @ScissorsBarcodeReplace, @Reason",
                                                                              @IssuanceId, @ScissorsBarcode, @ScissorsBarcodeReplace, @Reason) > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public static bool ReplaceScissors_1(ReleaseScissorsModel model)
+        {
+            var @ReleaseId      = new SqlParameter("@ReleaseId", model.ReleaseId);
+            var @BarcodeReplace = new SqlParameter("@BarcodeReplace", model.BarcodeReplace);
+            var @Reason         = new SqlParameter("@Reason", model.Reason);
+            var @ReleaseBy      = new SqlParameter("@ReleaseBy", model.ReleaseBy);
+
+            using (var db = new ScissorsManagmentEntities())
+            {
+
+                if (db.Database.ExecuteSqlCommand("EXEC spm_UpdateScissorsReplace   @ReleaseId, @BarcodeReplace, @Reason, @ReleaseBy",
+                                                                                    @ReleaseId, @BarcodeReplace, @Reason, @ReleaseBy) > 0)
                 {
                     return true;
                 }

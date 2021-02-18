@@ -8,11 +8,12 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Newtonsoft.Json;
 
-using WebsiteTesting.Models.CheckInSystem;
-using WebsiteTesting.Controllers.CheckInSystem;
 using WebsiteTesting.Controllers.ScissorsController;
 using WebsiteTesting.Entities;
 using WebsiteTesting.Models.ScissorsManagmentSystem;
+using WebsiteTesting.Models.CheckInSystem;
+using WebsiteTesting.Controllers.CheckInSystem;
+
 namespace WebsiteTesting.Pages.ScissorsManagment
 {
     public partial class ReleaseScissorsPage : System.Web.UI.Page
@@ -23,20 +24,8 @@ namespace WebsiteTesting.Pages.ScissorsManagment
         }
 
         [WebMethod]
-        [ScriptMethod(UseHttpGet = true)]
-        public static string SubmitReleaseScissors(string workerId, string workerName, string section, string lineName, string barcode, string scissorsType, string status, string releaseBy)
+        public static string SubmitReleaseScissors(ReleaseScissorsModel insertModel)
         {
-            var insertModel = new ReleaseScissorsModel
-            {
-                WorkerId = workerId,
-                WorkerName = workerName,
-                Section = section,
-                LineName = lineName,
-                Barcode = barcode,
-                ScissorsType = scissorsType,
-                Status = status,
-                ReleaseBy = releaseBy
-            };
             try
             {
                 if (ScissorsMainController.InsertReleaseScissors(insertModel))

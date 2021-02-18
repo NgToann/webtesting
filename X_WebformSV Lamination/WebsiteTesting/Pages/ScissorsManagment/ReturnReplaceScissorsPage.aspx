@@ -134,6 +134,7 @@
             <script type="text/javascript">
                 var currentReleaseScissorsList;
                 var releaseByWorkerList;
+                var userLogin = '';
                 window.addEventListener('load', function () {
                     // Load Data Release Scissors
                     $.ajax({
@@ -150,6 +151,7 @@
                             else {
                                 var sources = JSON.parse(data.d);
                                 currentReleaseScissorsList = sources[0];
+                                userLogin = sources[1];
                                 //alert(JSON.stringify(currentReleaseScissorsList));
                                 btnSearch.onclick = function () { updateDataTable() };
                             }
@@ -292,11 +294,12 @@
                 };
 
                 function returnScissors(item) {
-                    if (item.Status === 'Returned') {
-                        alert('This scissors already returned !');
+                    if (item.Status != 'Borrowed') {
+                        alert('This scissors cannot be return !');
                         return;
                     }
 
+                    // Excute Return Process
                     var r = confirm('Confirm return ' + item.ScissorsType + ' scissors barcode: ' + item.Barcode + '?');
                     if (r == true) {
                         $.ajax({
@@ -360,9 +363,70 @@
                         return;
                     }
 
+                    item.BarcodeReplace = barcodeNew;
+                    item.Reason         = radLoss.checked == true ? radLoss.value : radBroken.value;
+                    item.ReleaseBy      = userLogin;
 
-                    
+                    var updateContent = JSON.stringify({ replaceModel: item });
+
+                    // Excute Replacement Process
+                    $.ajax({
+                        url: '<%= ResolveUrl("~/Pages/ScissorsManagment/ReturnReplaceScissorsPage.aspx/ReplaceScissors") %>',
+                        data: updateContent,
+                        type: "POST",
+                        datatype: "json",
+                        async: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.d.toString().includes('Exception:')) {
+                                alert(data.d);
+                            }
+                            else if (data.d.toString().includes('Successful')) {
+                                alert('Replace ' + data.d);
+                                // Update the Scissors has been replaced
+                                currentReleaseScissorsList = currentReleaseScissorsList.filter(f => f.ReleaseId !== item.ReleaseId);
+                                currentReleaseScissorsList.push(item);
+
+                                //releaseByWorkerList.forEach(function (releaseItem) {
+                                //    if (releaseItem.ReleaseId == item.ReleaseId) {
+                                //        releaseItem.Status = "Replaced";
+                                //        releaseItem.Reason = item.Reason;
+                                //        releaseItem.ReleaseBy = item.ReleaseBy;
+                                //    }
+                                //});
+
+                                // Add New Release Scissors
+                                var releaseNew = item;
+                                releaseNew.barcodeNew = item.BarcodeReplace;
+                                releaseNew.Status = 'Borrowed';
+                                releaseNew.BarcodeReplace = '';
+
+                                currentReleaseScissorsList.push(releaseNew);
+                                updateDataTable();
+                            }
+                            else {
+                                alert(data.d);
+                            }
+                        },
+                        error: onError
+                    })
                 };
+
+                //class ReleaseScissorsModel {
+                //    constructor(ReleaseId, WorkerId, WorkerName, Section, LineName, Barcode, ScissorsType, Status, BrcodeReplace, Reason, ReleaseBy) {
+                //        this.ReleaseId = ReleaseId;
+                //        this.WorkerId = WorkerId;
+                //        this.WorkerName = WorkerName;
+                //        this.Section = Section;
+                //        this.LineName = LineName;
+                //        this.Barcode = Barcode;
+                //        this.ScissorsType = ScissorsType;
+                //        this.Status = Status;
+                //        this.BarcodeReplace = BarcodeReplace;
+                //        this.Reason = Reason;
+                //        this.ReleaseBy = ReleaseBy;
+                //    }
+                //}
 
                 let selectedDeviceId;
                 const codeReader = new ZXing.BrowserMultiFormatReader()

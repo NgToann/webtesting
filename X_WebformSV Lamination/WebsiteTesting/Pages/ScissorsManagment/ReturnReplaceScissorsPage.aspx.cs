@@ -27,14 +27,14 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             try
             {
                 var releaseScissorsList = ScissorsMainController.GetReleaseScissors();
-                var resource = new object[] { releaseScissorsList };
+                var userLogin = HttpContext.Current.User.Identity.Name.ToString();
+                var resource = new object[] { releaseScissorsList, userLogin };
                 return JsonConvert.SerializeObject(resource);
             }
             catch (Exception ex)
             {
                 return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
             }
-            
         }
 
         [WebMethod]
@@ -53,6 +53,31 @@ namespace WebsiteTesting.Pages.ScissorsManagment
                 return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
             }
 
+        }
+
+        [WebMethod]
+        public static string ReplaceScissors(ReleaseScissorsModel replaceModel)
+        {
+            var x = replaceModel.ReleaseId;
+
+            var releaseNew      = replaceModel;
+            releaseNew.Barcode  = replaceModel.BarcodeReplace;
+
+            try {
+                if (ScissorsMainController.ReplaceScissors_1(replaceModel)
+                    && ScissorsMainController.InsertReleaseScissors(releaseNew))
+                {
+                    return "Successful";
+                }
+                else
+                {
+                    return "Reload page and try again !";
+                }
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
+            }
         }
     }
 }

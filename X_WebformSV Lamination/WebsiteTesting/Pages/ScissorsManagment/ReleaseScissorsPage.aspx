@@ -344,9 +344,9 @@
                             return;
                         }
                     }
-
+                    // releaseId default 1611
                     var releaseInsertModel = new ReleaseScissorsModel (
-                        ReleaseId   = '',
+                        ReleaseId   = 1611,
                         WorkerId = workerModel.WorkerId,
                         WorkerName = workerModel.Name,
                         Section = workerModel.Section,
@@ -414,20 +414,11 @@
 
                 function confirmSave(releaseInsertModel) {
                     // Insert Data
+                    var saveContent = JSON.stringify({ insertModel: releaseInsertModel });
                     $.ajax({
                         url: '<%= ResolveUrl("~/Pages/ScissorsManagment/ReleaseScissorsPage.aspx/SubmitReleaseScissors") %>',
-                        //data: {},
-                        data: {
-                            "workerId": '"' + releaseInsertModel.WorkerId + '"',
-                            "workerName": '"' + releaseInsertModel.WorkerName + '"',
-                            "section": '"' + releaseInsertModel.Section + '"',
-                            "lineName": '"' + releaseInsertModel.LineName + '"',
-                            "barcode": '"' + releaseInsertModel.Barcode + '"',
-                            "scissorsType": '"' + releaseInsertModel.ScissorsType + '"',
-                            "status": '"' + releaseInsertModel.Status + '"',
-                            "releaseBy": '"' + releaseInsertModel.ReleaseBy + '"'
-                        },
-                        type: "GET",
+                        data: saveContent,
+                        type: "POST",
                         datatype: "json",
                         async: true,
                         contentType: "application/json; charset=utf-8",
