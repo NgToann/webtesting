@@ -37,6 +37,22 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             }
         }
 
+        //
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public static string LoadReleaseScissorsByWorker(string workerId)
+        {
+            try
+            {
+                var releaseScissorsByWorkerList = ScissorsMainController.GetReleaseScissorsByWorker(workerId);
+                var resource = new object[] { releaseScissorsByWorkerList };
+                return JsonConvert.SerializeObject(resource);
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
+            }
+        }
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]
         public static string ReturnScissors(string releaseId)

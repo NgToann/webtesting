@@ -5,10 +5,12 @@
     <html>
     <head>
         <title>Scissors Managment - Inspection</title>
-        <link href="assets/style.css" rel="Stylesheet"/>
         <link href="../../assets/css/styleForPage.css" rel="Stylesheet"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> 
     </head>
     <body>
         <div class="container SVContent">
@@ -134,6 +136,8 @@
                     }
                 }
             }
+            var releaseScissorsList;
+            var userLogin;
             window.addEventListener('load', function () {
                 // Load Data Inspection ToDay
                 $.ajax({
@@ -153,30 +157,31 @@
                         else {
                             //alert(data.d);
                             var sources = JSON.parse(data.d);
-                            updateDataTable(sources[0], sources[1]);
+                            releaseScissorsList = sources[2];
+                            userLogin = sources[3];
+                            updateDataTable(sources[0], releaseScissorsList);
                         }
                     },
                     error: onError
                 })
             });
-            function OnSuccess(data) {
-
-            };
             function onError() {
                 alert('An error occured at the backend !');
             };
+
             class InspectionModel {
                 constructor(WorkerId, WorkerName, Barcode, InspectionDate, Section, Line, Inspector) {
                     this.WorkerId       = WorkerId;
                     this.WorkerName     = WorkerName;
                     this.Barcode        = Barcode;
-                    this.InspectionDate = '';
-                    this.Section        = '';
-                    this.Line           = '';
-                    this.Inspector      = '';
+                    this.InspectionDate = InspectionDate;
+                    this.Section        = Section;
+                    this.Line           = Line;
+                    this.Inspector      = Inspector;
                 }
             }
-            function scanScissors(inspectionListToDay, issuanceList) {
+
+            function scanScissors(inspectionListToDay, releaseScissorsList) {
                 var barcodeScanned = document.getElementById('txtScissorsBarcode').value;
                 if (barcodeScanned === '') {
                     alert('Scissors barcode is empty !');
@@ -188,21 +193,31 @@
                     return;
                 }
 
-                var issuanceByBarcode = issuanceList.filter(f => f.ScissorsBarcode == barcodeScanned);
-                if (issuanceByBarcode.length == 0) {
-                    alert('This scissors does not exist in issuance list !');
+                var releaseByBarcode = releaseScissorsList.filter(f => f.Barcode == barcodeScanned);
+                if (releaseByBarcode.length == 0) {
+                    alert('This scissors does not exist in release list !');
                     return;
                 }
 
                 var inspectionScann = new InspectionModel(
-                    WorkerId = issuanceByBarcode[0].WorkerId,
-                    WorkerName = issuanceByBarcode[0].WorkerName,
-                    Barcode = issuanceByBarcode[0].ScissorsBarcode
+                    WorkerId    = releaseByBarcode[0].WorkerId,
+                    WorkerName  = releaseByBarcode[0].WorkerName,
+                    Barcode     = releaseByBarcode[0].Barcode,
+                    InspectionDate = '',
+                    Section     = '',
+                    Line        = '',
+                    Inspector   = userLogin
                 );
-
+                var uploadContent = JSON.stringify({ uploadModel: inspectionScann });
                 $.ajax({
                     url: '<%= ResolveUrl("~/Pages/ScissorsManagment/InspectionPage.aspx/ScanScissors") %>',
-                    data: { "workerId": '"' + inspectionScann.WorkerId + '"', "workerName": '"' + inspectionScann.WorkerName + '"', "barcode": '"' + inspectionScann.Barcode + '"'},
+                    data: {
+                        "workerId": '"' + inspectionScann.WorkerId + '"',
+                        "workerName": '"' + inspectionScann.WorkerName + '"',
+                        "barcode": '"' + inspectionScann.Barcode + '"',
+                        "inspector": '"' + inspectionScann.Inspector + '"'
+                    },
+                    //data: uploadContent,
                     type: "GET",
                     datatype: "json",
                     async: true,
@@ -213,17 +228,16 @@
                         }
                         else {
                             inspectionListToDay.push(inspectionScann);
-                            updateDataTable(inspectionListToDay, issuanceList);
+                            updateDataTable(inspectionListToDay, releaseScissorsList);
                             alert(data.d);
                             searchByWorkerId();
                         }
                     },
                     error: onError
                 })
-
             }
 
-            function updateDataTable(inspectionListToDay, issuanceList) {
+            function updateDataTable(inspectionListToDay, releaseScissorsList) {
                 
                 const workerIdList = [];
                 const map = new Map();
@@ -297,22 +311,22 @@
                     tdSmall.innerText = '';
                     tdSmall.classList.add('text-center');
 
-                    var scissorsWorkerBorrow = issuanceList.filter(f => f.WorkerId == item.WorkerId);
+                    var scissorsWorkerBorrow = releaseScissorsList.filter(f => f.WorkerId == item.WorkerId);
                     if (scissorsWorkerBorrow.length > 0) {
-                        var bigScissors     = scissorsWorkerBorrow.filter(f => f.IsBig == true);
-                        var smallScissors   = scissorsWorkerBorrow.filter(f => f.IsBig == false);
+                        var bigScissors     = scissorsWorkerBorrow.filter(f => f.ScissorsType == 'Big');
+                        var smallScissors   = scissorsWorkerBorrow.filter(f => f.ScissorsType == 'Small');
 
                         if (bigScissors.length > 0) {
-                            tdBig.innerText = bigScissors[0].ScissorsBarcode;
-                            var checkInspected = inspectionListToDay.filter(f => f.Barcode == bigScissors[0].ScissorsBarcode);
+                            tdBig.innerText = bigScissors[0].Barcode;
+                            var checkInspected = inspectionListToDay.filter(f => f.Barcode == bigScissors[0].Barcode);
                             if (checkInspected.length == 0)
                                 tdBig.classList.add('bg-danger');
                             else
                                 tdBig.classList.add('bg-success');
                         }
                         if (smallScissors.length > 0) {
-                            tdSmall.innerText = smallScissors[0].ScissorsBarcode;
-                            var checkInspected = inspectionListToDay.filter(f => f.Barcode == smallScissors[0].ScissorsBarcode);
+                            tdSmall.innerText = smallScissors[0].Barcode;
+                            var checkInspected = inspectionListToDay.filter(f => f.Barcode == smallScissors[0].Barcode);
                             if (checkInspected.length == 0)
                                 tdSmall.classList.add('bg-danger');
                             else
@@ -332,11 +346,10 @@
 
                 tableInspection.appendChild(tbody);
 
-                document.getElementById('btnSave').onclick = function () { scanScissors(inspectionListToDay, issuanceList) };
-
-                //alert(JSON.stringify(workerIdList));
+                document.getElementById('btnSave').onclick = function () { scanScissors(inspectionListToDay, releaseScissorsList) };
             }
 
+            // New Update 2021/02/19
             // ZXing Libary
             let selectedDeviceId;
             const codeReader = new ZXing.BrowserMultiFormatReader()
@@ -345,43 +358,39 @@
                 .then((videoInputDevices) => {
                     const sourceSelect = document.getElementById('sourceSelect')
                     selectedDeviceId = videoInputDevices[0].deviceId
-                    if (videoInputDevices[videoInputDevices.length - 1] != null) {
+                    if (videoInputDevices.length > 1) {
                         selectedDeviceId = videoInputDevices[videoInputDevices.length - 1].deviceId
                     }
 
-                    if (videoInputDevices.length >= 1) {
-                        videoInputDevices.forEach((element) => {
-                            const sourceOption = document.createElement('option')
-                            sourceOption.text = element.label
-                            sourceOption.value = element.deviceId
-                            sourceSelect.appendChild(sourceOption)
+                    videoInputDevices.forEach((element) => {
+                        const sourceOption = document.createElement('option')
+                        sourceOption.text = element.label
+                        sourceOption.value = element.deviceId
+                        sourceSelect.appendChild(sourceOption)
+                    })
+
+                    sourceSelect.onchange = () => {
+                        selectedDeviceId = sourceSelect.value;
+                        codeReader.reset()
+                        console.log('Reset.')
+                        document.getElementById("txtScissorsBarcode").value = ''
+                        codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
+                            if (result) {
+                                console.log(result)
+                                //document.getElementById('result').textContent = result.text
+                                $(document).ready(function () {
+                                    document.getElementById("txtScissorsBarcode").value = result.text
+                                    // Click OK Button
+                                    document.getElementById('btnSave').click();
+                                });
+                            }
+                            if (err && !(err instanceof ZXing.NotFoundException)) {
+                                console.error(err)
+                                document.getElementById("txtScissorsBarcode").value = err
+                            }
                         })
-
-                        sourceSelect.onchange = () => {
-                            selectedDeviceId = sourceSelect.value;
-                            codeReader.reset()
-                            console.log('Reset.')
-                            document.getElementById("txtScissorsBarcode").value = ''
-                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
-                                if (result) {
-                                    console.log(result)
-                                    //document.getElementById('result').textContent = result.text
-                                    $(document).ready(function () {
-                                        document.getElementById("txtScissorsBarcode").value = result.text
-                                        // Click OK Button
-                                        document.getElementById('btnSave').click();
-                                        });
-                                    }
-                                if (err && !(err instanceof ZXing.NotFoundException)) {
-                                    console.error(err)
-                                    document.getElementById("txtScissorsBarcode").value = err
-                                    }
-                                })
-                            console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
-                        };
-
-                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
-                    }
+                        console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
+                    };
 
                     // Barcode Button Click
                     document.getElementById("btnScanScissorsBarcode").addEventListener("click", function () {
@@ -409,10 +418,8 @@
                 .catch((err) => {
                     console.error(err)
                 })
-        </script>
-        
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+
+        </script>        
     </body>
     </html>
 </asp:Content>

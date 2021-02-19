@@ -153,7 +153,7 @@
                                 currentReleaseScissorsList = sources[0];
                                 userLogin = sources[1];
                                 //alert(JSON.stringify(currentReleaseScissorsList));
-                                btnSearch.onclick = function () { updateDataTable() };
+                                btnSearch.onclick = function () { searchByWorker() };
                             }
                         },
                         error: onError
@@ -164,7 +164,32 @@
                     alert('An error occured at the backend !');
                 };
 
-                function updateDataTable() {
+                function searchByWorker() {
+                    var workerId = document.getElementById('txtWorkerId').value;
+                    $.ajax({
+                        url: '<%= ResolveUrl("~/Pages/ScissorsManagment/ReturnReplaceScissorsPage.aspx/LoadReleaseScissorsByWorker") %>',
+                        data: {
+                            "workerId": '"' + workerId + '"'
+                        },
+                        type: "GET",
+                        datatype: "json",
+                        async: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.d.toString().includes('Exception:')) {
+                                alert(data.d);
+                            }
+                            else {
+                                var sources = JSON.parse(data.d);
+                                releaseByWorkerList = sources[0];
+                                updateDataTable(true);
+                            }
+                        },
+                        error: onError
+                    })
+                }
+
+                function updateDataTable(updateBySearchClicked) {
                     tblWorkerInfo.innerText = '';
 
                     var tableReturnRelease = document.getElementById("tableReturnRelease");
@@ -216,17 +241,19 @@
                     // Searching data....
                     var workerIdInput = document.getElementById('txtWorkerId').value;
                     var scissorsReleaseByWorkerId = currentReleaseScissorsList.filter(f => f.WorkerId.toUpperCase() == workerIdInput.toUpperCase());
-                    releaseByWorkerList = scissorsReleaseByWorkerId;
-                    if (scissorsReleaseByWorkerId.length == 0) {
+                    if (!updateBySearchClicked) {
+                        releaseByWorkerList = scissorsReleaseByWorkerId;
+                    }
+                    if (releaseByWorkerList.length == 0) {
                         alert('WorkerId: ' + workerIdInput + ' has`not borrowed any Scissors !');
                         return;
                     }
-                    var workerInfo = scissorsReleaseByWorkerId[0];
+                    var workerInfo = releaseByWorkerList[0];
                     tblWorkerInfo.innerText = 'Worker: ' + workerInfo.WorkerId + ' / ' + workerInfo.WorkerName + ' / ' + workerInfo.Section + ' / ' + workerInfo.LineName;
                     
                     var i = 1;
                     var tbody = document.createElement('tbody');
-                    scissorsReleaseByWorkerId.forEach(function (item) {
+                    releaseByWorkerList.forEach(function (item) {
                         var tr = document.createElement('tr');
 
                         var tdBodyNo = document.createElement('td');
@@ -320,12 +347,23 @@
                                 }
                                 else {
                                     alert('Returned ' + data.d);
-                                    releaseByWorkerList.forEach(function (releaseItem) {
-                                        if (releaseItem.ReleaseId == item.ReleaseId) {
-                                            releaseItem.Status = "Returned";
-                                        }
-                                    });
-                                    updateDataTable();
+                                    //releaseByWorkerList.forEach(function (releaseItem) {
+                                    //    if (releaseItem.ReleaseId == item.ReleaseId) {
+                                    //        releaseItem.Status = "Returned";
+                                    //    }
+                                    //});
+                                    //currentReleaseScissorsList.forEach(function (releaseItem) {
+                                    //    if (releaseItem.ReleaseId == item.ReleaseId) {
+                                    //        releaseItem.Status = "Returned";
+                                    //    }
+                                    //});
+
+                                    currentReleaseScissorsList = currentReleaseScissorsList.filter(f => f.ReleaseId !== item.ReleaseId);
+                                    item.Status     = 'Returned';
+                                    item.ReleaseBy  = userLogin;
+
+                                    currentReleaseScissorsList.push(item);
+                                    updateDataTable(false);
                                 }
                             },
                             error: onError
@@ -357,7 +395,15 @@
                     else {
                         scissorsType = radSmall.value;
                     }
-
+                    var scissorsReturnedList = currentReleaseScissorsList.filter(f => f.Status == 'Returned');
+                    // Check new scissors exist in returned list or not
+                    var checkExistInReturnedList = scissorsReturnedList.filter(f => f.Barcode == barcodeNew);
+                    if (checkExistInReturnedList.length > 0) {
+                        if (checkExistInReturnedList[0].ScissorsType != item.ScissorsType) {
+                            alert('Can not replace a ' + item.ScissorsType + ' scissors by the ' + checkExistInReturnedList[0].ScissorsType + ' scissors ' + checkExistInReturnedList[0].Barcode + '. That was returned !');
+                            return;
+                        }
+                    }
                     if (item.ScissorsType != scissorsType) {
                         alert('Can not replace a ' + item.ScissorsType + ' scissors by a ' + scissorsType + ' scissors !');
                         return;
@@ -383,17 +429,9 @@
                             }
                             else if (data.d.toString().includes('Successful')) {
                                 alert('Replace ' + data.d);
-                                // Update the Scissors has been replaced
+                                // Update the Scissors Replaced
                                 currentReleaseScissorsList = currentReleaseScissorsList.filter(f => f.ReleaseId !== item.ReleaseId);
                                 currentReleaseScissorsList.push(item);
-
-                                //releaseByWorkerList.forEach(function (releaseItem) {
-                                //    if (releaseItem.ReleaseId == item.ReleaseId) {
-                                //        releaseItem.Status = "Replaced";
-                                //        releaseItem.Reason = item.Reason;
-                                //        releaseItem.ReleaseBy = item.ReleaseBy;
-                                //    }
-                                //});
 
                                 // Add New Release Scissors
                                 var releaseNew = item;
@@ -402,7 +440,8 @@
                                 releaseNew.BarcodeReplace = '';
 
                                 currentReleaseScissorsList.push(releaseNew);
-                                updateDataTable();
+                                updateDataTable(false);
+                                btnCloseModal.click();
                             }
                             else {
                                 alert(data.d);
@@ -412,22 +451,7 @@
                     })
                 };
 
-                //class ReleaseScissorsModel {
-                //    constructor(ReleaseId, WorkerId, WorkerName, Section, LineName, Barcode, ScissorsType, Status, BrcodeReplace, Reason, ReleaseBy) {
-                //        this.ReleaseId = ReleaseId;
-                //        this.WorkerId = WorkerId;
-                //        this.WorkerName = WorkerName;
-                //        this.Section = Section;
-                //        this.LineName = LineName;
-                //        this.Barcode = Barcode;
-                //        this.ScissorsType = ScissorsType;
-                //        this.Status = Status;
-                //        this.BarcodeReplace = BarcodeReplace;
-                //        this.Reason = Reason;
-                //        this.ReleaseBy = ReleaseBy;
-                //    }
-                //}
-
+                // Camera Process
                 let selectedDeviceId;
                 const codeReader = new ZXing.BrowserMultiFormatReader()
                 console.log('ZXing code reader initialized')

@@ -66,6 +66,14 @@ namespace WebsiteTesting.Controllers.ScissorsController
                 return db.Database.SqlQuery<ReleaseScissorsModel>("EXEC spm_SelectReleaseScissors").ToList();
             }
         }
+        public static List<ReleaseScissorsModel> GetReleaseScissorsByWorker(string workerId)
+        {
+            var @WorkerId = new SqlParameter("@WorkerId", workerId);
+            using (var db = new ScissorsManagmentEntities())
+            {
+                return db.Database.SqlQuery<ReleaseScissorsModel>("EXEC spm_SelectReleaseScissorsByWorker @WorkerId", @WorkerId).ToList();
+            }
+        }
         public static List<ReleaseScissorsModel> GetReleaseWithBorrowedStatus()
         {
             using (var db = new ScissorsManagmentEntities())

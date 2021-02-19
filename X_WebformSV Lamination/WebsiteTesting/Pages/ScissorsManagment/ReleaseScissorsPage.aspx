@@ -83,7 +83,7 @@
                                 <div class="input-group">
                                     <input type="text" id="txtScissorsBarcode" class="form-control rounded-0" placeholder="Scan Scissors Barcode"/>
                                     <div class="input-group-append">
-                                        <button class="btn btn-lg rounded-0 border" type="button" id="btnScanScissorsBarcode" onclick="openModalScanBarcode()" data-bs-toggle="modal" data-bs-target="#modalBarcodeScan">
+                                        <button class="btn btn-lg rounded-0 border" type="button" id="btnScanScissorsBarcode" data-bs-toggle="modal" data-bs-target="#modalBarcodeScan">
                                             <a><i class="fa fa-barcode"></i></a>
 				                        </button>
                                     </div>
@@ -99,7 +99,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <input type="text" id="myInput" style="width:120px !important;" onkeyup="searchByWorkerId()" class="form-control float-right rounded-0 mb-1 text-primary" placeholder="input WorkerId or Barcode"/>
+                            <input type="text" id="myInput" style="width:120px !important;" class="form-control float-right rounded-0 mb-1 text-primary" placeholder="input WorkerId or Barcode"/>
                             <table id="tableRelease" class="table table-bordered table-hover">
                                 <%--<thead>
                                     <tr>
@@ -178,13 +178,14 @@
             <script type="text/javascript" src="assets/zxing.js"></script>
             <script type="text/javascript" language="javascript">
                 var configSystem;
+                var sectionList;
                 function searchByWorkerId() {
-                    var barcodeScanning = document.getElementById('txtScissorsBarcode').value;
+                    //var barcodeScanning = document.getElementById('txtScissorsBarcode').value;
                     var input, filter, table, tr, td, tdBig, tdSmall, i, txtValue;
                     input = document.getElementById("myInput");
                     filter = input.value.toUpperCase();
-                    if (barcodeScanning != '')
-                        filter = barcodeScanning;
+                    //if (barcodeScanning != '')
+                    //    filter = barcodeScanning;
                     table = document.getElementById("tableRelease");
                     tr = table.getElementsByTagName("tr");
                     for (i = 1; i < tr.length; i++) {
@@ -260,7 +261,21 @@
 
                     var personalListBySection = personalList.filter(f => f.SectionId == cboSectionSelected);
                     btnSearch.onclick = function () { searchClick(personalListBySection) };
+
+                    var sectionNameSelected = sectionList.filter(f => f.SectionId == cboSectionSelected);
+                    var releaseCurrentBySectionList = releaseCurrentList.filter(f => f.Section == sectionNameSelected[0].Name);
+                    
+                    cboSourceLine.onchange = function () { selectLine(releaseCurrentBySectionList) };
+                    updateDataTable(releaseCurrentBySectionList);
+
+                    myInput.onkeyup = function () { searchByWorkerId() };
                 };
+
+                function selectLine(releaseCurrentBySectionList) {
+                    var cboLineSelected = document.getElementById('slLine').value;
+                    var releaseCurrentBySectionByLineList = releaseCurrentBySectionList.filter(f => f.LineName == cboLineSelected);
+                    updateDataTable(releaseCurrentBySectionByLineList);
+                }
 
                 function searchClick(personalListBySection, releaseList) {
                     // Validate Combobox
@@ -368,7 +383,7 @@
                     divContentSubmit.innerHTML = '';
 
                     var divColContentData = document.createElement('div');
-                    divColContentData.className = 'col-auto';                    
+                    divColContentData.className = 'col-auto p-0';                    
                     
                     var pWorker = document.createElement('p');
                     pWorker.className = 'm-1';
@@ -430,7 +445,7 @@
                                 // Update Data table
                                 releaseCurrentList.push(releaseInsertModel);
                                 btnCloseModalConfirmSubmit.click();
-                                updateDataTable();
+                                updateDataTable(releaseCurrentList);
                             }
                             else {
                                 alert(data.d);
@@ -457,7 +472,7 @@
                                 var cboSection = document.getElementById('slSection');
                                 var sources = JSON.parse(data.d);
 
-                                var sectionList     = sources[0];
+                                sectionList     = sources[0];
                                 var lineList        = sources[1];
                                 var personalList    = sources[2];
                                 var releaseList     = sources[3];
@@ -478,7 +493,7 @@
                                     cboSection.appendChild(sourceOption)
                                 });
                                 cboSection.onchange = function () { selectSection(sectionList, lineList, personalList) };
-                                updateDataTable();
+                                updateDataTable(releaseCurrentList);
                             }
                         },
                         error: onError
@@ -489,7 +504,7 @@
                     alert('An error occured at the backend !');
                 };
 
-                function updateDataTable() {
+                function updateDataTable(releaseCurrentList) {
                     var tableRelease = document.getElementById("tableRelease");
                     // Clear value
                     tableRelease.innerHTML = "";
@@ -601,9 +616,7 @@
                     tableRelease.appendChild(tbody);
                 };
 
-                function openModalScanBarcode() {
-                };
-
+                
                 // ZXing Libary
                 let selectedDeviceId;
                 const codeReader = new ZXing.BrowserMultiFormatReader()
