@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WHLaminationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SaovietMasterSchedule.dbo.LaminationMaterial' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="LaminationMaterial">
+          <Key>
+            <PropertyRef Name="LaminationMaterialId" />
+          </Key>
+          <Property Name="LaminationMaterialId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNoId" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ArticleNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShoeName" Type="nvarchar(max)" />
+          <Property Name="PatternNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductNoList" Type="nvarchar(max)" />
+          <Property Name="Position" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaterialPart" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaterialName" Type="nvarchar(max)" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+          <Property Name="POQuantity" Type="int" />
+          <Property Name="SendQuantity" Type="int" />
+          <Property Name="DeliveryDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="PurchaseDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="SupplierName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remarks" Type="nvarchar(max)" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="UpdatedTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserWeb">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Password" Type="nvarchar" MaxLength="200" />
+          <Property Name="WHLamination" Type="bit" />
+          <Property Name="CreatedTime" Type="datetime" />
+        </EntityType>
+        <Function Name="spm_SelectLaminationMaterialByOrderNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="spm_SelectUserWeb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="WHLaminationModelStoreContainer">
+          <EntitySet Name="UserWeb" EntityType="Self.UserWeb" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LaminationMaterial" EntityType="Self.LaminationMaterial" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[LaminationMaterial].[LaminationMaterialId] AS [LaminationMaterialId], 
+[LaminationMaterial].[OrderNoId] AS [OrderNoId], 
+[LaminationMaterial].[OrderNo] AS [OrderNo], 
+[LaminationMaterial].[ArticleNo] AS [ArticleNo], 
+[LaminationMaterial].[ShoeName] AS [ShoeName], 
+[LaminationMaterial].[PatternNo] AS [PatternNo], 
+[LaminationMaterial].[ProductNoList] AS [ProductNoList], 
+[LaminationMaterial].[Position] AS [Position], 
+[LaminationMaterial].[MaterialPart] AS [MaterialPart], 
+[LaminationMaterial].[MaterialName] AS [MaterialName], 
+[LaminationMaterial].[Unit] AS [Unit], 
+[LaminationMaterial].[POQuantity] AS [POQuantity], 
+[LaminationMaterial].[SendQuantity] AS [SendQuantity], 
+[LaminationMaterial].[DeliveryDate] AS [DeliveryDate], 
+[LaminationMaterial].[PurchaseDate] AS [PurchaseDate], 
+[LaminationMaterial].[SupplierName] AS [SupplierName], 
+[LaminationMaterial].[Remarks] AS [Remarks], 
+[LaminationMaterial].[CreatedTime] AS [CreatedTime], 
+[LaminationMaterial].[UpdatedTime] AS [UpdatedTime]
+FROM [dbo].[LaminationMaterial] AS [LaminationMaterial]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WHLaminationModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityType Name="LaminationMaterial">
+          <Key>
+            <PropertyRef Name="LaminationMaterialId" />
+          </Key>
+          <Property Name="LaminationMaterialId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNoId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ArticleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShoeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PatternNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductNoList" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaterialPart" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaterialName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="POQuantity" Type="Int32" />
+          <Property Name="SendQuantity" Type="Int32" />
+          <Property Name="DeliveryDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="WHLaminationEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="LaminationMaterials" EntityType="Self.LaminationMaterial" />
+          <FunctionImport Name="spm_SelectLaminationMaterialByOrderNo" ReturnType="Collection(WHLaminationModel.spm_SelectLaminationMaterialByOrderNo_Result)">
+          <Parameter Name="OrderNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="UserWebs" EntityType="WHLaminationModel.UserWeb" />
+          <FunctionImport Name="spm_SelectUserWeb" ReturnType="Collection(WHLaminationModel.spm_SelectUserWeb_Result)" />
+        </EntityContainer>
+        <ComplexType Name="spm_SelectLaminationMaterialByOrderNo_Result">
+          <Property Type="Int32" Name="LaminationMaterialId" Nullable="false" />
+          <Property Type="String" Name="OrderNoId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="OrderNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ArticleNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ShoeName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PatternNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ProductNoList" Nullable="true" />
+          <Property Type="String" Name="Position" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MaterialPart" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MaterialName" Nullable="true" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="POQuantity" Nullable="true" />
+          <Property Type="Int32" Name="SendQuantity" Nullable="true" />
+          <Property Type="String" Name="DeliveryDate" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PurchaseDate" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SupplierName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Remarks" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="UpdatedTime" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="UserWeb">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="WHLamination" Type="Boolean" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="spm_SelectUserWeb_Result">
+          <Property Type="Int32" Name="UserId" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="WHLamination" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedTime" Nullable="true" Precision="23" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WHLaminationModelStoreContainer" CdmEntityContainer="WHLaminationEntities">
+          <EntitySetMapping Name="LaminationMaterials">
+            <EntityTypeMapping TypeName="WHLaminationModel.LaminationMaterial">
+              <MappingFragment StoreEntitySet="LaminationMaterial">
+                <ScalarProperty Name="LaminationMaterialId" ColumnName="LaminationMaterialId" />
+                <ScalarProperty Name="OrderNoId" ColumnName="OrderNoId" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="ArticleNo" ColumnName="ArticleNo" />
+                <ScalarProperty Name="ShoeName" ColumnName="ShoeName" />
+                <ScalarProperty Name="PatternNo" ColumnName="PatternNo" />
+                <ScalarProperty Name="ProductNoList" ColumnName="ProductNoList" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="MaterialPart" ColumnName="MaterialPart" />
+                <ScalarProperty Name="MaterialName" ColumnName="MaterialName" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="POQuantity" ColumnName="POQuantity" />
+                <ScalarProperty Name="SendQuantity" ColumnName="SendQuantity" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spm_SelectLaminationMaterialByOrderNo" FunctionName="WHLaminationModel.Store.spm_SelectLaminationMaterialByOrderNo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WHLaminationModel.spm_SelectLaminationMaterialByOrderNo_Result">
+                <ScalarProperty Name="LaminationMaterialId" ColumnName="LaminationMaterialId" />
+                <ScalarProperty Name="OrderNoId" ColumnName="OrderNoId" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="ArticleNo" ColumnName="ArticleNo" />
+                <ScalarProperty Name="ShoeName" ColumnName="ShoeName" />
+                <ScalarProperty Name="PatternNo" ColumnName="PatternNo" />
+                <ScalarProperty Name="ProductNoList" ColumnName="ProductNoList" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="MaterialPart" ColumnName="MaterialPart" />
+                <ScalarProperty Name="MaterialName" ColumnName="MaterialName" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="POQuantity" ColumnName="POQuantity" />
+                <ScalarProperty Name="SendQuantity" ColumnName="SendQuantity" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="UserWebs">
+            <EntityTypeMapping TypeName="WHLaminationModel.UserWeb">
+              <MappingFragment StoreEntitySet="UserWeb">
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="WHLamination" ColumnName="WHLamination" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spm_SelectUserWeb" FunctionName="WHLaminationModel.Store.spm_SelectUserWeb">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WHLaminationModel.spm_SelectUserWeb_Result">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="WHLamination" ColumnName="WHLamination" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

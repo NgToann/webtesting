@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ScissorsManagmentModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="InspectionList">
+          <Key>
+            <PropertyRef Name="InspectionId" />
+          </Key>
+          <Property Name="InspectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkerId" Type="nvarchar" MaxLength="10" />
+          <Property Name="WorkerName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Barcode" Type="nvarchar" MaxLength="7" />
+          <Property Name="InsepctionDate" Type="date" />
+          <Property Name="CreatedTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="IssuanceList">
+          <Key>
+            <PropertyRef Name="IssuanceId" />
+          </Key>
+          <Property Name="IssuanceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkerId" Type="nvarchar" MaxLength="10" />
+          <Property Name="Section" Type="nvarchar" MaxLength="100" />
+          <Property Name="Line" Type="nvarchar" MaxLength="100" />
+          <Property Name="ScissorsBarcode" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsReturn" Type="bit" />
+          <Property Name="ScissorsBarcodeReplace" Type="nchar" MaxLength="10" />
+          <Property Name="ReplaceTime" Type="datetime" />
+          <Property Name="IssuanceBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="IssuanceTime" Type="datetime" />
+          <Property Name="ReturnTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ScissorsList">
+          <Key>
+            <PropertyRef Name="ScissorsId" />
+          </Key>
+          <Property Name="ScissorsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Barcode" Type="nvarchar" MaxLength="7" />
+          <Property Name="IsBig" Type="bit" />
+          <Property Name="IsAvailable" Type="bit" />
+          <Property Name="IsEnable" Type="bit" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="UpdatedTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserList">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedDate" Type="date" />
+        </EntityType>
+        <Function Name="spm_SelectUserList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="ScissorsManagmentModelStoreContainer">
+          <EntitySet Name="InspectionList" EntityType="Self.InspectionList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IssuanceList" EntityType="Self.IssuanceList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScissorsList" EntityType="Self.ScissorsList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserList" EntityType="Self.UserList" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ScissorsManagmentModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityType Name="InspectionList">
+          <Key>
+            <PropertyRef Name="InspectionId" />
+          </Key>
+          <Property Name="InspectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkerId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="WorkerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Barcode" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="InsepctionDate" Type="DateTime" Precision="0" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="IssuanceList">
+          <Key>
+            <PropertyRef Name="IssuanceId" />
+          </Key>
+          <Property Name="IssuanceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkerId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Section" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Line" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ScissorsBarcode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsReturn" Type="Boolean" />
+          <Property Name="ScissorsBarcodeReplace" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ReplaceTime" Type="DateTime" Precision="3" />
+          <Property Name="IssuanceBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IssuanceTime" Type="DateTime" Precision="3" />
+          <Property Name="ReturnTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ScissorsList">
+          <Key>
+            <PropertyRef Name="ScissorsId" />
+          </Key>
+          <Property Name="ScissorsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Barcode" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="IsBig" Type="Boolean" />
+          <Property Name="IsAvailable" Type="Boolean" />
+          <Property Name="IsEnable" Type="Boolean" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="ScissorsManagmentEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="InspectionLists" EntityType="Self.InspectionList" />
+          <EntitySet Name="IssuanceLists" EntityType="Self.IssuanceList" />
+          <EntitySet Name="ScissorsLists" EntityType="Self.ScissorsList" />
+          <FunctionImport Name="spm_SelectUserList" ReturnType="Collection(ScissorsManagmentModel.spm_SelectUserList_Result)" />
+          <EntitySet Name="UserLists" EntityType="ScissorsManagmentModel.UserList" />
+        </EntityContainer>
+        <ComplexType Name="spm_SelectUserList_Result">
+          <Property Type="String" Name="UserId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="UserList">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ScissorsManagmentModelStoreContainer" CdmEntityContainer="ScissorsManagmentEntities">
+          <EntitySetMapping Name="InspectionLists">
+            <EntityTypeMapping TypeName="ScissorsManagmentModel.InspectionList">
+              <MappingFragment StoreEntitySet="InspectionList">
+                <ScalarProperty Name="InspectionId" ColumnName="InspectionId" />
+                <ScalarProperty Name="WorkerId" ColumnName="WorkerId" />
+                <ScalarProperty Name="WorkerName" ColumnName="WorkerName" />
+                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+                <ScalarProperty Name="InsepctionDate" ColumnName="InsepctionDate" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IssuanceLists">
+            <EntityTypeMapping TypeName="ScissorsManagmentModel.IssuanceList">
+              <MappingFragment StoreEntitySet="IssuanceList">
+                <ScalarProperty Name="IssuanceId" ColumnName="IssuanceId" />
+                <ScalarProperty Name="WorkerId" ColumnName="WorkerId" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="ScissorsBarcode" ColumnName="ScissorsBarcode" />
+                <ScalarProperty Name="IsReturn" ColumnName="IsReturn" />
+                <ScalarProperty Name="ScissorsBarcodeReplace" ColumnName="ScissorsBarcodeReplace" />
+                <ScalarProperty Name="ReplaceTime" ColumnName="ReplaceTime" />
+                <ScalarProperty Name="IssuanceBy" ColumnName="IssuanceBy" />
+                <ScalarProperty Name="IssuanceTime" ColumnName="IssuanceTime" />
+                <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScissorsLists">
+            <EntityTypeMapping TypeName="ScissorsManagmentModel.ScissorsList">
+              <MappingFragment StoreEntitySet="ScissorsList">
+                <ScalarProperty Name="ScissorsId" ColumnName="ScissorsId" />
+                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+                <ScalarProperty Name="IsBig" ColumnName="IsBig" />
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spm_SelectUserList" FunctionName="ScissorsManagmentModel.Store.spm_SelectUserList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ScissorsManagmentModel.spm_SelectUserList_Result">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="UserLists">
+            <EntityTypeMapping TypeName="ScissorsManagmentModel.UserList">
+              <MappingFragment StoreEntitySet="UserList">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

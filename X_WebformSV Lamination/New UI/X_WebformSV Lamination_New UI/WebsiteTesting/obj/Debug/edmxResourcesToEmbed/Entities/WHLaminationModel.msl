@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WHLaminationModelStoreContainer" CdmEntityContainer="WHLaminationEntities">
+    <EntitySetMapping Name="LaminationMaterials">
+      <EntityTypeMapping TypeName="WHLaminationModel.LaminationMaterial">
+        <MappingFragment StoreEntitySet="LaminationMaterial">
+          <ScalarProperty Name="LaminationMaterialId" ColumnName="LaminationMaterialId" />
+          <ScalarProperty Name="OrderNoId" ColumnName="OrderNoId" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="ArticleNo" ColumnName="ArticleNo" />
+          <ScalarProperty Name="ShoeName" ColumnName="ShoeName" />
+          <ScalarProperty Name="PatternNo" ColumnName="PatternNo" />
+          <ScalarProperty Name="ProductNoList" ColumnName="ProductNoList" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="MaterialPart" ColumnName="MaterialPart" />
+          <ScalarProperty Name="MaterialName" ColumnName="MaterialName" />
+          <ScalarProperty Name="Unit" ColumnName="Unit" />
+          <ScalarProperty Name="POQuantity" ColumnName="POQuantity" />
+          <ScalarProperty Name="SendQuantity" ColumnName="SendQuantity" />
+          <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+          <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+          <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="spm_SelectLaminationMaterialByOrderNo" FunctionName="WHLaminationModel.Store.spm_SelectLaminationMaterialByOrderNo">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="WHLaminationModel.spm_SelectLaminationMaterialByOrderNo_Result">
+          <ScalarProperty Name="LaminationMaterialId" ColumnName="LaminationMaterialId" />
+          <ScalarProperty Name="OrderNoId" ColumnName="OrderNoId" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="ArticleNo" ColumnName="ArticleNo" />
+          <ScalarProperty Name="ShoeName" ColumnName="ShoeName" />
+          <ScalarProperty Name="PatternNo" ColumnName="PatternNo" />
+          <ScalarProperty Name="ProductNoList" ColumnName="ProductNoList" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="MaterialPart" ColumnName="MaterialPart" />
+          <ScalarProperty Name="MaterialName" ColumnName="MaterialName" />
+          <ScalarProperty Name="Unit" ColumnName="Unit" />
+          <ScalarProperty Name="POQuantity" ColumnName="POQuantity" />
+          <ScalarProperty Name="SendQuantity" ColumnName="SendQuantity" />
+          <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+          <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+          <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="UserWebs">
+      <EntityTypeMapping TypeName="WHLaminationModel.UserWeb">
+        <MappingFragment StoreEntitySet="UserWeb">
+          <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+          <ScalarProperty Name="WHLamination" ColumnName="WHLamination" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="spm_SelectUserWeb" FunctionName="WHLaminationModel.Store.spm_SelectUserWeb">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="WHLaminationModel.spm_SelectUserWeb_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="WHLamination" ColumnName="WHLamination" />
+          <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

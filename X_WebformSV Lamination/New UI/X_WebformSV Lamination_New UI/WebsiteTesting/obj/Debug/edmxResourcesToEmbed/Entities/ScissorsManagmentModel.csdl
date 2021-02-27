@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ScissorsManagmentModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityType Name="InspectionList">
+    <Key>
+      <PropertyRef Name="InspectionId" />
+    </Key>
+    <Property Name="InspectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorkerId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="WorkerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Barcode" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+    <Property Name="InsepctionDate" Type="DateTime" Precision="0" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="IssuanceList">
+    <Key>
+      <PropertyRef Name="IssuanceId" />
+    </Key>
+    <Property Name="IssuanceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorkerId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Section" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Line" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ScissorsBarcode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="IsReturn" Type="Boolean" />
+    <Property Name="ScissorsBarcodeReplace" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="ReplaceTime" Type="DateTime" Precision="3" />
+    <Property Name="IssuanceBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IssuanceTime" Type="DateTime" Precision="3" />
+    <Property Name="ReturnTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ScissorsList">
+    <Key>
+      <PropertyRef Name="ScissorsId" />
+    </Key>
+    <Property Name="ScissorsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Barcode" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+    <Property Name="IsBig" Type="Boolean" />
+    <Property Name="IsAvailable" Type="Boolean" />
+    <Property Name="IsEnable" Type="Boolean" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityContainer Name="ScissorsManagmentEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="InspectionLists" EntityType="Self.InspectionList" />
+    <EntitySet Name="IssuanceLists" EntityType="Self.IssuanceList" />
+    <EntitySet Name="ScissorsLists" EntityType="Self.ScissorsList" />
+    <FunctionImport Name="spm_SelectUserList" ReturnType="Collection(ScissorsManagmentModel.spm_SelectUserList_Result)" />
+    <EntitySet Name="UserLists" EntityType="ScissorsManagmentModel.UserList" />
+  </EntityContainer>
+  <ComplexType Name="spm_SelectUserList_Result">
+    <Property Type="String" Name="UserId" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="FullName" Nullable="true" MaxLength="200" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="UserList">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+  </EntityType>
+</Schema>

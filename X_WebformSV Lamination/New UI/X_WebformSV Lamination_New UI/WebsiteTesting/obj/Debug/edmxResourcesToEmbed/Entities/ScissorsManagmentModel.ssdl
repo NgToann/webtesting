@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ScissorsManagmentModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityType Name="InspectionList">
+    <Key>
+      <PropertyRef Name="InspectionId" />
+    </Key>
+    <Property Name="InspectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WorkerId" Type="nvarchar" MaxLength="10" />
+    <Property Name="WorkerName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Barcode" Type="nvarchar" MaxLength="7" />
+    <Property Name="InsepctionDate" Type="date" />
+    <Property Name="CreatedTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="IssuanceList">
+    <Key>
+      <PropertyRef Name="IssuanceId" />
+    </Key>
+    <Property Name="IssuanceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WorkerId" Type="nvarchar" MaxLength="10" />
+    <Property Name="Section" Type="nvarchar" MaxLength="100" />
+    <Property Name="Line" Type="nvarchar" MaxLength="100" />
+    <Property Name="ScissorsBarcode" Type="nvarchar" MaxLength="10" />
+    <Property Name="IsReturn" Type="bit" />
+    <Property Name="ScissorsBarcodeReplace" Type="nchar" MaxLength="10" />
+    <Property Name="ReplaceTime" Type="datetime" />
+    <Property Name="IssuanceBy" Type="nvarchar" MaxLength="50" />
+    <Property Name="IssuanceTime" Type="datetime" />
+    <Property Name="ReturnTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ScissorsList">
+    <Key>
+      <PropertyRef Name="ScissorsId" />
+    </Key>
+    <Property Name="ScissorsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Barcode" Type="nvarchar" MaxLength="7" />
+    <Property Name="IsBig" Type="bit" />
+    <Property Name="IsAvailable" Type="bit" />
+    <Property Name="IsEnable" Type="bit" />
+    <Property Name="CreatedTime" Type="datetime" />
+    <Property Name="UpdatedTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserList">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="CreatedDate" Type="date" />
+  </EntityType>
+  <Function Name="spm_SelectUserList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="ScissorsManagmentModelStoreContainer">
+    <EntitySet Name="InspectionList" EntityType="Self.InspectionList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IssuanceList" EntityType="Self.IssuanceList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ScissorsList" EntityType="Self.ScissorsList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserList" EntityType="Self.UserList" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

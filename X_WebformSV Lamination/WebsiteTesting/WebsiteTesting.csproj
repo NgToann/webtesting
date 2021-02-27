@@ -172,6 +172,7 @@
     <Content Include="Pages\SewingMachines\SummaryDetail.aspx" />
     <Content Include="Pages\SewingMachines\UpdateSchedule.aspx" />
     <Content Include="Pages\WHLamination\assets\font-awesome.min.css" />
+    <Content Include="Pages\WHLamination\assets\whlamination.js" />
     <Content Include="Pages\WHLamination\assets\zxing.js" />
     <Content Include="Pages\WHLamination\Report.aspx" />
     <Content Include="Pages\WHLamination\WHLaminationHome.aspx" />

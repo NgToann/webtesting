@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1a7c164c83b24ed4985f6d310525f5e5" Name="Diagram1">
+        <EntityTypeShape EntityType="WHLaminationModel.LaminationMaterial" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WHLaminationModel.Account" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.AssemblyMaster" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.AssemblyRelease" Width="1.5" PointX="5.75" PointY="5.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.ErrorOSMaterial" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.InsockMaterial" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.InsockRawMaterial" Width="1.5" PointX="7.75" PointY="4.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.InsockSupplier" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.LaminationMaterialScore" Width="1.5" PointX="7.75" PointY="8.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.MachineList" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.MachineRequest" Width="1.5" PointX="9.75" PointY="3.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.MachineRequirement" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.MaterialDelivery" Width="1.5" PointX="9.75" PointY="7.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.MaterialPlan" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.MaterialType" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OffDay" Width="1.5" PointX="11.75" PointY="4.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OrderExtra" Width="1.5" PointX="11.75" PointY="7.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.Order" Width="1.5" PointX="11.75" PointY="10.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.Orders_1" Width="1.5" PointX="13.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.Orders_old" Width="1.5" PointX="13.75" PointY="5.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OSWHWorkingTime" Width="1.5" PointX="13.75" PointY="10.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaster" Width="1.5" PointX="0.75" PointY="14.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaterial" Width="1.5" PointX="6.75" PointY="14.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaterialCheckingList" Width="1.5" PointX="8.75" PointY="14.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaterialDetail" Width="1.5" PointX="13.75" PointY="14.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaterialIssue" Width="1.5" PointX="15.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaterialRackPosition" Width="1.5" PointX="15.75" PointY="3.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaterialRejectDetail" Width="1.5" PointX="15.75" PointY="7.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleMaterialReleasePainting" Width="1.5" PointX="10.75" PointY="15.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleOutput" Width="1.5" PointX="15.75" PointY="11.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleRawMaterial" Width="1.5" PointX="15.75" PointY="14.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleReleaseMaterial" Width="1.5" PointX="17.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleReleaseWHInspection" Width="1.5" PointX="17.75" PointY="4.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleSupplier" Width="1.5" PointX="17.75" PointY="8.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleWHFG" Width="1.5" PointX="17.75" PointY="11.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.OutsoleWHInspection" Width="1.5" PointX="17.75" PointY="15.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.PrivateDefine" Width="1.5" PointX="19.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.ProductionMemo" Width="1.5" PointX="0.75" PointY="19.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.ProductNoRevise" Width="1.5" PointX="19.75" PointY="5.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.RawMaterial" Width="1.5" PointX="6.75" PointY="19.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.RejectList" Width="1.5" PointX="19.75" PointY="8.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.SewingMaster" Width="1.5" PointX="8.75" PointY="19.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.SewingOutput" Width="1.5" PointX="10.75" PointY="19.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.SizeMap" Width="1.5" PointX="19.75" PointY="12.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.SizeRun" Width="1.5" PointX="12.75" PointY="19.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.SockliningInput" Width="1.5" PointX="14.75" PointY="19.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.SockliningMaster" Width="1.5" PointX="19.75" PointY="15.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.sysdiagram" Width="1.5" PointX="16.75" PointY="19.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.UpperComponentMaterial" Width="1.5" PointX="18.75" PointY="20.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.UpperComponentRawMaterial" Width="1.5" PointX="20.75" PointY="20.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.UpperComponent" Width="1.5" PointX="21.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.UserWeb" Width="1.5" PointX="2.75" PointY="21.75" />
+        <EntityTypeShape EntityType="WHLaminationModel.AvailableMachine" Width="1.5" PointX="21.75" PointY="3.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
