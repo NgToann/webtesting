@@ -264,7 +264,7 @@ namespace WebsiteTesting.Controllers.ScissorsController
             var @DateSearch = new SqlParameter("@DateSearch", dateSearch);
             using (var db = new ScissorsManagmentEntities())
             {
-                return db.Database.SqlQuery<InspectionReportModel>("EXEC spm_SelectInspectionByDate_1 @DateSearch", @DateSearch).ToList();
+                return db.Database.SqlQuery<InspectionReportModel>("EXEC spm_SelectInspectionByDate_2 @DateSearch", @DateSearch).ToList();
             }
         }
 

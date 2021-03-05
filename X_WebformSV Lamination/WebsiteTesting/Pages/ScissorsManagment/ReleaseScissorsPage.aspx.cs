@@ -20,7 +20,6 @@ namespace WebsiteTesting.Pages.ScissorsManagment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
 
         [WebMethod]
@@ -47,7 +46,8 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             {
                 var userLogin           = HttpContext.Current.User.Identity.Name.ToString();
                 var sectionList         = SectionController.Select();
-                var releasedScissors    = ScissorsMainController.GetReleaseWithBorrowedStatus();
+                //var releasedScissors    = ScissorsMainController.GetReleaseWithBorrowedStatus();
+                var releasedScissors = ScissorsMainController.GetReleaseScissors().Where(w => !w.Status.Equals("Returned")).ToList();
                 var configSystem        = ScissorsMainController.GetConfigSystem();
 
                 var personalList    = new List<PersonalModel>();

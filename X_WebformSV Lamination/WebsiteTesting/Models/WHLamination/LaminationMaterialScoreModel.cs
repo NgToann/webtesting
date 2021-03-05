@@ -26,5 +26,6 @@ namespace WebsiteTesting.Models.WHLamination
         public int TotalScore { get; set; }
         public string Reviser { get; set; }
         public int MaxRound { get; set; }
+        public string Remarks { get; set; }
     }
 }

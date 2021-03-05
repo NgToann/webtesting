@@ -36,13 +36,13 @@
             </section>
 
             <div class="col-row">
-                <asp:Table ID="tableAvailableScissors" CssClass="table table-hover table-bordered" runat="server">
+                <asp:Table ID="tableAvailableScissors" CssClass="table table-hover table-bordered table-sm" runat="server">
                 </asp:Table>
             </div>
         </div>
-        <footer class="page-footer font-small">
+        <%--<footer class="page-footer font-small">
             <div class="footer-copyright text-center py-3">© 2020 Created by:<a runat="server" href="../../Default.aspx"> IT Saoviet</a></div>
-        </footer>
+        </footer>--%>
     </body>
     </html>
 </asp:Content>

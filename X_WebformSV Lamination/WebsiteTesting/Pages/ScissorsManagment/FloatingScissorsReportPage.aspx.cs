@@ -13,13 +13,17 @@ namespace WebsiteTesting.Pages.ScissorsManagment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            var issuanceReturnedList = ScissorsMainController.GetReturnedScissors().ToList();
-            var scissorsAssignedList = ScissorsMainController.GetIssuance().Where(w => w.IsReturn == false && w.IsReplace == false).Select(s => s.ScissorsBarcode).Distinct().ToList();
+            //var issuanceReturnedList = ScissorsMainController.GetReturnedScissors().ToList();
+            //var scissorsAssignedList = ScissorsMainController.GetIssuance().Where(w => w.IsReturn == false && w.IsReplace == false).Select(s => s.ScissorsBarcode).Distinct().ToList();
+
+            var releasedList = ScissorsMainController.GetReleaseScissors().Where(w => !w.Status.Equals("Replaced")).ToList();
+            var borrowedList = releasedList.Where(w => w.Status.Equals("Borrowed")).Select(s => s.Barcode).Distinct().ToList();
+            var returnedList = releasedList.Where(w => w.Status.Equals("Returned") && !borrowedList.Contains(w.Barcode)).ToList();
 
             // remove scissors already assigned
-            issuanceReturnedList = issuanceReturnedList.Where(w => scissorsAssignedList.Contains(w.ScissorsBarcode) == false).ToList();
+            //issuanceReturnedList = issuanceReturnedList.Where(w => borrowedList.Contains(w.ScissorsBarcode) == false).ToList();
 
-            var sectionList         = issuanceReturnedList.Select(s => s.Section).Distinct().ToList();
+            var sectionList         = returnedList.Select(s => s.Section).Distinct().ToList();
             if (sectionList.Count() > 0)
                 sectionList = sectionList.OrderBy(o => o).ToList();
 
@@ -57,8 +61,8 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             int totalSmall = 0, totalBig = 0;
             foreach (var section in sectionList)
             {
-                var issuanceListBySection   = issuanceReturnedList.Where(w => w.Section.Equals(section)).ToList();
-                var lineListLiBySection     = issuanceListBySection.Select(s => s.Line).Distinct().ToList();
+                var returnedBySection   = returnedList.Where(w => w.Section.Equals(section)).ToList();
+                var lineListLiBySection = returnedBySection.Select(s => s.LineName).Distinct().ToList();
 
                 var regex = new Regex(@"\D");
                 var lineCustomList = lineListLiBySection.Select(s => new { Line = s, LineNumber = regex.IsMatch(s) ? regex.Replace(s, "") : s }).ToList();
@@ -79,7 +83,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
 
                     TableCell tcLine = new TableCell();
 
-                    Session["IssuanceList"] = issuanceReturnedList;
+                    Session["ReturnedList"] = returnedList;
                     var lnkLine = new HyperLink
                     {
                         Text = line.Line,
@@ -88,7 +92,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
                     tcLine.Controls.Add(lnkLine);
                     tr.Cells.Add(tcLine);
 
-                    var qtySmallReturned = issuanceListBySection.Where(w => w.Line.Equals(line.Line) && w.IsBig == false).ToList().Count();
+                    var qtySmallReturned = returnedBySection.Where(w => w.LineName.Equals(line.Line) && w.ScissorsType.Equals("Small")).ToList().Count();
                     //int qtySmallReturned = smallScissorsReturnedList.Where(w => smallScissorsAssignedList.Contains(w) == false).Count();
                     totalSmall += qtySmallReturned;
 
@@ -100,7 +104,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
                     //var bigScissorsRuturnedReturnedList = issuanceListBySection.Where(w => w.Line.Equals(line) && w.IsBig == true).Select(s => s.ScissorsBarcode).Distinct().ToList();
                     //var bigScissorsAssignedList         = scissorsAssignedList.Where(w => w.IsBig == true && w.IsReturn == false && w.IsReplace == false).Select(s => s.ScissorsBarcode).Distinct().ToList();
 
-                    int qtyBigReturned  = issuanceListBySection.Where(w => w.Line.Equals(line.Line) && w.IsBig == true).ToList().Count();
+                    int qtyBigReturned  = returnedBySection.Where(w => w.LineName.Equals(line.Line) && w.ScissorsType.Equals("Big")).ToList().Count();
                     //int qtyBigReturned = bigScissorsRuturnedReturnedList.Where(w => bigScissorsAssignedList.Contains(w) == false).Count();
                     totalBig += qtyBigReturned;
 

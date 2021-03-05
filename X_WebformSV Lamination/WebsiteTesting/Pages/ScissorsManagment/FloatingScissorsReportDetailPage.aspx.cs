@@ -14,11 +14,11 @@ namespace WebsiteTesting.Pages.ScissorsManagment
         {
             string lineClicked = Request.Params["line"];
             lblLine.Text = String.Format("Line: {0}", lineClicked);
-            var issuanceList = Session["IssuanceList"] as List<IssuanceModel>;
+            var returnedList = Session["ReturnedList"] as List<ReleaseScissorsModel>;
 
-            var returnedScissorsListByLine = issuanceList.Where(w => w.IsReturn == true && w.Line == lineClicked).ToList();
+            var returnedScissorsListByLine = returnedList.Where(w => w.LineName == lineClicked).ToList();
             if (returnedScissorsListByLine.Count() > 0)
-                returnedScissorsListByLine = returnedScissorsListByLine.OrderBy(o => o.ReturnTime).ToList();
+                returnedScissorsListByLine = returnedScissorsListByLine.OrderBy(o => o.UpdatedTime).ToList();
             // Create Table
 
             tableAvailableScissorsDetail.Rows.Clear();
@@ -50,7 +50,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
                 TableCell tcContentIndex = new TableCell() { Text = String.Format("<center>{0}</center>", index), };
                 trContent.Cells.Add(tcContentIndex);
 
-                TableCell tcContentBarcode = new TableCell() { Text = String.Format("<center>{0}{1}</center>", returnScissors.IsBig == true ? "B" : "S", returnScissors.ScissorsBarcode), };
+                TableCell tcContentBarcode = new TableCell() { Text = String.Format("<center>{0}{1}</center>", returnScissors.ScissorsType.Equals("Big") == true ? "B" : "S", returnScissors.Barcode), };
                 trContent.Cells.Add(tcContentBarcode);
 
                 TableCell tcContentWorker = new TableCell() { Text = String.Format("{0} {1}", returnScissors.WorkerId, returnScissors.WorkerName), };
@@ -58,7 +58,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
 
                 TableCell tcContentReturnTime = new TableCell()
                 {
-                    Text = String.Format("<center>{0}</center>", returnScissors.ReturnTime),
+                    Text = String.Format("<center>{0}</center>", returnScissors.UpdatedTime),
                 };
                 trContent.Cells.Add(tcContentReturnTime);
 

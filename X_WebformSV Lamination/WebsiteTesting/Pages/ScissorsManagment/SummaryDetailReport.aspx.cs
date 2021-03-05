@@ -14,12 +14,12 @@ namespace WebsiteTesting.Pages.ScissorsManagment
         {
             string lineClicked = Request.Params["line"];
             lblLine.Text = String.Format("Line: {0}", lineClicked);
-            var issuanceList = Session["IssuanceList"] as List<IssuanceModel>;
-
+            //var issuanceList = Session["IssuanceList"] as List<IssuanceModel>;
+            var releasedList = Session["ReleasedList"] as List<ReleaseScissorsModel>;
             if (IsPostBack == true)
                 return;
 
-            var issuanceListByLine  = issuanceList.Where(w => w.Line == lineClicked).ToList();
+            var releasedByLine  = releasedList.Where(w => w.LineName == lineClicked).ToList();
 
             //var assignedList = issuanceListByLine.Where(w => w.IsReplace == false && w.IsReturn == false).Select(s => s.WorkerId).Distinct().ToList();
             //var lossList     = issuanceListByLine.Where(w => w.Reason.ToUpper().Equals("LOSS")).Select(s => s.WorkerId).Distinct().ToList();
@@ -27,7 +27,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             //var returnedList = issuanceListByLine.Where(w => w.IsReturn == true).Select(s => s.WorkerId).Distinct().ToList();
             //var indexList    = new int[] { assignedList.Count(), lossList.Count(), brokenList.Count(), returnedList.Count };
 
-            var problemScissorsList = issuanceListByLine.Where(w => w.Reason.ToUpper().Equals("BROKEN") || w.Reason.ToUpper().Equals("LOSS")).ToList();
+            var problemScissorsList = releasedByLine.Where(w => w.Reason.ToUpper().Equals("BROKEN") || w.Reason.ToUpper().Equals("LOSS")).ToList();
             var workerHasProblemScissorsList = problemScissorsList.Select(s => s.WorkerId).Distinct();
             workerHasProblemScissorsList = workerHasProblemScissorsList.Count() > 0 ? workerHasProblemScissorsList.OrderBy(o => o).ToList() : workerHasProblemScissorsList;
 
@@ -84,7 +84,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
                 List<string> lossContent = new List<String>();
                 foreach (var loss in lossScissors)
                 {
-                    lossContent.Add(String.Format("{0}<br>{1}", loss.ScissorsBarcodeReplace, loss.ReplaceTime));
+                    lossContent.Add(String.Format("{0}<br>{1}", loss.Barcode, loss.UpdatedTime != null ? loss.UpdatedTime.ToString() : ""));
                 }
                 tcLossContent.Text = String.Format("{0}", String.Join("<br>", lossContent));
                 tr.Cells.Add(tcLossContent);
@@ -93,7 +93,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
                 List<string> brokenContent = new List<String>();
                 foreach (var broken in brokenScissors)
                 {
-                    brokenContent.Add(String.Format("{0}<br>{1}", broken.ScissorsBarcodeReplace, broken.ReplaceTime));
+                    brokenContent.Add(String.Format("{0}<br>{1}", broken.Barcode, broken.UpdatedTime != null ? broken.UpdatedTime.ToString() : ""));
                 }
                 tcBrokenContent.Text = String.Format("{0}", String.Join("<br>", brokenContent));
                 tr.Cells.Add(tcBrokenContent);

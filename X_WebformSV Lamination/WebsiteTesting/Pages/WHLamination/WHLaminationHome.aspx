@@ -11,7 +11,11 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>        
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>        
         
+        <%--<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">--%>
+        <!-- Theme style -->
+        <%--<link rel="stylesheet" href="dist/css/adminlte.min.css">--%>
         <script type="text/javascript">
+            var rejectsWHLamination;
             class LaminationMaterialScore {
                 constructor(OrderNoId, POQuantity, LabelQuantity, ActualQuantity, LabelWidth, ActualWidth, TotalScore, DefectType1, DefectType2, DefectType3, DefectType4, HoleType2, HoleType4, Reviser, NoOfDefects, RoundCheck, MaxRound) {
                     this.OrderNoId      = OrderNoId;
@@ -113,7 +117,8 @@
                         // matsScore already check
                         else {
                             var roundCheckList = JSON.parse(data.d);
-                            if (roundCheckList != null) {
+                            
+                            if (roundCheckList != null || roundCheckList.length != 0) {
                                 var nextRound = 0;
 
                                 var pHistory = document.createElement("p");
@@ -456,8 +461,8 @@
                 document.getElementById("btnConfirmSave").onclick = function () { SaveScore(currentLMScore) };
 
                 //
-                document.getElementById("btnPlusActualWidth").onclick = function () { plusActualWidth(currentLMScore) };
-                document.getElementById("btnPlusActualQuantity").onclick = function () { plusActualQuantity(currentLMScore) };
+                //document.getElementById("btnPlusActualWidth").onclick = function () { plusActualWidth(currentLMScore) };
+                //document.getElementById("btnPlusActualQuantity").onclick = function () { plusActualQuantity(currentLMScore) };
 
                 document.getElementById("txtPlusActualQuantity").onkeyup = function () { UpdateScoreByQuantity(currentLMScore) };
                 document.getElementById("txtPlusActualWidth").onkeyup = function () { UpdateScoreByWidth(currentLMScore) };
@@ -466,6 +471,43 @@
             }
 
             function ShowSavingData(currentLMScore) {
+                var divReject = document.getElementById("divRejectCheckbox");
+                divReject.innerHTML = '';
+                var pTitle = document.createElement('p');
+                pTitle.innerText = 'Check Remarks';
+                pTitle.className = 'pt-0 pb-0 mb-1';
+                divReject.appendChild(pTitle);
+
+                var divRejectContent = document.createElement('div');
+                divRejectContent.className = 'col-auto';
+                // Create Checkbox rejectlist
+                var noOfReject = 1;
+                rejectsWHLamination.forEach(function (item) {
+                    var divByItem = document.createElement('div');
+                    divByItem.className = 'form-check form-check-inline';
+                    var checkBoxByItem = document.createElement('input');
+                    checkBoxByItem.className = 'form-check-input mt-1';
+                    checkBoxByItem.value = item.RejectName;
+                    checkBoxByItem.type = 'checkbox';
+                    checkBoxByItem.id = 'inlineCheckbox' + item.RejectId;
+
+                    var labelByItem = document.createElement('label');
+                    labelByItem.className = 'form-check-label';
+                    //var forAttributes = document.createAttribute('for');
+                    //forAttributes.value = 'inlineCheckbox' + item.RejectId;
+                    //labelByItem.attributes.add(forAttributes);
+                    var attValue = 'inlineCheckbox' + item.RejectId;
+                    labelByItem.setAttribute("for", attValue);
+                    labelByItem.innerText = noOfReject + '. ' + item.RejectName + item.RejectName_1;
+
+                    divByItem.appendChild(checkBoxByItem);
+                    divByItem.appendChild(labelByItem);
+                    divRejectContent.appendChild(divByItem);
+                    noOfReject++;
+                });
+
+                divReject.appendChild(divRejectContent);
+
                 document.getElementById("pConfirmOrderNoId").textContent        = currentLMScore.OrderNoId;
                 document.getElementById("pConfirmRound").textContent            = currentLMScore.RoundCheck;
                 document.getElementById("pConfirmActualQuantity").textContent   = currentLMScore.ActualQuantity;
@@ -494,6 +536,15 @@
                 var reviser         = reviser; 
                 var noOfDefects     = currentLMScore.NoOfDefects;
                 var roundCheck      = currentLMScore.RoundCheck;
+
+                var listOfRemarks = new Array();
+                rejectsWHLamination.forEach(function (item) {
+                    var chkId =  'inlineCheckbox' + item.RejectId;
+                    var checkBoxById = document.getElementById(chkId);
+                    if (checkBoxById.checked)
+                        listOfRemarks.push(checkBoxById.value);
+                });
+                var remarks = listOfRemarks.join('; ');
                 //jQuery.ajax({
                 //var contentUpload = JSON.stringify({ laminationScore: currentLMScore });
                 $.ajax({
@@ -502,7 +553,8 @@
                         "orderNoId": '"' + orderNoId + '"', "poQuantity": '"' + poQuantity + '"', "labelQuantity": '"' + labelQuantity + '"', "actualQuantity": '"' + actualQuantity + '"',
                         "labelWidth": '"' + labelWidth + '"', "actualWidth": '"' + actualWidth + '"', "defectType1": '"' + defectType1 + '"', "defectType2": '"' + defectType2 + '"',
                         "defectType3": '"' + defectType3 + '"', "defectType4": '"' + defectType4 + '"', "holeType2": '"' + holeType2 + '"', "holeType4": '"' + holeType4 + '"',
-                        "totalScore": '"' + totalScore + '"', "reviser": '"' + reviser + '"', "roundCheck": '"' + roundCheck + '"', "noOfDefects": '"' + noOfDefects + '"'
+                        "totalScore": '"' + totalScore + '"', "reviser": '"' + reviser + '"', "roundCheck": '"' + roundCheck + '"', "noOfDefects": '"' + noOfDefects + '"',
+                        "remarks": '"' + remarks + '"'
                     },
                     //data: contentUpload,
                     type: "GET",
@@ -606,7 +658,10 @@
                     return;
                 }
                 // Clear lamination material list
-                var laminationMaterialList = JSON.parse(data.d);
+                var sources = JSON.parse(data.d);
+                var laminationMaterialList = sources[0];
+                rejectsWHLamination = sources[1];
+
                 laminationMaterialList.forEach(function (laminationMaterial) {
                     const matDiv = document.createElement("div");
                     matDiv.className = "col";
@@ -845,6 +900,12 @@
                                                 </div>
                                             </button>
                                         </div>
+                                        <%--<div class="col-3">
+                                            <a class="btn btn-app bg-secondary btn-lg h-100 w-100" style="font-size: 1.5rem;">
+                                                <span class="badge bg-success" style="font-size: 1.3rem;">1000</span>
+                                                <i class="fas fa-barcode"></i> Products
+                                            </a>
+                                        </div>--%>
                                     </div>
                                 </div>
                                 
@@ -873,15 +934,15 @@
                                                 <div class="col">
                                                     <p class="m-0 text-center">Actual Qty</p>
                                                     <div class="input-group input-group">
-                                                        <button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualQuantity"><i class="fa fa-plus text-info"></i></button>
-                                                        <input type="text" id="txtPlusActualQuantity" class="form-control rounded-0 text-center" aria-label="Sizing example input" aria-describedby="btnPlusActualQuantity">
+                                                        <%--<button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualQuantity"><i class="fa fa-plus text-info"></i></button>--%>
+                                                        <input type="text" id="txtPlusActualQuantity" class="form-control rounded-0 text-center" aria-label="Sizing example input">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <p class="m-0 text-center">Actual Width</p>
                                                     <div class="input-group input-group">
-                                                        <button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualWidth"><i class="fa fa-plus text-info"></i></button>
-                                                        <input type="text" class="form-control rounded-0 text-center" id="txtPlusActualWidth" aria-label="Sizing example input" aria-describedby="btnPlusActualWidth">
+                                                        <%--<button type="button" class="input-group-text btn btn-outline-secondary rounded-0" id="btnPlusActualWidth"><i class="fa fa-plus text-info"></i></button>aria-describedby="btnPlusActualWidth"--%>
+                                                        <input type="text" class="form-control rounded-0 text-center" id="txtPlusActualWidth" aria-label="Sizing example input">
                                                     </div>
                                                 </div>
                                             </div>
@@ -895,9 +956,8 @@
                                         <div class="row p-0 m-0 align-items-center">
                                             <div class="col text-left"><h4 class="p-0 m-0">Total</h4></div>
                                             <div class="col-auto p-0 m-0">
-                                                <button id="btnReset" type="button" class="btn btn-warning shadow-sm btn-sm rounded-2" data-bs-toggle="modal" data-bs-target="#modalDisplayToast">
-                                                    <i class="fa fa-refresh fa-1x mr-2"></i>
-                                                    Reset</button>
+                                                <button id="btnReset" type="button" class="btn btn-sm rounded-2" data-bs-toggle="modal" data-bs-target="#modalDisplayToast">
+                                                    <i class="fa fa-refresh fa-1x mr-2"></i>Reset</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1006,7 +1066,27 @@
                 </div>
               </div>
             </div>
-
+            <!--
+                <p class="pt-0 pb-0 mb-1">Check remarks</p>
+                          <div class="col-auto">
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input mt-1" type="checkbox" id="inlineCheckbox1" value="option1">
+                                  <label class="form-check-label" for="inlineCheckbox1">Error 1</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input mt-1" type="checkbox" id="inlineCheckbox2" value="option2">
+                                  <label class="form-check-label" for="inlineCheckbox2">Error 2</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input mt-1" type="checkbox" id="inlineCheckbox3" value="option3">
+                                  <label class="form-check-label" for="inlineCheckbox3">Error 3Error 3Error 3Error 3</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input mt-1" type="checkbox" id="inlineCheckbox4" value="option4">
+                                  <label class="form-check-label" for="inlineCheckbox4">Error 4Error 4Error 4Error 4Error 4Error 4Error 4Error 4</label>
+                              </div>
+                          </div>
+            -->
             <!-- Modal Confirm Save-->
             <div class="modal fade rounded-0" id="modalConfirmSave" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -1015,7 +1095,10 @@
                     <h5 class="modal-title text-success" id="staticBackdropLabel">Confirm Save</h5>
                     <button id="btnConfirmSaveClose" type="button" class="btn-close text-danger" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-body text-primary">
+                  <div class="modal-body pt-0 pb-0 text-primary">
+                      <div id="divRejectCheckbox" class="row mb-2 bg-light text-danger align-items-center">
+                          
+                      </div>
                       <div class="row">
                           <div class="col-auto">
                               <p class="mb-1">Order No Id:</p>
@@ -1038,7 +1121,6 @@
                               <p class="mb-0" id="pConfirmUser"></p>
                           </div>
                       </div>
-                      
                   </div>
                   <div class="modal-footer">
                       <div class="row w-100">

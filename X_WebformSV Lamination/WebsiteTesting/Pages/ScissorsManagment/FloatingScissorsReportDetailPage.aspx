@@ -37,7 +37,7 @@
             <div class="row">
                 <div class="col-12">
                     <asp:Label ID="lblLine" CssClass="mb-1" runat="server">Line: </asp:Label>
-                    <asp:Table ID="tableAvailableScissorsDetail" CssClass="table table-hover table-bordered" runat="server">
+                    <asp:Table ID="tableAvailableScissorsDetail" CssClass="table table-hover table-bordered table-sm" runat="server">
                     </asp:Table>
                 </div>
             </div>

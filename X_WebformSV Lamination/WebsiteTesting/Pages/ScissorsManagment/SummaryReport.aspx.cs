@@ -17,8 +17,9 @@ namespace WebsiteTesting.Pages.ScissorsManagment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            var issuanceList = ScissorsMainController.GetIssuance();
-            ViewState["issuanceList"] = issuanceList;
+            //var issuanceList = ScissorsMainController.GetIssuance();
+            var releasedList = ScissorsMainController.GetReleaseScissors();
+            ViewState["releasedList"] = releasedList;
 
             if (IsPostBack == true)
             {
@@ -30,7 +31,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
 
             cboSection.DataSource = sectionList;
             cboSection.DataBind();
-            UpdateDataTable(issuanceList);
+            UpdateDataTable(releasedList);
         }
 
         protected void cboSection_SelectedIndexChanged(object sender, EventArgs e)
@@ -38,13 +39,15 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             var sectionList = ViewState["sectionList"] as List<SectionModel>;
             var sectionClicked = sectionList[cboSection.SelectedIndex];
 
-            var issuanceList = ViewState["issuanceList"] as List<IssuanceModel>;
+            //var issuanceList = ViewState["issuanceList"] as List<IssuanceModel>;
+            var releasedList = ViewState["releasedList"] as List<ReleaseScissorsModel>;
             if (!sectionClicked.Name.Equals("All"))
-                issuanceList = issuanceList.Where(w => w.Section.Equals(sectionClicked.Name)).ToList();
-            UpdateDataTable(issuanceList);
+                releasedList = releasedList.Where(w => w.Section.Equals(sectionClicked.Name)).ToList();
+            UpdateDataTable(releasedList);
         }
 
-        protected void UpdateDataTable (List<IssuanceModel> issuanceList)
+        //protected void UpdateDataTable (List<IssuanceModel> issuanceList)
+        protected void UpdateDataTable(List<ReleaseScissorsModel> releasedList)
         {
             tableSummaryReport.Rows.Clear();
             // update table current.
@@ -118,30 +121,30 @@ namespace WebsiteTesting.Pages.ScissorsManagment
 
             tableSummaryReport.Rows.Add(trHeaderDetail);
 
-            var lineList = issuanceList.Select(s => s.Line).Distinct().ToList();
+            var lineList = releasedList.Select(s => s.LineName).Distinct().ToList();
             var regex = new Regex(@"\D");
             var lineCustomList = lineList.Select(s => new { Line = s, LineNumber = regex.IsMatch(s) ? regex.Replace(s, "") : s }).ToList();
             if (lineCustomList.Count() > 0)
                 lineCustomList = lineCustomList.OrderBy(o => String.IsNullOrEmpty(o.LineNumber) ? 100 : Int32.Parse(o.LineNumber)).ThenBy(th => th.Line).ToList();
 
-            int issuedTotalSmall = 0, issuedTotalBig = 0, brokenTotalSmall = 0, brokenTotalBig = 0, lossTotalSmall = 0, lossTotalBig = 0;
+            int rlTotalSmall = 0, rlTotalBig = 0, brokenTotalSmall = 0, brokenTotalBig = 0, lossTotalSmall = 0, lossTotalBig = 0;
             int index = 1;
-            Session["IssuanceList"] = issuanceList;
+            Session["ReleasedList"] = releasedList;
             foreach (var line in lineCustomList)
             {
-                var issuanceListByLine = issuanceList.Where(w => w.Line.Equals(line.Line)).ToList();
+                var rlByLineList = releasedList.Where(w => w.LineName.Equals(line.Line)).ToList();
 
-                int issuedSmall     = issuanceListByLine.Where(w => w.IsReturn == false && w.IsReplace == false && w.IsBig == false).Count();
-                int issuedBig       = issuanceListByLine.Where(w => w.IsReturn == false && w.IsReplace == false && w.IsBig == true).Count();
+                int issuedSmall     = rlByLineList.Where(w => w.Status.Equals("Borrowed") && w.ScissorsType.Equals("Small")).Count();
+                int issuedBig       = rlByLineList.Where(w => w.Status.Equals("Borrowed") && w.ScissorsType.Equals("Big")).Count();
 
-                int brokenSmall     = issuanceListByLine.Where(w => w.IsReplace == true && w.Reason.ToUpper().ToString().Equals("BROKEN") && w.IsBig == false).Count();
-                int brokenBig       = issuanceListByLine.Where(w => w.IsReplace == true && w.Reason.ToUpper().ToString().Equals("BROKEN") && w.IsBig == true).Count();
+                int brokenSmall = rlByLineList.Where(w => w.Status.Equals("Replaced") && w.Reason.Equals("Broken") && w.ScissorsType.Equals("Small")).Count();
+                int brokenBig = rlByLineList.Where(w => w.Status.Equals("Replaced") && w.Reason.Equals("Broken") && w.ScissorsType.Equals("Big")).Count();
 
-                int lossSmall       = issuanceListByLine.Where(w => w.IsReplace == true && w.Reason.ToUpper().ToString().Equals("LOSS") && w.IsBig == false).Count();
-                int lossBig         = issuanceListByLine.Where(w => w.IsReplace == true && w.Reason.ToUpper().ToString().Equals("LOSS") && w.IsBig == true).Count();
+                int lossSmall       = rlByLineList.Where(w => w.Status.Equals("Replaced") && w.Reason.Equals("Loss") && w.ScissorsType.Equals("Small")).Count();
+                int lossBig         = rlByLineList.Where(w => w.Status.Equals("Replaced") && w.Reason.Equals("Loss") && w.ScissorsType.Equals("Big")).Count();
 
-                issuedTotalSmall    += issuedSmall;
-                issuedTotalBig      += issuedBig;
+                rlTotalSmall    += issuedSmall;
+                rlTotalBig      += issuedBig;
                 brokenTotalSmall    += brokenSmall;
                 brokenTotalBig      += brokenBig;
                 lossTotalSmall      += lossSmall;
@@ -207,12 +210,12 @@ namespace WebsiteTesting.Pages.ScissorsManagment
             tcLineTotal.Text = "<center><b>Total</b></center>";
             trTotal.Cells.Add(tcLineTotal);
 
-            var issuedSmallViewTotal = issuedTotalSmall > 0 ? issuedTotalSmall.ToString() : "";
+            var issuedSmallViewTotal = rlTotalSmall > 0 ? rlTotalSmall.ToString() : "";
             TableCell tcIssuedSmallTotal = new TableCell();
             tcIssuedSmallTotal.Text = String.Format("<center><b>{0}</b></center>", issuedSmallViewTotal);
             trTotal.Cells.Add(tcIssuedSmallTotal);
 
-            var issuedBigViewTotal = issuedTotalBig > 0 ? issuedTotalBig.ToString() : "";
+            var issuedBigViewTotal = rlTotalBig > 0 ? rlTotalBig.ToString() : "";
             TableCell tcIssuedBigTotal = new TableCell();
             tcIssuedBigTotal.Text = String.Format("<center><b>{0}</b></center>", issuedBigViewTotal);
             trTotal.Cells.Add(tcIssuedBigTotal);
@@ -239,7 +242,7 @@ namespace WebsiteTesting.Pages.ScissorsManagment
 
             tableSummaryReport.Rows.Add(trTotal);
 
-            lblTotalIssued.Text     = String.Format("TOTAL ISSUED : {0}", issuedTotalBig + issuedTotalSmall);
+            lblTotalIssued.Text     = String.Format("TOTAL ISSUED : {0}", rlTotalBig + rlTotalSmall);
             lblTotalBroken.Text     = String.Format("TOTAL BROKEN : {0}", brokenTotalBig + brokenTotalSmall);
             lblTotalLoss.Text       = String.Format("TOTAL LOSS   : {0}", lossTotalBig + lossTotalSmall);
         }

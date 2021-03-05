@@ -21,5 +21,6 @@ namespace WebsiteTesting.Models.ScissorsManagmentSystem
         public string Reason { get; set; }
         public string ReleaseBy { get; set; }
         public DateTime CreatedTime { get; set; }
+        public Nullable<DateTime> UpdatedTime { get; set; }
     }
 }

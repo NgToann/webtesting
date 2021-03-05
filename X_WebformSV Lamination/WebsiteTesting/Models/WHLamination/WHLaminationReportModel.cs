@@ -22,7 +22,9 @@ namespace WebsiteTesting.Models.WHLamination
         public int DefectType4 { get; set; }
         public int HoleType2 { get; set; }
         public int HoleType4 { get; set; }
+        public int TotalDefect { get; set; }
         public int TotalScore { get; set; }
+        public string Remarks { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 }

@@ -63,11 +63,19 @@ namespace WebsiteTesting.Pages.WHLamination
                     dr["DefectType4"]   = whlReport.DefectType4.ToString();
                     dr["HoleType2"]     = whlReport.HoleType2.ToString();
                     dr["HoleType4"]     = whlReport.HoleType4.ToString();
-                    dr["TotalPoints"]   = whlReport.TotalScore.ToString();
-                    dr["PointPerYards"] = (100 - whlReport.TotalScore).ToString();
-                    dr["Accept"]        = whlReport.TotalScore <= 20 ? "1" : "";
-                    dr["Reject"]        = whlReport.TotalScore > 20 ? "1" : "";
-                    dr["Remarks"]       = "";
+
+                    //dr["TotalPoints"]   = whlReport.TotalScore.ToString();
+                    //(Total points / Actual Qty) *(36 / Actual width) *100
+                    var pointPerYards = ((double)whlReport.TotalScore / (double)whlReport.ActualQuantity) * (36.0 / (double)whlReport.ActualWidth) * 100;
+                    //dr["PointPerYards"] = pointPerYards.ToString("N0");
+
+                    // Revise
+                    dr["TotalPoints"] = whlReport.TotalDefect.ToString();
+                    dr["PointPerYards"] = whlReport.TotalScore.ToString();
+
+                    dr["Accept"]        = whlReport.TotalScore <= 20 ? "Accept" : "";
+                    dr["Reject"]        = whlReport.TotalScore > 20 ? "Reject" : "";
+                    dr["Remarks"]       = whlReport.Remarks;
 
                     dt.Rows.Add(dr);
                 }

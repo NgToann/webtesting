@@ -18,7 +18,7 @@ namespace WebsiteTesting.Controllers.WHLamination
             var @To = new SqlParameter("@To", toDate);
             using (var db = new WHLaminationEntities())
             {
-                return db.Database.SqlQuery<WHLaminationReportModel>("EXEC reporter_WHLaminationFromTo @From, @To", @From, @To).ToList();
+                return db.Database.SqlQuery<WHLaminationReportModel>("EXEC reporter_WHLaminationFromTo_1 @From, @To", @From, @To).ToList();
             }
         }
     }

@@ -144,3 +144,5 @@ F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\ob
 F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.dll
 F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
 F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csprojAssemblyReference.cache
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.cache
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.compiled

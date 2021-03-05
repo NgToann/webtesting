@@ -77,9 +77,9 @@
             </div>
 
         </div>
-        <footer class="page-footer font-small">
+        <%--<footer class="page-footer font-small">
             <div class="footer-copyright text-center py-3">© 2020 Created by:<a runat="server" href="../../Default.aspx"> IT Saoviet</a></div>
-        </footer>
+        </footer>--%>
     </body>
     </html>
 </asp:Content>

@@ -928,7 +928,7 @@ var Webcam = {
 		// "camera", "privacy", "default", "localStorage", "microphone", "settingsManager"
 		if (!panel) panel = "camera";
 		this.getMovie()._configure(panel);
-	},
+	},f
 	
 	flashNotify: function(type, msg) {
 		// receive notification from flash about event

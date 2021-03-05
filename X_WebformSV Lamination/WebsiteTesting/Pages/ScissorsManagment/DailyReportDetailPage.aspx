@@ -37,14 +37,14 @@
             <div class="row">
                 <div class="col-12">
                     <asp:Label ID="lblLine" CssClass="mb-1" runat="server">Line: </asp:Label>
-                    <asp:Table ID="tableDailyReportDetail" CssClass="table table-hover table-bordered" runat="server">
+                    <asp:Table ID="tableDailyReportDetail" CssClass="table table-hover table-bordered table-sm" runat="server">
                     </asp:Table>
                 </div>
             </div>
         </div>
-        <footer class="page-footer font-small">
+        <%--<footer class="page-footer font-small">
             <div class="footer-copyright text-center py-3">© 2020 Created by:<a runat="server" href="../../Default.aspx"> IT Saoviet</a></div>
-        </footer>
+        </footer>--%>
     </body>
     </html>
 </asp:Content>

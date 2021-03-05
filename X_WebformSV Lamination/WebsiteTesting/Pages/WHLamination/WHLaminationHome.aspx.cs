@@ -43,9 +43,11 @@ namespace WebsiteTesting.Pages.WHLamination
             try 
             {
                 var laminationMatsSearch = LaminationMaterialController.GetLaminationMaterialByOrderNo(orderNo).ToList();
+                var rejectWHLamination = RejectController.GetWHLaminationRejects();
                 if (laminationMatsSearch.Count() == 0)
                     return "This PO does not exist in system !";
-                return JsonConvert.SerializeObject(laminationMatsSearch);
+                object[] source = new object[] { laminationMatsSearch, rejectWHLamination };
+                return JsonConvert.SerializeObject(source);
             }
             catch (Exception ex)
             {
@@ -93,7 +95,7 @@ namespace WebsiteTesting.Pages.WHLamination
 
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]
-        public static string SaveScore( string orderNoId, int poQuantity, int labelQuantity, int actualQuantity, int labelWidth, int actualWidth, int defectType1, int defectType2, int defectType3, int defectType4, int holeType2, int holeType4, int totalScore, string reviser, int roundCheck, int noOfDefects)
+        public static string SaveScore( string orderNoId, int poQuantity, int labelQuantity, int actualQuantity, int labelWidth, int actualWidth, int defectType1, int defectType2, int defectType3, int defectType4, int holeType2, int holeType4, int totalScore, string reviser, int roundCheck, int noOfDefects, string remarks)
         //public static string SaveScore(LaminationMaterialScoreModel laminationScore)
         {
             var laminationScoreSave = new LaminationMaterialScoreModel()
@@ -114,6 +116,7 @@ namespace WebsiteTesting.Pages.WHLamination
                 Reviser = reviser,
                 RoundCheck = roundCheck,
                 NoOfDefects = noOfDefects,
+                Remarks = remarks
             };
             //var laminationScoreSave = laminationScore;
             try

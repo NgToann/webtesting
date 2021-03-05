@@ -328,18 +328,16 @@
                         alert('Please select a type of Scissors !');
                         return;
                     }
-
-                    
-                    var releasByScissors = releaseCurrentList.filter(f => f.Barcode == barcodeScanned);
-                    if (releasByScissors.length > 0) {
-                        alert('Scissors: ' + releasByScissors[0].Barcode + ' released to : ' + releasByScissors[0].WorkerId + ' - ' + releasByScissors[0].WorkerName + ' !');
+                    // Check Scissors Replaced
+                    var scissorsReplaced = releaseCurrentList.filter(f => f.Barcode == barcodeScanned && f.Status == 'Replaced');
+                    if (scissorsReplaced.length > 0) {
+                        alert(scissorsReplaced[0].ScissorsType + ' Scissors: ' + scissorsReplaced[0].Barcode + 'was ' + scissorsReplaced[0].Reason);
                         return;
                     }
-
-                    // Check Scissors is broken or loss
-                    var checkRoundScissorsRound2 = releasByScissors.filter(f => f.BarcodeReplace == barcodeScanned);
-                    if (checkRoundScissorsRound2.length > 0) {
-                        alert('Scissors: ' + checkRoundScissorsRound2[0].BarcodeReplace + ' was ' + checkRoundScissorsRound2[0].Reason);
+                    
+                    var releaseByScissors = releaseCurrentList.filter(f => f.Barcode == barcodeScanned);
+                    if (releaseByScissors.length > 0) {
+                        alert('Scissors: ' + releaseByScissors[0].Barcode + ' released to : ' + releaseByScissors[0].WorkerId + ' - ' + releaseByScissors[0].WorkerName + ' !');
                         return;
                     }
 
@@ -560,7 +558,7 @@
                     var i = 1;
                     var tbody = document.createElement('tbody');
                     workerIdList.forEach(function (item) {
-                        var releaseByWorker = releaseCurrentList.filter(f => f.WorkerId == item.WorkerId);
+                        var releaseByWorker = releaseCurrentList.filter(f => f.WorkerId == item.WorkerId && f.Status == 'Borrowed');
 
                         var tr = document.createElement('tr');
 

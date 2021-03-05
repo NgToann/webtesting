@@ -51,11 +51,12 @@ namespace WebsiteTesting.Controllers.WHLamination
             var @Reviser        = new SqlParameter("@Reviser", model.Reviser);
             var @RoundCheck     = new SqlParameter("@RoundCheck", model.RoundCheck);
             var @NoOfDefects    = new SqlParameter("@NoOfDefects", model.NoOfDefects);
+            var @Remarks        = new SqlParameter("@Remarks", model.Remarks);
 
             using (var db = new WHLaminationEntities())
             {
-                if (db.Database.ExecuteSqlCommand("EXEC spm_InsertLaminationMaterialScore_1 @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser, @RoundCheck, @NoOfDefects",
-                                                                                            @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser, @RoundCheck, @NoOfDefects) > 0)
+                if (db.Database.ExecuteSqlCommand("EXEC spm_InsertLaminationMaterialScore_2 @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser, @RoundCheck, @NoOfDefects, @Remarks",
+                                                                                            @OrderNoId, @POQuantity, @LabelQuantity, @ActualQuantity, @LabelWidth, @ActualWidth, @DefectType1, @DefectType2, @DefectType3, @DefectType4, @HoleType2, @HoleType4, @TotalScore, @Reviser, @RoundCheck, @NoOfDefects, @Remarks) > 0)
                 {
                     return true;
                 }

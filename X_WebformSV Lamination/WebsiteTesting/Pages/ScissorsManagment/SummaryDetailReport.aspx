@@ -44,7 +44,7 @@
                 <div class="col-12">
                     <%--<asp:Label ID="lblLine" CssClass="mb-1" runat="server">Line: </asp:Label>--%>
                     <asp:Label CssClass="mb-1">List of (loss or broken) Scissors</asp:Label>
-                    <asp:Table ID="tableSummaryDetailReport" CssClass="table table-hover table-bordered" runat="server">
+                    <asp:Table ID="tableSummaryDetailReport" CssClass="table table-hover table-bordered table-sm" runat="server">
                     </asp:Table>
                 </div>
             </div>

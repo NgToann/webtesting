@@ -156,6 +156,8 @@
     <Content Include="Pages\ScissorsManagment\SummaryReport.aspx" />
     <Content Include="Pages\SewingMachines\AddUpdateOutsoleMachineImage.aspx" />
     <Content Include="Pages\SewingMachines\Allocation.aspx" />
+    <Content Include="Pages\SewingMachines\assets\images\ospaper\pic2.jpg" />
+    <Content Include="Pages\SewingMachines\assets\images\ospaper\pic1.jpg" />
     <Content Include="Pages\SewingMachines\assets\images\allocate.png" />
     <Content Include="Pages\SewingMachines\assets\images\inventory.png" />
     <Content Include="Pages\SewingMachines\assets\images\machineDB.png" />
@@ -174,6 +176,38 @@
     <Content Include="Pages\WHLamination\assets\font-awesome.min.css" />
     <Content Include="Pages\WHLamination\assets\whlamination.js" />
     <Content Include="Pages\WHLamination\assets\zxing.js" />
+    <Content Include="Pages\WHLamination\dist\css\adminlte.min.css" />
+    <Content Include="Pages\WHLamination\dist\js\adminlte.js" />
+    <Content Include="Pages\WHLamination\dist\js\adminlte.min.js" />
+    <Content Include="Pages\WHLamination\dist\js\demo.js" />
+    <Content Include="Pages\WHLamination\dist\js\pages\dashboard.js" />
+    <Content Include="Pages\WHLamination\dist\js\pages\dashboard2.js" />
+    <Content Include="Pages\WHLamination\dist\js\pages\dashboard3.js" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.bundle.js" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.js" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\all.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\all.min.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\brands.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\brands.min.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\fontawesome.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\fontawesome.min.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\regular.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\regular.min.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\solid.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\solid.min.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\svg-with-js.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\svg-with-js.min.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\v4-shims.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\css\v4-shims.min.css" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-brands-400.svg" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-regular-400.svg" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-solid-900.svg" />
+    <Content Include="Pages\WHLamination\plugins\jquery\jquery.js" />
+    <Content Include="Pages\WHLamination\plugins\jquery\jquery.min.js" />
+    <Content Include="Pages\WHLamination\plugins\jquery\jquery.slim.js" />
+    <Content Include="Pages\WHLamination\plugins\jquery\jquery.slim.min.js" />
     <Content Include="Pages\WHLamination\Report.aspx" />
     <Content Include="Pages\WHLamination\WHLaminationHome.aspx" />
     <Content Include="Web.Config">
@@ -207,6 +241,7 @@
     <Compile Include="Controllers\SewingMachineController\CommonController.cs" />
     <Compile Include="Controllers\WHLamination\LaminationMaterialController.cs" />
     <Compile Include="Controllers\WHLamination\LaminationMaterialScoreController.cs" />
+    <Compile Include="Controllers\WHLamination\RejectController.cs" />
     <Compile Include="Controllers\WHLamination\ReportController.cs" />
     <Compile Include="Controllers\WHLamination\UserWebController.cs" />
     <Compile Include="DataSets\WHLamination\WHLaminationDataSet.Designer.cs">
@@ -392,6 +427,7 @@
     <Compile Include="Models\SewingMachine\SheduleModel.cs" />
     <Compile Include="Models\SewingMachine\UserSMModel.cs" />
     <Compile Include="Models\WHLamination\LaminationMaterialScoreModel.cs" />
+    <Compile Include="Models\WHLamination\RejectModel.cs" />
     <Compile Include="Models\WHLamination\UserWebModel.cs" />
     <Compile Include="Models\WHLamination\WHLaminationReportModel.cs" />
     <Compile Include="Pages\CheckInSystem\AttendancePage.aspx.cs">
@@ -738,9 +774,30 @@
       <DependentUpon>WHLaminationDataSet.xsd</DependentUpon>
     </Content>
     <None Include="packages.config" />
+    <Content Include="Pages\WHLamination\dist\js\.eslintrc.json" />
+    <Content Include="Pages\WHLamination\dist\js\adminlte.js.map" />
+    <Content Include="Pages\WHLamination\dist\js\adminlte.min.js.map" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.bundle.js.map" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.bundle.min.js.map" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.js.map" />
+    <Content Include="Pages\WHLamination\plugins\bootstrap\js\bootstrap.min.js.map" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-brands-400.eot" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-brands-400.ttf" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-brands-400.woff" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-brands-400.woff2" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-regular-400.eot" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-regular-400.ttf" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-regular-400.woff" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-regular-400.woff2" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-solid-900.eot" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-solid-900.ttf" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-solid-900.woff" />
+    <Content Include="Pages\WHLamination\plugins\fontawesome-free\webfonts\fa-solid-900.woff2" />
+    <Content Include="Pages\WHLamination\plugins\jquery\jquery.min.map" />
+    <Content Include="Pages\WHLamination\plugins\jquery\jquery.slim.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\SewingMachines\OutsoleMachineImage\" />
+    <Folder Include="Pages\WHLamination\dist\img\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
