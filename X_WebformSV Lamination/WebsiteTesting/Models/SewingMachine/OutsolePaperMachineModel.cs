@@ -16,12 +16,8 @@ namespace WebsiteTesting.Models.SewingMachine
         public string OutsoleCode { get; set; }
         public string MachineType { get; set; }
         public DateTime CreatedDate { get; set; }
-        public byte[] LeftImage { get; set; }
-        public byte[] RightImage { get; set; }
         public string CreatedBy { get; set; }
-        public string LeftImageString { get; set; }
-        public string RightImageString { get; set; }
-        public string UpdateLeftImage { get; set; }
-        public string UpdateRightImage { get; set; }
+        public string LeftImagePath { get; set; }
+        public string RightImagePath { get; set; }
     }
 }

@@ -101,8 +101,8 @@ namespace WebsiteTesting.Pages.SewingMachines
                 trContent.Cells.Add(trcCreatedDate);
 
                 TableCell trcLeftImage = new TableCell();
-                if (!osMachine.LeftImageString.Equals("Null"))
-                {
+                //if (!osMachine.LeftImageString.Equals("Null"))
+                //{
                     var leftMachineLink = new HyperLink
                     {
                         Text = String.Format("L-{0}", osMachine.MachineType),
@@ -110,12 +110,12 @@ namespace WebsiteTesting.Pages.SewingMachines
                         CssClass = "btn btn-outline-info btn-sm rounded-0"
                     };
                     trcLeftImage.Controls.Add(leftMachineLink);
-                }
+                //}
                 trContent.Cells.Add(trcLeftImage);
 
                 TableCell trcRightImage = new TableCell();
-                if (!osMachine.RightImageString.Equals("Null"))
-                {
+                //if (!osMachine.RightImageString.Equals("Null"))
+                //{
                     var rightMachineLink = new HyperLink
                     {
                         Text =  String.Format("R-{0}", osMachine.MachineType),
@@ -123,7 +123,7 @@ namespace WebsiteTesting.Pages.SewingMachines
                         CssClass = "btn btn-outline-danger btn-sm rounded-0"
                     };
                     trcRightImage.Controls.Add(rightMachineLink);
-                }
+                //}
                 trContent.Cells.Add(trcRightImage);
 
                 tblListOfMahineImage.Rows.Add(trContent);

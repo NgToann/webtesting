@@ -68,7 +68,7 @@
                 </div>
                 <div class="row flex-row flex-nowrap mt-1">
                     <div class="col-auto">
-                        <asp:Table ID="tblListOfMahineImage" CssClass="table table-hover table-bordered" runat="server">
+                        <asp:Table ID="tblListOfMahineImage" CssClass="table table-hover table-sm table-bordered" runat="server">
                         </asp:Table>
                     </div>
                 </div>

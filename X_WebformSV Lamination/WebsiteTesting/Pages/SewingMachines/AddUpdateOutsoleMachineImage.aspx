@@ -88,19 +88,19 @@
                             </div>
                             <div class="form-group mb-1">
                                 <label class="m-0">Line</label>
-                                <input class="form-control">
+                                <input id="txtLine" class="form-control">
                             </div>
                             <div class="form-group mb-1">
                                 <label class="m-0">Product No</label>
-                                <input class="form-control">
+                                <input id="txtProductNo" class="form-control">
                             </div>
                             <div class="form-group mb-1">
                                 <label class="m-0">Style Name</label>
-                                <input class="form-control">
+                                <input id="txtStyleName" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label class="m-0">Outsole Code</label>
-                                <input class="form-control">
+                                <input id="txtOutsoleCode" class="form-control">
                             </div>
                             <div class="row">
                                 <div class="col-12 col-md-6 mb-2">
@@ -149,7 +149,7 @@
                         <figure id="divLeftImage" class="figure mb-1 mb-sm-0">
                         </figure>
                         <figcaption id="fgCaptionLeft" class="figure-caption text-danger d-none">Left Image</figcaption>
-                        <figure class="figure d-none">
+                        <figure id="divLeftImageDisplay" class="figure d-none">
                             <img id="imgLeftImage" src="assets/images/ospaper/pic1.jpg" class="figure-img img-fluid rounded" alt="Left Image">
                             <figcaption class="figure-caption text-danger">Left Image</figcaption>
                         </figure>
@@ -158,7 +158,7 @@
                         <figure id="divRightImage" class="figure mb-1 mb-sm-0">
                         </figure>
                         <figcaption id="fgCaptionRight" class="figure-caption text-danger d-none">Right Image</figcaption>
-                        <figure class="figure d-none">
+                        <figure id="divRightImageDisplay" class="figure d-none">
                             <img src="assets/images/ospaper/pic2.jpg" class="figure-img img-fluid rounded" alt="Right Image">
                             <figcaption class="figure-caption text-danger">Right Image</figcaption>
                         </figure>
@@ -169,9 +169,78 @@
             <script type="text/javascript" src="assets/webcam.min.js"></script>
 	        <!-- Configure a few settings and attach camera -->
 	        <script type="text/javascript">
+                window.addEventListener('load', function () {
+                    // Load Data Release Scissors
+                    $.ajax({
+                        url: '<%= ResolveUrl("~/Pages/SewingMachines/AddUpdateOutsoleMachineImage.aspx/LoadPage") %>',
+                        data: {},
+                        type: "GET",
+                        datatype: "json",
+                        async: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.d.toString().includes('Exception:')) {
+                                alert(data.d);
+                            }
+                            else {
+                                var sources = JSON.parse(data.d);
+                                var osPaperById = sources[2];
+                                var machineTypeList = sources[0];
+                                var sectionList = sources[1];
+
+                                if (osPaperById == null) {
+                                    loadCombobox(null, machineTypeList, sectionList);
+                                }
+                                else {
+                                    loadCombobox(osPaperById, machineTypeList, sectionList);
+                                    var date = new Date(osPaperById.CreatedDate);
+                                    txtLine.value = osPaperById.LineName;
+                                    txtDate.value = date.toLocaleDateString();
+                                    txtProductNo.value = osPaperById.ProductNo;
+                                    txtStyleName.value = osPaperById.StyleName;
+                                    txtOutsoleCode.value = osPaperById.OutsoleCode;
+
+                                    divLeftImageDisplay.className = 'figure';
+                                    divRightImageDisplay.className = 'figure';
+                                }
+                            }
+                        },
+                        error: onError
+                    })
+                });
+
+                function onError() {
+                    alert('An error occured at the backend !');
+                };
+
+                function loadCombobox(osPaperById, machineTypeList, sectionList) {
+                    var selectMachineType = document.getElementById('cboMachineType');
+                    selectMachineType.innerHTML = '';
+                    var selectSection = document.getElementById('cboSection');
+                    selectSection.innerHTML = '';
+                    machineTypeList.forEach(function (item) {
+                        var opt = document.createElement('option');
+                        opt.value = item.MachineType;
+                        opt.innerText = item.MachineType;
+                        if (osPaperById != null && osPaperById.MachineType == item.MachineType) {
+                            opt.selected = true;
+                        }
+                        selectMachineType.appendChild(opt);
+                    });
+                    sectionList.forEach(function (item) {
+                        var opt = document.createElement('option');
+                        opt.value = item;
+                        opt.innerText = item;
+                        if (osPaperById != null && osPaperById.SectionName == item) {
+                            opt.selected = true;
+                        }
+                        selectSection.appendChild(opt);
+                    });
+                }
+
                 Webcam.set({
-                    width: 320,
-                    height: 240,
+                    width: 400,
+                    height: 300,
                     dest_width: 640,
                     dest_height: 480,
                     image_format: 'png',
@@ -214,6 +283,8 @@
                     });
                     var fgCaptionLeft = document.getElementById('fgCaptionLeft');
                     fgCaptionLeft.className = 'figure-caption text-danger';
+
+                    divLeftImageDisplay.className = 'figure d-none';
                 }
                 function take_right_snapshot() {
                     // take snapshot and get image data
@@ -226,6 +297,7 @@
                     });
                     var fgCaptionRight = document.getElementById('fgCaptionRight');
                     fgCaptionRight.className = 'figure-caption text-danger';
+                    divRightImageDisplay.className = 'figure d-none';
                 }
             </script>
         </body>

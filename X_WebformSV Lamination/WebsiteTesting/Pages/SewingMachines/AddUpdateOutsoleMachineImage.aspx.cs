@@ -11,6 +11,7 @@ using WebsiteTesting.Models.SewingMachine;
 using Newtonsoft.Json;
 using System.IO;
 using System.Globalization;
+using System.Web.Script.Services;
 
 namespace WebsiteTesting.Pages.SewingMachines
 {
@@ -21,14 +22,15 @@ namespace WebsiteTesting.Pages.SewingMachines
         {
             //if (IsPostBack)
             //    return;
-            //var osMachineTypeList = CommonController.GetOutsoleMachineTypeList();
+            var osMachineTypeList = CommonController.GetOutsoleMachineTypeList();
             //cboMachineType.DataSource = osMachineTypeList.Select(s => s.MachineType).Distinct().ToList();
             //cboMachineType.DataBind();
 
             //cboSectionName.DataSource = osMachineTypeList.Select(s => s.SectionName).Distinct().ToList();
             //cboSectionName.DataBind();
 
-            //var par = Request.Params["par"];
+            var par = Request.Params["par"];
+            Session["osPaperId"] = par;
             //// Not Null is Update
             //if (!String.IsNullOrEmpty(par))
             //{
@@ -79,8 +81,35 @@ namespace WebsiteTesting.Pages.SewingMachines
         }
 
         [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public static string LoadPage()
+        {
+            try
+            {
+                var osMachineTypeList = CommonController.GetOutsoleMachineTypeList();
+                //var par = HttpContext.Current.Request.Params["par"];
+                var par = HttpContext.Current.Session["osPaperId"];
+
+                var osImageEmpty = new OutsoleImageEmpty();
+                int idFromPar = 0;
+                Int32.TryParse(par != null ? par.ToString() : "", out idFromPar);
+                var osPaperMachineById = CommonController.GetOutsolePaperMachineById(idFromPar);
+                var sectionList = osMachineTypeList.Select(s => s.SectionName).Distinct().ToList();
+
+                var resource = new object[] { osMachineTypeList, sectionList, osPaperMachineById };
+                //if (osPaperMachineById == null)
+                //    resource = new object[] { osMachineTypeList, sectionList, "null" };
+                return JsonConvert.SerializeObject(resource);
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.InnerException.InnerException.Message.ToString());
+            }
+        }
+
+        [WebMethod]
         public static string UploadImage(string updateWhat, 
-            string sectionName, string lineName, string productNo, string style, string outsoleCode, string machineType ,string createdDate, string leftImage, string rightImage)
+        string sectionName, string lineName, string productNo, string style, string outsoleCode, string machineType ,string createdDate, string leftImage, string rightImage)
         {
             var osImageEmpty = new OutsoleImageEmpty();
 
@@ -117,11 +146,11 @@ namespace WebsiteTesting.Pages.SewingMachines
                 StyleName   = style,
                 OutsoleCode = outsoleCode,
                 MachineType = machineType,
-                LeftImage   = leftImageByte,
-                RightImage  = rightImageByte,
-                CreatedDate         = ConvertDateStatic(createdDate),
-                UpdateLeftImage     = leftImage != osImageEmpty.ImgString ? "UpdateLeftImage" : "None",
-                UpdateRightImage    = rightImage != osImageEmpty.ImgString ? "UpdateRightImage" : "None",
+                //LeftImage   = leftImageByte,
+                //RightImage  = rightImageByte,
+                //CreatedDate         = ConvertDateStatic(createdDate),
+                //UpdateLeftImage     = leftImage != osImageEmpty.ImgString ? "UpdateLeftImage" : "None",
+                //UpdateRightImage    = rightImage != osImageEmpty.ImgString ? "UpdateRightImage" : "None",
             };
             try
             {
