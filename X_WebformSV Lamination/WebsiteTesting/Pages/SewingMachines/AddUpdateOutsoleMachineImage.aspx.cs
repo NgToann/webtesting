@@ -107,6 +107,14 @@ namespace WebsiteTesting.Pages.SewingMachines
             }
         }
 
+
+        [WebMethod]
+        public static string Upload(UploadOSPaperModel osPaperInsert)
+        {
+            var x = osPaperInsert;
+            return "";
+        }
+
         [WebMethod]
         public static string UploadImage(string updateWhat, 
         string sectionName, string lineName, string productNo, string style, string outsoleCode, string machineType ,string createdDate, string leftImage, string rightImage)
@@ -211,5 +219,17 @@ namespace WebsiteTesting.Pages.SewingMachines
             }
         }
 
+        public class UploadOSPaperModel
+        {
+            public int OutsolePaperType { get; set; }
+            public string SectionName { get; set; }
+            public string LineName { get; set; }
+            public string ProductNo { get; set; }
+            public string OutsoleCode { get; set; }
+            public string MachineType { get; set; }
+            public string CreatedDateString { get; set; }
+            public string LeftImageContent { get; set; }
+            public string RightImageContent { get; set; }
+        }
     }
 }

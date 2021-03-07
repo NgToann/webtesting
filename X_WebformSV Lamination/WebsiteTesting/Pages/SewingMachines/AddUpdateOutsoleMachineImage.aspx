@@ -53,8 +53,7 @@
                 
                 <!--Header-->
                 <div>
-                    <h3 class="font-weight-bold"><asp:Label ID="lblTitle" Text="Add New Image" runat="server"></asp:Label></h3>
-                    <asp:Label ID="lblId" CssClass="d-none" runat="server"></asp:Label>
+                    <h4 id="lblHeader" class="font-weight-bold"></h4>
                 </div>
 
                 <div class="row g-2">
@@ -104,7 +103,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12 col-md-6 mb-2">
-                                    <button type="submit" class="btn btn-primary float-left">Submit</button>
+                                    <button onclick="summit()" type="submit" class="btn btn-primary float-left">Submit</button>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <!-- Button trigger modal -->
@@ -169,6 +168,7 @@
             <script type="text/javascript" src="assets/webcam.min.js"></script>
 	        <!-- Configure a few settings and attach camera -->
 	        <script type="text/javascript">
+                let currentOsPaperId = 0;
                 window.addEventListener('load', function () {
                     // Load Data Release Scissors
                     $.ajax({
@@ -190,6 +190,7 @@
 
                                 if (osPaperById == null) {
                                     loadCombobox(null, machineTypeList, sectionList);
+                                    lblHeader.innerText = 'Add new outsole paper image';
                                 }
                                 else {
                                     loadCombobox(osPaperById, machineTypeList, sectionList);
@@ -202,6 +203,8 @@
 
                                     divLeftImageDisplay.className = 'figure';
                                     divRightImageDisplay.className = 'figure';
+                                    lblHeader.innerText = 'Update outsole paper image';
+                                    currentOsPaperId = osPaperById.OutsolePaperImageId;
                                 }
                             }
                         },
@@ -236,6 +239,60 @@
                         }
                         selectSection.appendChild(opt);
                     });
+                }
+
+                function summit() {
+                    var machineType = document.getElementById('cboMachineType').value;
+                    var section = document.getElementById('cboSection').value;
+                    var date = document.getElementById('txtDate').value;
+                    var line = document.getElementById('txtLine').value;
+                    var poNo = document.getElementById('txtProductNo').value;
+                    var styleName = document.getElementById('txtStyleName').value;
+                    var osCode = document.getElementById('txtOutsoleCode').value;
+                    var leftImageContent = document.getElementById('divLeftImage').innerHTML;
+                    var rightImageContent = document.getElementById('divRightImage').innerHTML;
+                    var submitModel = new UploadOSPaperModel(
+                        OutsolePaperImageId = currentOsPaperId,
+                        SectionName = section,
+                        LineName = line,
+                        ProductNo = poNo,
+                        OutsoleCode = osCode,
+                        MachineType = machineType,
+                        CreatedDateString = date,
+                        LeftImageContent = leftImageContent,
+                        RightImageContent = rightImageContent,
+                    );
+
+                    if (!leftImageContent.includes('img') && !rightImageContent.includes('img')) {
+                        alert('Left and Right image are empty !')
+                        return;
+                    }
+                    if (date == '') {
+                        alert('Date is empty !')
+                        return;
+                    }
+
+                    var submitContent = JSON.stringify({ osPaperInsert: submitModel });
+                    $.ajax({
+                        url: '<%= ResolveUrl("~/Pages/SewingMachines/AddUpdateOutsoleMachineImage.aspx//Upload") %>',
+                        data: submitContent,
+                        type: "POST",
+                        datatype: "json",
+                        async: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.d.toString().includes('Exception:')) {
+
+                            }
+                            else if (data.d.toString().includes('Successful')) {
+
+                            }
+                            else {
+
+                            }
+                        },
+                        error: onError
+                    })
                 }
 
                 Webcam.set({
@@ -298,7 +355,22 @@
                     var fgCaptionRight = document.getElementById('fgCaptionRight');
                     fgCaptionRight.className = 'figure-caption text-danger';
                     divRightImageDisplay.className = 'figure d-none';
+                }                          
+
+                class UploadOSPaperModel {
+                    constructor(OutsolePaperImageId, SectionName, LineName, ProductNo, OutsoleCode, MachineType, CreatedDateString, LeftImageContent, RightImageContent) {
+                        this.OutsolePaperImageId = OutsolePaperImageId;
+                        this.SectionName = SectionName;
+                        this.LineName = LineName;
+                        this.ProductNo = ProductNo;
+                        this.OutsoleCode = OutsoleCode;
+                        this.MachineType = MachineType;
+                        this.CreatedDateString = CreatedDateString;
+                        this.LeftImageContent = LeftImageContent;
+                        this.RightImageContent = RightImageContent;
+                    }
                 }
+
             </script>
         </body>
     </html>

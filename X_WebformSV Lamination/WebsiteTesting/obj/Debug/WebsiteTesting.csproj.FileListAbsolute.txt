@@ -146,3 +146,15 @@ F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\ob
 F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csprojAssemblyReference.cache
 F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.cache
 F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.compiled
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\Reports\LoadingSystem\PackingReport.rdlc
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.dll
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.pdb
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\EntityFramework.dll
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\Newtonsoft.Json.dll
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\EntityFramework.xml
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\Newtonsoft.Json.xml
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csprojAssemblyReference.cache
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CoreCompileInputs.cache
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.dll
+C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
