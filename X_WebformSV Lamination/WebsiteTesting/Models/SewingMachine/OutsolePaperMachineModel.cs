@@ -16,11 +16,13 @@ namespace WebsiteTesting.Models.SewingMachine
         public string OutsoleCode { get; set; }
         public string MachineType { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime CreatedDateString { get; set; }
+        public string CreatedDateString { get; set; }
         public string CreatedBy { get; set; }
         public string LeftImagePath { get; set; }
         public string LeftImageContent { get; set; }
         public string RightImagePath { get; set; }
         public string RightImageContent { get; set; }
+        public string LeftImageDisplay { get; set; }
+        public string RightImageDisplay { get; set; }
     }
 }

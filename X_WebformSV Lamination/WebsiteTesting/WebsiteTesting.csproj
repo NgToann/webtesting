@@ -156,8 +156,6 @@
     <Content Include="Pages\ScissorsManagment\SummaryReport.aspx" />
     <Content Include="Pages\SewingMachines\AddUpdateOutsoleMachineImage.aspx" />
     <Content Include="Pages\SewingMachines\Allocation.aspx" />
-    <Content Include="Pages\SewingMachines\assets\images\ospaper\pic2.jpg" />
-    <Content Include="Pages\SewingMachines\assets\images\ospaper\pic1.jpg" />
     <Content Include="Pages\SewingMachines\assets\images\allocate.png" />
     <Content Include="Pages\SewingMachines\assets\images\inventory.png" />
     <Content Include="Pages\SewingMachines\assets\images\machineDB.png" />
@@ -798,6 +796,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\WHLamination\dist\img\" />
+    <Folder Include="pics\OutsolePaperImage\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

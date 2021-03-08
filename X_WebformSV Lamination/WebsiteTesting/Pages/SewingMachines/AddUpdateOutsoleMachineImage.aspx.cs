@@ -17,67 +17,12 @@ namespace WebsiteTesting.Pages.SewingMachines
 {
     public partial class AddUpdateOutsoleMachineImage : System.Web.UI.Page
     {
-        private string PREFIX_FOLDER_IMAGE = "http://svv.saovietqc.com:8080/pics/OutsolePaperImage/";
+        private static string PREFIX_FOLDER_IMAGE = @"~/ws/pics/OutsolePaperImage/";
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (IsPostBack)
-            //    return;
             var osMachineTypeList = CommonController.GetOutsoleMachineTypeList();
-            //cboMachineType.DataSource = osMachineTypeList.Select(s => s.MachineType).Distinct().ToList();
-            //cboMachineType.DataBind();
-
-            //cboSectionName.DataSource = osMachineTypeList.Select(s => s.SectionName).Distinct().ToList();
-            //cboSectionName.DataBind();
-
             var par = Request.Params["par"];
             Session["osPaperId"] = par;
-            //// Not Null is Update
-            //if (!String.IsNullOrEmpty(par))
-            //{
-            //    try
-            //    {
-            //        var osImageEmpty = new OutsoleImageEmpty();
-
-            //        lblTitle.Text = "Update image machine";
-            //        int idFromPar = 0;
-            //        Int32.TryParse(par, out idFromPar);
-            //        var osPaperMachineById = CommonController.GetOutsolePaperMachineById(idFromPar);
-
-            //        var mType = osMachineTypeList.FirstOrDefault(f => f.MachineType.Equals(osPaperMachineById.MachineType));
-            //        cboMachineType.SelectedValue = mType != null ? mType.MachineType : "";
-
-            //        var sectionX = osMachineTypeList.FirstOrDefault(f => f.SectionName.Equals(osPaperMachineById.SectionName));
-            //        cboSectionName.SelectedValue = sectionX != null ? sectionX.SectionName : "";
-
-            //        txtLine.Text = osPaperMachineById.LineName;
-            //        txtProductNo.Text = osPaperMachineById.ProductNo;
-            //        txtStyleName.Text = osPaperMachineById.StyleName;
-            //        txtOutsoleCode.Text = osPaperMachineById.OutsoleCode;
-            //        txtCreatedDate.Text = string.Format("{0:MM/dd/yyyy}", osPaperMachineById.CreatedDate);
-
-            //        // Prefix ""
-
-            //        //divLeftImage.InnerHtml = "<img src=\"data:image/jpeg;base64," + osPaperMachineById.LeftImageString + "\">";
-            //        var leftImage = new Image();
-            //        if (osPaperMachineById.LeftImage != Convert.FromBase64String(osImageEmpty.ImgString))
-            //        {
-            //            leftImage.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(osPaperMachineById.LeftImage);
-            //            divLeftImage.Controls.Add(leftImage);
-            //        }
-
-            //        var rightImage = new Image();
-            //        if (osPaperMachineById.RightImage != Convert.FromBase64String(osImageEmpty.ImgString))
-            //        {
-            //            rightImage.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(osPaperMachineById.RightImage);                        
-            //            divRightImage.Controls.Add(rightImage);
-            //        }
-                    
-            //        lblId.Text = string.Format("{0}", osPaperMachineById.OutsolePaperImageId);
-            //    }
-            //    catch (Exception ex) {
-            //        ShowAlert(ex.Message.ToString());
-            //    }
-            //}
         }
 
         [WebMethod]
@@ -87,15 +32,19 @@ namespace WebsiteTesting.Pages.SewingMachines
             try
             {
                 var osMachineTypeList = CommonController.GetOutsoleMachineTypeList();
-                //var par = HttpContext.Current.Request.Params["par"];
                 var par = HttpContext.Current.Session["osPaperId"];
-
-                var osImageEmpty = new OutsoleImageEmpty();
+                
                 int idFromPar = 0;
                 Int32.TryParse(par != null ? par.ToString() : "", out idFromPar);
                 var osPaperMachineById = CommonController.GetOutsolePaperMachineById(idFromPar);
                 var sectionList = osMachineTypeList.Select(s => s.SectionName).Distinct().ToList();
-
+                if (osPaperMachineById != null)
+                {
+                    if (!String.IsNullOrEmpty(osPaperMachineById.LeftImagePath))
+                        osPaperMachineById.LeftImageDisplay = PREFIX_FOLDER_IMAGE.Replace("~", "") + osPaperMachineById.LeftImagePath;
+                    if (!String.IsNullOrEmpty(osPaperMachineById.RightImagePath))
+                        osPaperMachineById.RightImageDisplay = PREFIX_FOLDER_IMAGE.Replace("~", "") + osPaperMachineById.RightImagePath;
+                }
                 var resource = new object[] { osMachineTypeList, sectionList, osPaperMachineById };
                 //if (osPaperMachineById == null)
                 //    resource = new object[] { osMachineTypeList, sectionList, "null" };
@@ -109,10 +58,56 @@ namespace WebsiteTesting.Pages.SewingMachines
 
 
         [WebMethod]
-        public static string Upload(UploadOSPaperModel osPaperInsert)
+        public static string Upload(OutsolePaperMachineModel osPaperInsert)
         {
-            var x = osPaperInsert;
-            return "";
+            // Convert Image
+            try
+            {
+                // Left image
+                if (osPaperInsert.LeftImageContent.Contains(","))
+                {
+                    var fileName = Guid.NewGuid() + ".png";
+                    var imgSource = osPaperInsert.LeftImageContent.Split(',')[1].ToString().Replace("\">", "").ToString();
+                    var leftImageBytes = Convert.FromBase64String(imgSource);
+                    using (var mem = new MemoryStream(leftImageBytes))
+                    {
+                        var leftImg = System.Drawing.Image.FromStream(mem);
+                        leftImg.Save(HttpContext.Current.Server.MapPath(PREFIX_FOLDER_IMAGE) + fileName, System.Drawing.Imaging.ImageFormat.Png);
+                        osPaperInsert.LeftImagePath = fileName;
+                    }
+                }
+
+                // Right image
+                if (osPaperInsert.RightImageContent.Contains(","))
+                {
+                    var fileName = Guid.NewGuid() + ".png";
+                    var imgSource = osPaperInsert.RightImageContent.Split(',')[1].ToString().Replace("\">", "").ToString();
+                    var rightImageBytes = Convert.FromBase64String(imgSource);
+                    using (var mem = new MemoryStream(rightImageBytes))
+                    {
+                        var rightImg = System.Drawing.Image.FromStream(mem);
+                        rightImg.Save(HttpContext.Current.Server.MapPath(PREFIX_FOLDER_IMAGE) + fileName, System.Drawing.Imaging.ImageFormat.Png);
+                        osPaperInsert.RightImagePath = fileName;
+                    }
+                }
+
+                osPaperInsert.CreatedDate = ConvertDateStatic(osPaperInsert.CreatedDateString);
+                var sucesss = CommonController.InsertOutsoleMachineImage(osPaperInsert);
+                if (sucesss)
+                    return "Successful";
+                else
+                    return "Can not insert data please try again !";
+            }
+            catch (Exception ex)
+            {
+                return String.Format("Exception: {0}", ex.Message.ToString());
+            }
+
+            //string imageString = "read the image string from XML file";
+            //byte[] imageBytes = Convert.FromBase64String(imageString);
+            //MemoryStream memStream = new MemoryStream(imageBytes);
+            //Image image = Image.FromStream(memStream);
+
         }
 
         [WebMethod]

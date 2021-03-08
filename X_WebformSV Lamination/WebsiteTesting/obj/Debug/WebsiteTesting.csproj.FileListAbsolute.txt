@@ -132,20 +132,6 @@ F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\Website
 F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
 F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.dll
 F:\SV PROJECT\WebTesting\webtesting.git\X_ScissorsManagment Upload Image\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\Reports\LoadingSystem\PackingReport.rdlc
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.dll
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.pdb
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\EntityFramework.dll
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\Newtonsoft.Json.dll
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\EntityFramework.xml
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\Newtonsoft.Json.xml
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CoreCompileInputs.cache
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.dll
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csprojAssemblyReference.cache
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.cache
-F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.compiled
 C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\Reports\LoadingSystem\PackingReport.rdlc
 C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.dll
 C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.pdb
@@ -158,3 +144,17 @@ C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTe
 C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
 C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.dll
 C:\Users\ToanNg\Desktop\NgToanGit\SV\webtesting\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\Reports\LoadingSystem\PackingReport.rdlc
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\WebsiteTesting.pdb
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\EntityFramework.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\Newtonsoft.Json.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\EntityFramework.xml
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\bin\Newtonsoft.Json.xml
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.cache
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\RdlCompile.compiled
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CoreCompileInputs.cache
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csproj.CopyComplete
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.dll
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.pdb
+F:\SV PROJECT\WebTesting\webtesting.git\X_WebformSV Lamination\WebsiteTesting\obj\Debug\WebsiteTesting.csprojAssemblyReference.cache

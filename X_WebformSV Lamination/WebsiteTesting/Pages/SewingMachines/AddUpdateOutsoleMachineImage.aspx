@@ -102,12 +102,15 @@
                                 <input id="txtOutsoleCode" class="form-control">
                             </div>
                             <div class="row">
-                                <div class="col-12 col-md-6 mb-2">
-                                    <button onclick="summit()" type="submit" class="btn btn-primary float-left">Submit</button>
+                                <div class="col-12 col-md-auto mb-2">
+                                    <button type="button" id="btnSubmit" class="btn rounded-1 btn-primary float-left">Submit</button>
                                 </div>
-                                <div class="col-12 col-md-6">
+                                <div class="col-12 col-md-auto mb-2">
+                                    <button type="button" id="btnDelete" class="btn rounded-1 btn-danger float-left">Delete</button>
+                                </div>
+                                <div class="col-12 col-md-auto">
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-info float-left float-md-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <button type="button" class="btn rounded-1 btn-info float-left float-md-right" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                         Open Camera
                                     </button>
                                 </div>
@@ -149,7 +152,7 @@
                         </figure>
                         <figcaption id="fgCaptionLeft" class="figure-caption text-danger d-none">Left Image</figcaption>
                         <figure id="divLeftImageDisplay" class="figure d-none">
-                            <img id="imgLeftImage" src="assets/images/ospaper/pic1.jpg" class="figure-img img-fluid rounded" alt="Left Image">
+                            <img id="imgLeftDisplay" class="figure-img img-fluid rounded" alt="Left Image">
                             <figcaption class="figure-caption text-danger">Left Image</figcaption>
                         </figure>
                     </div>
@@ -158,7 +161,7 @@
                         </figure>
                         <figcaption id="fgCaptionRight" class="figure-caption text-danger d-none">Right Image</figcaption>
                         <figure id="divRightImageDisplay" class="figure d-none">
-                            <img src="assets/images/ospaper/pic2.jpg" class="figure-img img-fluid rounded" alt="Right Image">
+                            <img id="imgRightDisplay" class="figure-img img-fluid rounded" alt="Right Image">
                             <figcaption class="figure-caption text-danger">Right Image</figcaption>
                         </figure>
                     </div>
@@ -168,7 +171,7 @@
             <script type="text/javascript" src="assets/webcam.min.js"></script>
 	        <!-- Configure a few settings and attach camera -->
 	        <script type="text/javascript">
-                let currentOsPaperId = 0;
+                var currentOsPaperId = 0;
                 window.addEventListener('load', function () {
                     // Load Data Release Scissors
                     $.ajax({
@@ -204,8 +207,16 @@
                                     divLeftImageDisplay.className = 'figure';
                                     divRightImageDisplay.className = 'figure';
                                     lblHeader.innerText = 'Update outsole paper image';
+
+                                    var baseUrl = window.location.origin;
+                                    if (osPaperById.LeftImageDisplay != null)
+                                        imgLeftDisplay.src = baseUrl + osPaperById.LeftImageDisplay;
+                                    if (osPaperById.RightImageDisplay != null)
+                                        imgRightDisplay.src = baseUrl + osPaperById.RightImageDisplay;
+
                                     currentOsPaperId = osPaperById.OutsolePaperImageId;
                                 }
+                                document.getElementById("btnSubmit").onclick = function () { summit() };
                             }
                         },
                         error: onError
@@ -251,6 +262,7 @@
                     var osCode = document.getElementById('txtOutsoleCode').value;
                     var leftImageContent = document.getElementById('divLeftImage').innerHTML;
                     var rightImageContent = document.getElementById('divRightImage').innerHTML;
+
                     var submitModel = new UploadOSPaperModel(
                         OutsolePaperImageId = currentOsPaperId,
                         SectionName = section,
@@ -261,12 +273,9 @@
                         CreatedDateString = date,
                         LeftImageContent = leftImageContent,
                         RightImageContent = rightImageContent,
+                        StyleName = styleName
                     );
 
-                    if (!leftImageContent.includes('img') && !rightImageContent.includes('img')) {
-                        alert('Left and Right image are empty !')
-                        return;
-                    }
                     if (date == '') {
                         alert('Date is empty !')
                         return;
@@ -274,26 +283,38 @@
 
                     var submitContent = JSON.stringify({ osPaperInsert: submitModel });
                     $.ajax({
-                        url: '<%= ResolveUrl("~/Pages/SewingMachines/AddUpdateOutsoleMachineImage.aspx//Upload") %>',
+                        url: '<%= ResolveUrl("~/Pages/SewingMachines/AddUpdateOutsoleMachineImage.aspx/Upload") %>',
                         data: submitContent,
                         type: "POST",
                         datatype: "json",
                         async: true,
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
-                            if (data.d.toString().includes('Exception:')) {
-
-                            }
-                            else if (data.d.toString().includes('Successful')) {
-
-                            }
-                            else {
-
-                            }
+                            alert(data.d);
                         },
                         error: onError
                     })
+
                 }
+
+                $("#btnDelete").click(function () {
+                    var deleteWhat = currentOsPaperId.toString();
+                    var confirmDelete = confirm('Confirm delete this record ?');
+                    if (confirmDelete == true) {
+                        PageMethods.DeleteRecord(deleteWhat, onSuccess, onError);
+                        function onSuccess(result) {
+                            alert(result);
+                            window.location.href = 'OutsolePaperHome.aspx?';
+                        }
+                        function onError(result) {
+                            alert(result.d);
+                        }
+                        return false;
+                    }
+                    else {
+                        return;
+                    }
+                });
 
                 Webcam.set({
                     width: 400,
@@ -358,7 +379,7 @@
                 }                          
 
                 class UploadOSPaperModel {
-                    constructor(OutsolePaperImageId, SectionName, LineName, ProductNo, OutsoleCode, MachineType, CreatedDateString, LeftImageContent, RightImageContent) {
+                    constructor(OutsolePaperImageId, SectionName, LineName, ProductNo, OutsoleCode, MachineType, CreatedDateString, LeftImageContent, RightImageContent, StyleName) {
                         this.OutsolePaperImageId = OutsolePaperImageId;
                         this.SectionName = SectionName;
                         this.LineName = LineName;
@@ -368,6 +389,7 @@
                         this.CreatedDateString = CreatedDateString;
                         this.LeftImageContent = LeftImageContent;
                         this.RightImageContent = RightImageContent;
+                        this.StyleName = StyleName
                     }
                 }
 

@@ -21,7 +21,7 @@ namespace WebsiteTesting.Pages.SewingMachines
         
         private void LoadData()
         {
-            var osMachineList = CommonController.GetOutsolePaperMachineList();
+            var osPaperMachineList = CommonController.GetOutsolePaperMachineList();
 
             tblListOfMahineImage.Rows.Clear();
 
@@ -68,12 +68,12 @@ namespace WebsiteTesting.Pages.SewingMachines
 
             // Content
             int noOfRow = 1;
-            foreach (var osMachine in osMachineList)
+            foreach (var osMachine in osPaperMachineList)
             {
                 TableRow trContent = new TableRow();
 
                 TableCell trcNoOfRow = new TableCell();
-                trcNoOfRow.Text = String.Format("<center>{0}</center>",noOfRow);
+                trcNoOfRow.Text = String.Format("<center>{0}</center>", noOfRow);
                 trContent.Cells.Add(trcNoOfRow);
 
                 TableCell trcSection = new TableCell();
@@ -101,29 +101,24 @@ namespace WebsiteTesting.Pages.SewingMachines
                 trContent.Cells.Add(trcCreatedDate);
 
                 TableCell trcLeftImage = new TableCell();
-                //if (!osMachine.LeftImageString.Equals("Null"))
-                //{
-                    var leftMachineLink = new HyperLink
-                    {
-                        Text = String.Format("L-{0}", osMachine.MachineType),
-                        NavigateUrl = String.Format("AddUpdateOutsoleMachineImage.aspx?par={0}", osMachine.OutsolePaperImageId),
-                        CssClass = "btn btn-outline-info btn-sm rounded-0"
-                    };
-                    trcLeftImage.Controls.Add(leftMachineLink);
-                //}
+                var leftMachineLink = new HyperLink
+                {
+                    Text = String.Format("L-{0}", osMachine.MachineType),
+                    NavigateUrl = String.Format("AddUpdateOutsoleMachineImage.aspx?par={0}", osMachine.OutsolePaperImageId),
+                    CssClass = "btn btn-outline-info btn-sm rounded-0"
+                };
+                trcLeftImage.Controls.Add(leftMachineLink);
                 trContent.Cells.Add(trcLeftImage);
 
                 TableCell trcRightImage = new TableCell();
-                //if (!osMachine.RightImageString.Equals("Null"))
-                //{
-                    var rightMachineLink = new HyperLink
-                    {
-                        Text =  String.Format("R-{0}", osMachine.MachineType),
-                        NavigateUrl = String.Format("AddUpdateOutsoleMachineImage.aspx?par={0}", osMachine.OutsolePaperImageId),
-                        CssClass = "btn btn-outline-danger btn-sm rounded-0"
-                    };
-                    trcRightImage.Controls.Add(rightMachineLink);
-                //}
+                var rightMachineLink = new HyperLink
+                {
+                    Text = String.Format("R-{0}", osMachine.MachineType),
+                    NavigateUrl = String.Format("AddUpdateOutsoleMachineImage.aspx?par={0}", osMachine.OutsolePaperImageId),
+                    CssClass = "btn btn-outline-danger btn-sm rounded-0"
+                };
+                trcRightImage.Controls.Add(rightMachineLink);
+
                 trContent.Cells.Add(trcRightImage);
 
                 tblListOfMahineImage.Rows.Add(trContent);
