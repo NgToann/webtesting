@@ -209,10 +209,20 @@
                                     lblHeader.innerText = 'Update outsole paper image';
 
                                     var baseUrl = window.location.origin;
-                                    if (osPaperById.LeftImageDisplay != null)
-                                        imgLeftDisplay.src = baseUrl + osPaperById.LeftImageDisplay;
-                                    if (osPaperById.RightImageDisplay != null)
-                                        imgRightDisplay.src = baseUrl + osPaperById.RightImageDisplay;
+                                    if (osPaperById.LeftImageDisplay != null) {
+                                        if (baseUrl.includes('localhost')) {
+                                            imgLeftDisplay.src = baseUrl + osPaperById.LeftImageDisplay;
+                                        }
+                                        else
+                                            imgLeftDisplay.src = baseUrl+ '/ws' + osPaperById.LeftImageDisplay;
+                                    }
+                                    if (osPaperById.RightImageDisplay != null) {
+                                        if (baseUrl.includes('localhost')) {
+                                            imgRightDisplay.src = baseUrl + osPaperById.RightImageDisplay;
+                                        }
+                                        else
+                                            imgRightDisplay.src = baseUrl + '/ws' + osPaperById.RightImageDisplay;
+                                    }
 
                                     currentOsPaperId = osPaperById.OutsolePaperImageId;
                                 }

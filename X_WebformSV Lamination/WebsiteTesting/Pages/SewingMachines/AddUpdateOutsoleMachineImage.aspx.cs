@@ -17,7 +17,7 @@ namespace WebsiteTesting.Pages.SewingMachines
 {
     public partial class AddUpdateOutsoleMachineImage : System.Web.UI.Page
     {
-        private static string PREFIX_FOLDER_IMAGE = @"~/ws/pics/OutsolePaperImage/";
+        private static string PREFIX_FOLDER_IMAGE = @"~/pics/OutsolePaperImage/";
         protected void Page_Load(object sender, EventArgs e)
         {
             var osMachineTypeList = CommonController.GetOutsoleMachineTypeList();
